@@ -37,8 +37,29 @@
     <link rel="stylesheet" type="text/css" href="static/css/leeleo.css">
     <link rel="stylesheet" type="text/css" href="static/css/jquery.mcustomscrollbar.min.css">
     <link rel="stylesheet" href="static/css/layer.css" id="layuicss-skinlayercss">
+    <style>
+    .back-home-float {
+        position: fixed;
+        top: 10px;
+        right: 15px;
+        z-index: 999999;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        background: rgba(18, 24, 38, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        color: #fff;
+        text-decoration: none;
+        font-size: 11px;
+    }
+    </style>
 </head>
 <body>
+<a href="../" class="back-home-float" title="返回全景工作台">⌂ 主站</a>
 <!-- 中间主体区域 -->
 <div class="center">
     <div class="container">

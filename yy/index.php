@@ -12,6 +12,12 @@
 // 定义核心
 define('MC_CORE', true);
 
+// 自动引导至现代化全功能音乐播放器 yyjx
+if (empty($_POST) && !isset($_GET['ajax']) && !isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+    header('Location: ../yyjx/');
+    exit;
+}
+
 // 定义版本
 define('MC_VERSION', '1.6.2');
 

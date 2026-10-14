@@ -20,5 +20,9 @@
      
     // 去除多余的换行符（保险起见）
     $result = str_replace(array("\r","\n","\r\n"), '', $result);
-	
-    	  echo 'document.write("'.htmlspecialchars($result).'");';
+    if (isset($_GET['format']) && $_GET['format'] === 'json') {
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode(['code' => 200, 'data' => $result], JSON_UNESCAPED_UNICODE);
+    } else {
+        echo 'document.write("'.htmlspecialchars($result, ENT_QUOTES, 'UTF-8').'");';
+    }

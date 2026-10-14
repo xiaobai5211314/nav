@@ -48,8 +48,39 @@ body{
     
     <!-- layer弹窗插件样式文件 -->
     <link rel="stylesheet" href="plugns/layer/skin/default/layer.css?v=3.0.2302" id="layuicss-skinlayercss">
+    <style>
+    .back-home-float {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 999999;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        background: rgba(18, 24, 38, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        color: #fff;
+        text-decoration: none;
+        font-size: 12px;
+        transition: all 0.25s ease;
+    }
+    .back-home-float:hover {
+        background: rgba(59, 130, 246, 0.85);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    </style>
 </head>
 <body>
+<a href="../" class="back-home-float" title="返回全景工作台">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    <span>全景主站</span>
+</a>
 <!-- 中间主体区域 -->
 <div class="center">
     <div class="container">

@@ -1,0 +1,219 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+	<title>舔狗日记 - 沉浸版</title>
+	<link rel="shortcut icon" href="favicon.ico">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="static/css/main.css" />
+	<noscript><link rel="stylesheet" href="static/css/noscript.css" /></noscript>
+	<style>
+		/* 现代化辅助增强样式 */
+		.back-home-float {
+			position: fixed;
+			top: 20px;
+			left: 20px;
+			z-index: 9999;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 8px 16px;
+			background: rgba(18, 24, 38, 0.75);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border: 1px solid rgba(255, 255, 255, 0.15);
+			border-radius: 999px;
+			color: #fff;
+			text-decoration: none;
+			font-size: 13px;
+			transition: all 0.25s ease;
+		}
+		.back-home-float:hover {
+			background: rgba(59, 130, 246, 0.85);
+			border-color: rgba(255, 255, 255, 0.4);
+			transform: translateY(-2px);
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+		}
+		.tg-action-bar {
+			margin-top: 25px;
+			display: flex;
+			gap: 12px;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		.tg-btn {
+			padding: 8px 18px;
+			border-radius: 6px;
+			border: 1px solid rgba(255, 255, 255, 0.25);
+			background: rgba(255, 255, 255, 0.08);
+			color: #ffffff;
+			cursor: pointer;
+			font-size: 14px;
+			transition: all 0.2s ease;
+		}
+		.tg-btn:hover {
+			background: rgba(255, 255, 255, 0.2);
+			border-color: rgba(255, 255, 255, 0.5);
+			transform: scale(1.03);
+		}
+		.tg-toast {
+			position: fixed;
+			bottom: 30px;
+			left: 50%;
+			transform: translateX(-50%) translateY(20px);
+			background: rgba(16, 185, 129, 0.9);
+			color: #ffffff;
+			padding: 8px 20px;
+			border-radius: 20px;
+			font-size: 13px;
+			opacity: 0;
+			pointer-events: none;
+			transition: all 0.3s ease;
+			z-index: 10000;
+		}
+		.tg-toast.show {
+			opacity: 1;
+			transform: translateX(-50%) translateY(0);
+		}
+		#diary-text {
+			min-height: 70px;
+			line-height: 1.8;
+			font-weight: 300;
+			text-align: left;
+			display: block;
+			font-size: 1.15rem;
+			color: #f1f5f9;
+			letter-spacing: 0.5px;
+		}
+	</style>
+</head>
+<body onselectstart="return false" oncontextmenu="return false">
+
+	<!-- 返回主站悬浮按钮 -->
+	<a href="../" class="back-home-float" title="返回全景工作台">
+		<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+		<span>全景主站</span>
+	</a>
+
+	<!-- Toast 提示 -->
+	<div id="toast" class="tg-toast">已复制到剪贴板 ✨</div>
+
+	<!-- Wrapper -->
+	<div id="wrapper">
+
+		<!-- Header -->
+		<header id="header">
+			<div class="logo">
+				<span>舔狗日记</span>
+			</div>
+			<div class="content">
+				<div class="inner">
+					<h2 id="diary-date">2026年10月15日 晴</h2>
+					<h3>
+						<span id="diary-text">正在翻阅日记...</span>
+					</h3>
+					<div class="tg-action-bar">
+						<button type="button" class="tg-btn" id="btn-next">🎲 再来一篇</button>
+						<button type="button" class="tg-btn" id="btn-copy">📋 复制日记</button>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<!-- Footer -->
+		<footer id="footer">
+			<p class="copyright">© 小白 · 舔狗日记 | 岁月静好，温柔只给意中人</p>
+		</footer>
+
+	</div>
+
+	<!-- BG -->
+	<div id="bg"></div>
+
+	<!-- Scripts -->
+	<script src="static/js/jquery.min.js"></script>
+	<script src="static/js/skel.min.js"></script>
+	<script src="static/js/util.js"></script>
+	<script src="static/js/main.js"></script>
+	<script src="data.js"></script>
+
+	<script>
+		// 日期计算与展示
+		(function initDate() {
+			var now = new Date();
+			var days = ['日', '一', '二', '三', '四', '五', '六'];
+			var year = now.getFullYear();
+			var month = (now.getMonth() + 1).toString().padStart(2, '0');
+			var date = now.getDate().toString().padStart(2, '0');
+			var day = days[now.getDay()];
+			var weathers = ['晴 ☀️', '多云 ⛅', '微风 🍃', '小雨 🌧️', '温暖 🌤️'];
+			var randomWeather = weathers[Math.floor(Math.random() * weathers.length)];
+			document.getElementById('diary-date').textContent = year + '年' + month + '月' + date + '日 星期' + day + ' · ' + randomWeather;
+		})();
+
+		// 日记池与加载逻辑
+		var quotesPool = window.TG_QUOTES || [];
+		var currentQuote = '';
+
+		function showRandomQuote() {
+			if (!quotesPool || quotesPool.length === 0) {
+				// 尝试通过 fetch 异步补拉
+				fetch('data.json')
+					.then(function(res) { return res.json(); })
+					.then(function(data) {
+						quotesPool = data;
+						renderQuote();
+					})
+					.catch(function() {
+						document.getElementById('diary-text').textContent = '今天也是爱你的一天，想你。';
+					});
+			} else {
+				renderQuote();
+			}
+		}
+
+		function renderQuote() {
+			var textEl = document.getElementById('diary-text');
+			$(textEl).fadeOut(150, function() {
+				var idx = Math.floor(Math.random() * quotesPool.length);
+				currentQuote = quotesPool[idx];
+				textEl.textContent = currentQuote;
+				$(textEl).fadeIn(200);
+			});
+		}
+
+		document.getElementById('btn-next').addEventListener('click', function(e) {
+			e.preventDefault();
+			showRandomQuote();
+		});
+
+		document.getElementById('btn-copy').addEventListener('click', function(e) {
+			e.preventDefault();
+			if (!currentQuote) return;
+			navigator.clipboard.writeText(currentQuote).then(function() {
+				showToast('已复制日记到剪贴板！');
+			}).catch(function() {
+				var ta = document.createElement('textarea');
+				ta.value = currentQuote;
+				document.body.appendChild(ta);
+				ta.select();
+				document.execCommand('copy');
+				document.body.removeChild(ta);
+				showToast('已复制日记到剪贴板！');
+			});
+		});
+
+		function showToast(msg) {
+			var toast = document.getElementById('toast');
+			toast.textContent = msg;
+			toast.classList.add('show');
+			setTimeout(function() {
+				toast.classList.remove('show');
+			}, 2000);
+		}
+
+		// 启动
+		showRandomQuote();
+	</script>
+</body>
+</html>

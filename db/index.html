@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!-- saved from url=(0027)http://itzoo.info/love.html -->
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Love</title>
@@ -14,8 +14,71 @@
         <script type="text/javascript" src="./Love_files/functions.js" charset="utf-8"></script>
         <script type="text/javascript" src="./Love_files/love.js" charset="utf-8"></script>
 
+        <style>
+        .back-home-float {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 99999;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(18, 24, 38, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 999px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            transition: all 0.25s ease;
+        }
+        .back-home-float:hover {
+            background: rgba(244, 63, 94, 0.85);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        .music-float-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(244, 63, 94, 0.85);
+            border: 2px solid #fff;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(244, 63, 94, 0.4);
+            animation: rotateBgm 4s linear infinite;
+        }
+        .music-float-btn.paused {
+            animation-play-state: paused;
+            opacity: 0.6;
+        }
+        @keyframes rotateBgm {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        </style>
     </head>
     <body>
+        <a href="../" class="back-home-float" title="返回全景工作台">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <span>全景主站</span>
+        </a>
+
+        <div id="musicToggle" class="music-float-btn" title="音乐播放/暂停">
+            🎵
+        </div>
+
         <div id="main">
             <div id="error">亲，您使用的浏览器无法支持即将显示的内容，请换成谷歌(<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI">Chrome</a>)或者火狐(<a href="http://firefox.com.cn/download/">Firefox</a>)浏览器哟~</div>
             <div id="wrap">
@@ -213,9 +276,34 @@
         }));
 
         runAsync().start();
+
+        // 现代浏览器音频交互容错
+        var audioEl = document.getElementById('bgmMusic');
+        var toggleBtn = document.getElementById('musicToggle');
+        if (toggleBtn && audioEl) {
+            toggleBtn.addEventListener('click', function() {
+                if (audioEl.paused) {
+                    audioEl.play().then(function() {
+                        toggleBtn.classList.remove('paused');
+                    }).catch(function(err) {
+                        console.log('Play blocked', err);
+                    });
+                } else {
+                    audioEl.pause();
+                    toggleBtn.classList.add('paused');
+                }
+            });
+            // 页面首次点击自动尝试恢复音频
+            document.body.addEventListener('click', function oncePlay() {
+                if (audioEl.paused) {
+                    audioEl.play().then(function() {
+                        toggleBtn.classList.remove('paused');
+                    }).catch(function() {});
+                }
+                document.body.removeEventListener('click', oncePlay);
+            }, { once: true });
+        }
     })();
     </script>
-
-
 
 </body></html>
