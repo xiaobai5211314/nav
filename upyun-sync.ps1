@@ -7,8 +7,8 @@
 #>
 
 param(
-    [string]$Service = "guzhicdn",          # 又拍云服务名 (Bucket)
-    [string]$Operator = "",                 # 又拍云操作员账号
+    [string]$Service = "xiaobai5211314",    # 又拍云服务名 (Bucket)
+    [string]$Operator = "dabai521",         # 又拍云操作员账号
     [string]$Password = "",                 # 又拍云操作员密码
     [string]$RemoteDir = "/asite/assets/"   # 又拍云远端目标目录
 )
@@ -17,7 +17,7 @@ $OutputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 
 Write-Host "==========================================================" -ForegroundColor Cyan
 Write-Host " ☁️ 又拍云存储静态资产同步助手 (Upyun CDN Sync Tool)" -ForegroundColor Green
-Write-Host " 绑定加速域名: https://guzhicdn.21212121.xyz" -ForegroundColor Yellow
+Write-Host " 绑定加速域名: https://tc1.21212121.xyz" -ForegroundColor Yellow
 Write-Host " 目标同步路径: $RemoteDir" -ForegroundColor Yellow
 Write-Host "==========================================================" -ForegroundColor Cyan
 

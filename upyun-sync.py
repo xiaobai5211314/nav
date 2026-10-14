@@ -23,7 +23,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 ASSETS_DIR = PROJECT_ROOT / "assets"
 TOOLS_UPX = PROJECT_ROOT / "tools" / "upx.exe"
 
-DEFAULT_SERVICE = "guzhicdn"
+DEFAULT_SERVICE = "xiaobai5211314"
+DEFAULT_OPERATOR = "dabai521"
 REMOTE_PREFIX = "asite/assets"
 
 
@@ -122,7 +123,7 @@ def upload_via_rest_api(service, operator, password, remote_prefix="asite/assets
 def main():
     print("=" * 60)
     print(" ☁️  小白数字空间 · 又拍云存储 (Upyun CDN) 资产上传工具")
-    print(" 绑定域名: https://guzhicdn.21212121.xyz/asite/assets/")
+    print(" 绑定域名: https://tc1.21212121.xyz/asite/assets/")
     print("=" * 60)
 
     if not ASSETS_DIR.exists():
@@ -132,7 +133,7 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="又拍云 CDN 资产同步工具")
     parser.add_argument("--service", "-s", default=DEFAULT_SERVICE, help="又拍云服务名 (Bucket)")
-    parser.add_argument("--operator", "-u", default=os.environ.get("UPYUN_OPERATOR", ""), help="又拍云操作员账号")
+    parser.add_argument("--operator", "-u", default=os.environ.get("UPYUN_OPERATOR", DEFAULT_OPERATOR), help="又拍云操作员账号")
     parser.add_argument("--password", "-p", default=os.environ.get("UPYUN_PASSWORD", ""), help="又拍云操作员密码")
     parser.add_argument("--remote-dir", "-r", default="/asite/assets/", help="又拍云目标存储路径")
 

@@ -6,7 +6,7 @@
  */
 window.AppCDN = {
     // 又拍云存储加速域名与独立隔离分类目录
-    host: 'https://guzhicdn.21212121.xyz',
+    host: 'https://tc1.21212121.xyz',
     basePath: 'asite',
     
     // 判定是否启用 CDN
