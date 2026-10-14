@@ -7,3 +7,5 @@ Thumbs.db
 .idea/
 .playwright-mcp/
 .work/
+tools/
+*.exe

@@ -5,8 +5,9 @@
  * 若检测到离线/加载失败，自动平滑 fallback 到本地相对路径，保证 100% 可用性。
  */
 window.AppCDN = {
-    // 又拍云存储加速域名
+    // 又拍云存储加速域名与独立隔离分类目录
     host: 'https://guzhicdn.21212121.xyz',
+    basePath: 'asite',
     
     // 判定是否启用 CDN
     enabled: !window.location.search.includes('nocdn=1') && window.location.protocol.startsWith('http'),
@@ -17,7 +18,8 @@ window.AppCDN = {
         // 如果是外部完整链接直接返回
         if (path.startsWith('http://') || path.startsWith('https://')) return path;
         var cleanPath = path.replace(/^\.?\/?/, '');
-        return this.host + '/' + cleanPath;
+        var prefix = this.basePath ? (this.basePath.replace(/^\/|\/$/g, '') + '/') : '';
+        return this.host + '/' + prefix + cleanPath;
     },
 
     // 动态加载 JS 脚本并支持本地 Fallback
