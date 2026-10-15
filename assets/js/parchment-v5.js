@@ -537,41 +537,40 @@
             }, 15000);
         }
 
-        // 页面打开后轻微延迟即刻弹出卡片框架
-        setTimeout(function() {
-            badge.classList.add('show');
-            if (locEl) locEl.textContent = '定位中...';
-            if (ipEl) ipEl.textContent = '访客 IP: 查询中...';
-        }, 400);
-
         fetch('api/visitor.php')
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data && data.ip) {
                     showVisitor(data.location, data.ip);
                 } else {
-                    fallbackIp();
+                    fallbackClient();
                 }
             })
             .catch(function() {
-                fallbackIp();
+                fallbackClient();
             });
 
-        function fallbackIp() {
-            var s = document.createElement('script');
-            window.baiduIpCb = function(d) {
-                if (d && d.data && d.data[0]) {
-                    showVisitor(d.data[0].location, d.data[0].OriginQuery);
-                } else {
-                    showVisitor('华夏大地', '已安全接入');
-                }
-            };
-            s.src = 'https://opendata.baidu.com/api.php?query=&resource_id=6006&oe=utf8&cb=baiduIpCb';
-            s.onerror = function() {
-                showVisitor('华夏大地', '已安全接入');
-            };
-            document.body.appendChild(s);
+        function fallbackClient() {
+            fetch('https://api.ipify.org?format=json')
+                .then(function(res) { return res.json(); })
+                .then(function(d) {
+                    if (d && d.ip) {
+                        showVisitor('华夏大地', d.ip);
+                    } else {
+                        showVisitor('华夏大地', '已连接');
+                    }
+                })
+                .catch(function() {
+                    showVisitor('华夏大地', '已连接');
+                });
         }
+
+        // 3秒兜底超时，确保即便极度弱网也不会挂起未渲染
+        setTimeout(function() {
+            if (!resolved) {
+                showVisitor('华夏大地', '已连接');
+            }
+        }, 3000);
     }
 
     // 12. 初始化入口
