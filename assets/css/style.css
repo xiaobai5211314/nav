@@ -53,38 +53,6 @@
     --radius-pill: 9999px;
 }
 
-/* 暗色主题 (Claude Dark Charcoal) */
-[data-theme="dark"] {
-    --claude-bg: #141413;               /* 官方深炭黑 */
-    --claude-surface: #1e1e1c;          /* 深暖灰表面 */
-    --claude-surface-hover: #262623;    /* 悬浮微亮深色表面 */
-    --claude-surface-muted: #2a2926;    /* 次级深色表面 */
-    --claude-nav-bg: rgba(20, 20, 19, 0.88);
-
-    --claude-border: #30302e;           /* 暗色暖边框 */
-    --claude-border-subtle: #242422;
-    --claude-border-hover: rgba(217, 119, 87, 0.45);
-
-    --claude-text: #faf9f5;             /* 象牙白主文字 */
-    --claude-text-secondary: #b0aea5;   /* 温暖银灰次要文字 */
-    --claude-text-muted: #78766e;       /* 弱化暗灰 */
-
-    --claude-terracotta: #d97757;       /* 暗色提亮陶土橙 */
-    --claude-terracotta-hover: #e06c43;
-    --claude-terracotta-soft: rgba(217, 119, 87, 0.14);
-    --claude-terracotta-border: rgba(217, 119, 87, 0.32);
-    --claude-terracotta-text: #ff9d79;
-
-    --claude-sage: #8fa671;
-    --claude-sage-soft: rgba(143, 166, 113, 0.15);
-    --claude-slate: #739bb2;
-    --claude-slate-soft: rgba(115, 155, 178, 0.15);
-
-    --shadow-ring: 0 0 0 1px var(--claude-border);
-    --shadow-whisper: 0 4px 20px rgba(0, 0, 0, 0.35);
-    --shadow-lift: 0 12px 32px rgba(0, 0, 0, 0.5);
-    --shadow-modal: 0 24px 60px rgba(0, 0, 0, 0.7);
-}
 
 /* 全局重置 */
 *, *::before, *::after {
@@ -545,12 +513,6 @@ header.claude-header {
     color: var(--claude-text);
     font-weight: 600;
     box-shadow: 0 1px 4px rgba(20, 20, 19, 0.08);
-}
-
-[data-theme="dark"] .filter-tab-btn.active {
-    background: var(--claude-surface-hover);
-    color: #ffffff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .filter-status-tag {

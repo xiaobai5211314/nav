@@ -1,13 +1,12 @@
 /**
- * 小白个人全景空间 · 核心应用中枢 (Claude Design UI 架构)
- * 纯粹、敏捷、无死锁：支持亮暗主题切换、分类筛选、日记心绪、落樱粒子、背景乐随身听、模态弹窗与剪贴板
+ * 小白个人全景空间 · 核心应用中枢 (Claude Design 羊皮纸暖白专版)
+ * 纯粹、敏捷、无死锁：锁死官方羊皮纸暖白质感、分类筛选、日记心绪、落樱粒子、背景乐随身听、模态弹窗与剪贴板
  */
 (function() {
     'use strict';
 
-    // 1. 全局配置与状态
+    // 1. 全局配置与状态 (锁死 Claude 羊皮纸暖白)
     var State = {
-        theme: localStorage.getItem('claude-theme') || 'dark', // 默认暗色或遵循历史设定
         sakuraActive: true,
         bgmPlaying: false,
         loveStartTime: new Date(2019, 4, 20, 20, 20, 0), // 2019-05-20 20:20:00 (5月为索引4)
@@ -15,10 +14,14 @@
         currentQuote: ''
     };
 
+    // 强行清除旧版暗色缓存，确保 100% 呈现羊皮纸暖白
+    document.documentElement.removeAttribute('data-theme');
+    try {
+        localStorage.removeItem('claude-theme');
+    } catch(e) {}
+
     // 2. DOM 元素缓存
     var DOM = {
-        html: document.documentElement,
-        btnTheme: document.getElementById('btn-theme'),
         clockTime: document.getElementById('clock-time'),
         loveDaysDisplay: document.getElementById('love-days-display'),
         btnSakura: document.getElementById('btn-sakura'),
@@ -34,30 +37,7 @@
         cards: document.querySelectorAll('.claude-card')
     };
 
-    // 3. 亮色 / 暗色主题引擎
-    function applyTheme(theme) {
-        State.theme = theme;
-        if (theme === 'dark') {
-            DOM.html.setAttribute('data-theme', 'dark');
-        } else {
-            DOM.html.removeAttribute('data-theme');
-        }
-        localStorage.setItem('claude-theme', theme);
-    }
-
-    function initThemeEngine() {
-        applyTheme(State.theme);
-
-        if (DOM.btnTheme) {
-            DOM.btnTheme.addEventListener('click', function() {
-                var nextTheme = State.theme === 'dark' ? 'light' : 'dark';
-                applyTheme(nextTheme);
-                window.showToast(nextTheme === 'dark' ? '已切换至 Claude 深炭暖黑' : '已切换至 Claude 羊皮纸暖白');
-            });
-        }
-    }
-
-    // 4. 分类过滤引擎
+    // 3. 分类过滤引擎
     function initCategoryFilter() {
         if (!DOM.filterTabs || DOM.filterTabs.length === 0) return;
 
@@ -80,7 +60,7 @@
         });
     }
 
-    // 5. 实时时钟与相恋计时
+    // 4. 实时时钟与相恋计时
     function updateClockAndLoveTime() {
         var now = new Date();
 
@@ -98,7 +78,7 @@
         }
     }
 
-    // 6. 今日心绪拾遗引擎
+    // 5. 今日心绪拾遗引擎
     function getRandomQuote() {
         if (!State.quotes || State.quotes.length === 0) {
             return "一个人习惯了，也就不知道寂寞是什么了。愿你历经千帆，归来仍是少年。";
@@ -160,7 +140,7 @@
         document.body.removeChild(textarea);
     }
 
-    // 7. 背景音频控制器
+    // 6. 背景音频控制器
     function initMusicController() {
         if (!DOM.btnBgm || !DOM.bgmAudio) return;
 
@@ -184,7 +164,7 @@
         });
     }
 
-    // 8. 自然落樱微动效引擎
+    // 7. 自然落樱微动效引擎 (优雅暖粉色调)
     function initSakuraCanvas() {
         if (!DOM.sakuraCanvas) return;
         var canvas = DOM.sakuraCanvas;
@@ -198,17 +178,17 @@
         });
 
         var petals = [];
-        var totalPetals = Math.min(32, Math.floor(width / 35));
+        var totalPetals = Math.min(28, Math.floor(width / 40));
 
         function Petal() {
             this.x = Math.random() * width;
             this.y = Math.random() * height - height;
             this.r = 3 + Math.random() * 4;
-            this.vx = 0.5 + Math.random() * 0.8;
-            this.vy = 0.8 + Math.random() * 1.2;
+            this.vx = 0.4 + Math.random() * 0.7;
+            this.vy = 0.7 + Math.random() * 1.1;
             this.rot = Math.random() * 360;
-            this.vrot = (Math.random() - 0.5) * 1.5;
-            this.alpha = 0.25 + Math.random() * 0.35;
+            this.vrot = (Math.random() - 0.5) * 1.2;
+            this.alpha = 0.2 + Math.random() * 0.3;
         }
 
         Petal.prototype.update = function() {
@@ -229,9 +209,7 @@
             ctx.save();
             ctx.translate(this.x, this.y);
             ctx.rotate((this.rot * Math.PI) / 180);
-            ctx.fillStyle = State.theme === 'dark' 
-                ? 'rgba(235, 175, 185, ' + this.alpha + ')' 
-                : 'rgba(215, 140, 155, ' + (this.alpha * 0.8) + ')';
+            ctx.fillStyle = 'rgba(215, 135, 150, ' + this.alpha + ')';
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.bezierCurveTo(this.r, -this.r, this.r * 2, this.r, 0, this.r * 2);
@@ -277,7 +255,7 @@
         }
     }
 
-    // 9. 全局通用 Toast 轻提示
+    // 8. 全局通用 Toast 轻提示
     var toastTimer = null;
     window.showToast = function(msg) {
         if (!DOM.toast) return;
@@ -289,7 +267,7 @@
         }, 2200);
     };
 
-    // 10. 模态窗口启闭控制器
+    // 9. 模态窗口启闭控制器
     window.openModal = function(id) {
         var el = document.getElementById(id);
         if (el) {
@@ -324,9 +302,8 @@
         }
     });
 
-    // 11. 初始化入口
+    // 10. 初始化入口
     function init() {
-        initThemeEngine();
         initCategoryFilter();
         initQuotesEngine();
         initMusicController();
