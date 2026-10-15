@@ -5,6 +5,25 @@
  * 时间：2018-3-11
  *************************************************/
 
+// 全局 AJAX 响应净化器：自动剥离 PHP Warning/Notice 前缀，保障在任何 PHP 环境下均可安全反序列化 JSON
+$.ajaxSetup({
+    dataFilter: function(data, type) {
+        if (typeof data === "string") {
+            var trimmed = data.trim();
+            if (trimmed.startsWith("<")) {
+                var jsonStart = trimmed.search(/[{\[]/);
+                var jsonpStart = trimmed.search(/[A-Za-z_$][A-Za-z0-9_$.]*\s*\(/);
+                if (jsonpStart !== -1 && (jsonStart === -1 || jsonpStart < jsonStart)) {
+                    return trimmed.substring(jsonpStart);
+                } else if (jsonStart !== -1) {
+                    return trimmed.substring(jsonStart);
+                }
+            }
+        }
+        return data;
+    }
+});
+
 // ajax加载搜索结果
 function ajaxSearch() {
     if(rem.wd === ""){
