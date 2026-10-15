@@ -28,8 +28,8 @@
         btnCopyQuote: document.getElementById('btn-copy-quote'),
         sakuraCanvas: document.getElementById('sakura-canvas'),
         toast: document.getElementById('toast-msg'),
-        filterTabs: document.querySelectorAll('.filter-tab'),
-        cards: document.querySelectorAll('.claude-card')
+        filterTabs: document.querySelectorAll('.filter-tab-btn, .filter-tab'),
+        cards: document.querySelectorAll('.bento-card, .claude-card')
     };
 
     // 3. 分类过滤引擎
@@ -46,7 +46,7 @@
                 DOM.cards.forEach(function(card) {
                     var categories = (card.getAttribute('data-category') || '').split(' ');
                     if (filter === 'all' || categories.indexOf(filter) !== -1) {
-                        card.style.display = 'flex';
+                        card.style.display = '';
                     } else {
                         card.style.display = 'none';
                     }
