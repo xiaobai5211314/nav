@@ -111,6 +111,10 @@
     .visitor-ip-close { background: transparent; border: none; color: #87867f; font-size: 16px; cursor: pointer; padding: 2px 4px; line-height: 1; border-radius: 4px; }
     .visitor-ip-close:hover { color: #141413; background: #eceae1; }
     @media (max-width: 680px) { .audio-capsule-title, .dimension-source { display: none; } .visitor-ip-badge { right: 16px; bottom: 16px; left: 16px; max-width: none; } }
+    
+    .card-icon-box { width: 38px; height: 38px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: 1px solid rgba(20,20,19,0.08); box-shadow: 0 1px 3px rgba(20,20,19,0.04); overflow: hidden; flex-shrink: 0; }
+    .card-logo-img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 9px; }
+
     </style>
     <script src="assets/data/data-v5.js"></script>
 </head>
@@ -327,7 +331,7 @@
             </div>
         </section>
 
-        <!-- 5. Bento 网格矩阵 (15 个精选实体应用与微服务，按项目工程规模与难度从大到小严格排序) -->
+                <!-- 5. Bento 网格矩阵 (15 个精选实体应用与微服务，按项目工程规模与难度从大到小严格排序) -->
         <main class="claude-bento-grid" id="project-grid">
 
             <!-- 01. 小白养基量化分析系统 (系统级：.NET 8 / Blazor / 估值回测 / 组合管理 / Chrome扩展) -->
@@ -335,7 +339,7 @@
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+                            <img src="assets/images/logos/logo_guzhi.png" alt="小白养基Logo" class="card-logo-img">
                         </div>
                         <span class="card-pill slate">.NET 8 / Blazor</span>
                     </div>
@@ -353,7 +357,7 @@
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                            <img src="assets/images/logos/logo_ff.png" alt="域名分发Logo" class="card-logo-img">
                         </div>
                         <span class="card-pill slate">Laravel 12 / 自动解析</span>
                     </div>
@@ -366,50 +370,14 @@
                 </div>
             </a>
 
-            <!-- 03. 小米 MiMo AI 控制台 (网关级：Python Flask / Playwright 逆向 / 多模态视觉路由) -->
-            <a href="https://xmcookie.21212121.xyz/pw" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                        </div>
-                        <span class="card-pill terracotta">Python / Playwright</span>
-                    </div>
-                    <h3 class="card-title">小米 MiMo AI 控制台</h3>
-                    <p class="card-desc">基于 Python Flask 与 Playwright 构建的小米 MiMo AI Studio 对话网关、多模态视觉模型路由与远程登录控制台。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">xmcookie.21212121.xyz/pw</span>
-                    <span class="card-arrow">访问控制台 ↗</span>
-                </div>
-            </a>
-
-            <!-- 04. DeepSeek 逆向 API 网关 (网关级：Playwright / Wasm 逆向 / QQ 机器人桥接) -->
-            <a href="https://deepseekapi.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zm-2 10H6V7h12v12zm-9-6c-.83 0-1.5-.67-1.5-1.5S8.17 10 9 10s1.5.67 1.5 1.5S9.83 13 9 13zm6 0c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg>
-                        </div>
-                        <span class="card-pill terracotta">Playwright/Wasm</span>
-                    </div>
-                    <h3 class="card-title">DeepSeek 逆向 API 网关</h3>
-                    <p class="card-desc">DeepSeek 网页逆向桥接服务与 QQ 智能机器人网关，提供高可用 AI 语义推理与智能问答能力。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">deepseekapi.21212121.xyz</span>
-                    <span class="card-arrow">访问网关 ↗</span>
-                </div>
-            </a>
-
-            <!-- 05. New API 多模型中继聚合网关 (集群级：Docker / Go / Redis / 多模型统一调度) -->
+            <!-- 03. New API 多模型中继聚合网关 (集群级：Docker / Go / Redis / 多模型统一调度) -->
             <a href="https://aiapi.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2zm0 14H5V8h14v10z"/><circle cx="8" cy="13" r="1.5"/><circle cx="12" cy="13" r="1.5"/><circle cx="16" cy="13" r="1.5"/></svg>
+                            <img src="assets/images/logos/logo_aiapi.png" alt="New API Logo" class="card-logo-img">
                         </div>
-                        <span class="card-pill terracotta">Docker / New API</span>
+                        <span class="card-pill terracotta">Docker / Go / Redis</span>
                     </div>
                     <h3 class="card-title">New API 多模型中继网关</h3>
                     <p class="card-desc">基于 Docker 容器反代的大模型统一分发中继网关与 API 控制台，支持 OpenAI 标准兼容接口与多平台路由。</p>
@@ -420,12 +388,12 @@
                 </div>
             </a>
 
-            <!-- 06. 岁月静好主博客 (中枢级：Typecho / PHP / MySQL 全站权威基准主站) -->
+            <!-- 04. 岁月静好主博客 (中枢级：Typecho / PHP / MySQL 全站权威基准主站) -->
             <a href="https://21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                            <img src="assets/images/logos/logo_blog.png" alt="岁月静好博客Logo" class="card-logo-img">
                         </div>
                         <span class="card-pill terracotta">权威基准站</span>
                     </div>
@@ -438,30 +406,12 @@
                 </div>
             </a>
 
-            <!-- 07. 全网解析音乐播放器 (服务级：全网音源逆向 / SQLite 账号云同步 / 密码加盐认证 / 网易云UID) -->
-            <a href="https://music.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="life">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-                        </div>
-                        <span class="card-pill slate">MKOnline / SQLite云同步</span>
-                    </div>
-                    <h3 class="card-title">全网解析音乐播放器</h3>
-                    <p class="card-desc">全网多音源在线解析播放器，支持滚动高亮歌词、SQLite 云端账号漫游、网易云 UID 绑定与极简底栏。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">music.21212121.xyz</span>
-                    <span class="card-arrow">打开音乐 ↗</span>
-                </div>
-            </a>
-
-            <!-- 08. 程序员全真模拟面试 (应用级：全栈多技术题库 / localStorage 进度持久化 / 代码考核) -->
+            <!-- 05. 程序员全真模拟面试 (应用级：全栈多技术题库 / localStorage 进度持久化 / 代码考核) -->
             <a href="https://ms.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                            <img src="assets/images/logos/logo_ms.png" alt="模拟面试Logo" class="card-logo-img">
                         </div>
                         <span class="card-pill slate">题库刷题</span>
                     </div>
@@ -474,12 +424,12 @@
                 </div>
             </a>
 
-            <!-- 09. 上海驾考科目一速过宝典 (应用级：单页全离线极速刷题 / IndexedDB 本地持久化) -->
+            <!-- 06. 上海驾考科目一速过宝典 (应用级：单页全离线极速刷题 / IndexedDB 本地持久化) -->
             <a href="https://jiakao.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                            <img src="assets/images/logos/logo_jiakao.png" alt="驾考速学Logo" class="card-logo-img">
                         </div>
                         <span class="card-pill sage">离线刷题</span>
                     </div>
@@ -492,66 +442,12 @@
                 </div>
             </a>
 
-            <!-- 10. EasyImage 极简云图床 (存储级：PHP / 七牛云 Kodo / 又拍云 CDN / WebP 压缩) -->
-            <a href="https://tuchuang.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-                        </div>
-                        <span class="card-pill sage">云存储</span>
-                    </div>
-                    <h3 class="card-title">EasyImage 极简云图床</h3>
-                    <p class="card-desc">轻量无数据库图床私有实例，结合七牛云 Kodo 与又拍云 CDN，支持 Markdown 一键复制与 WebP 压缩。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">tuchuang.21212121.xyz</span>
-                    <span class="card-arrow">上传图片 ↗</span>
-                </div>
-            </a>
-
-            <!-- 11. 腾讯云服务器实时探针 (运维级：PHP 8.5 / Linux 硬件与负载实时探针) -->
-            <a href="https://21212121.xyz/xbtz.php" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm-4 8H7v-2h6v2z"/></svg>
-                        </div>
-                        <span class="card-pill terracotta">PHP 8.5 / Sys</span>
-                    </div>
-                    <h3 class="card-title">腾讯云服务器实时探针</h3>
-                    <p class="card-desc">腾讯云上海节点服务器硬件、CPU/内存负载、网络流量与 PHP 运行环境全面实时监控。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">21212121.xyz/xbtz.php</span>
-                    <span class="card-arrow">查看监控 ↗</span>
-                </div>
-            </a>
-
-            <!-- 12. 照妖镜趣味拍照应用 (娱乐级：PHP 8.5 / 环境指纹 / 邮件异步告警) -->
-            <a href="https://zyj.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                        </div>
-                        <span class="card-pill terracotta">PHP 8.5</span>
-                    </div>
-                    <h3 class="card-title">照妖镜趣味拍照应用</h3>
-                    <p class="card-desc">趣味伪装自拍生成工具，支持邮件异步提醒与实时安全防护，经典轻量 Web 娱乐应用。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">zyj.21212121.xyz</span>
-                    <span class="card-arrow">体验应用 ↗</span>
-                </div>
-            </a>
-
-            <!-- 13. 《高性价比人生指南》 (知识级：开源长篇数字电子书 / 认知觉醒指南) -->
+            <!-- 07. 《高性价比人生指南》 (知识级：开源长篇数字电子书 / 认知觉醒指南) -->
             <a href="https://rensheng.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+                            <img src="assets/images/logos/logo_rensheng.png" alt="人生指南Logo" class="card-logo-img">
                         </div>
                         <span class="card-pill sage">知识库</span>
                     </div>
@@ -564,14 +460,104 @@
                 </div>
             </a>
 
-            <!-- 14. 3D 水晶球梦幻相册 (视觉级：Three.js / 3D 渲染管线 / 粒子空间交互) -->
+            <!-- 08. EasyImage 极简云图床 (存储级：PHP / 七牛云 Kodo / 又拍云 CDN / WebP 压缩) -->
+            <a href="https://tuchuang.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
+                <div class="card-top">
+                    <div class="card-badge-row">
+                        <div class="card-icon-box">
+                            <img src="assets/images/logos/logo_tuchuang.png" alt="云图床Logo" class="card-logo-img">
+                        </div>
+                        <span class="card-pill sage">云存储</span>
+                    </div>
+                    <h3 class="card-title">EasyImage 极简云图床</h3>
+                    <p class="card-desc">轻量无数据库图床私有实例，结合七牛云 Kodo 与又拍云 CDN，支持 Markdown 一键复制与 WebP 压缩。</p>
+                </div>
+                <div class="card-bottom">
+                    <span class="card-domain">tuchuang.21212121.xyz</span>
+                    <span class="card-arrow">上传图片 ↗</span>
+                </div>
+            </a>
+
+            <!-- 09. 全网解析音乐播放器 (服务级：全网音源逆向 / SQLite 账号云同步 / 密码加盐认证 / 网易云UID) -->
+            <a href="https://music.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="life">
+                <div class="card-top">
+                    <div class="card-badge-row">
+                        <div class="card-icon-box">
+                            <img src="assets/images/logos/logo_music.png" alt="音乐播放器Logo" class="card-logo-img">
+                        </div>
+                        <span class="card-pill slate">MKOnline / SQLite云同步</span>
+                    </div>
+                    <h3 class="card-title">全网解析音乐播放器</h3>
+                    <p class="card-desc">全网多音源在线解析播放器，支持滚动高亮歌词、SQLite 云端账号漫游、网易云 UID 绑定与极简底栏。</p>
+                </div>
+                <div class="card-bottom">
+                    <span class="card-domain">music.21212121.xyz</span>
+                    <span class="card-arrow">打开音乐 ↗</span>
+                </div>
+            </a>
+
+            <!-- 10. 小米 MiMo AI 控制台 (网关级：Python Flask / Playwright 逆向 / 多模态视觉路由) -->
+            <a href="https://xmcookie.21212121.xyz/pw" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
+                <div class="card-top">
+                    <div class="card-badge-row">
+                        <div class="card-icon-box">
+                            <img src="assets/images/logos/logo_mimo.png" alt="小米MiMo Logo" class="card-logo-img">
+                        </div>
+                        <span class="card-pill terracotta">Python / Playwright</span>
+                    </div>
+                    <h3 class="card-title">小米 MiMo AI 控制台</h3>
+                    <p class="card-desc">基于 Python Flask 与 Playwright 构建的小米 MiMo AI Studio 对话网关、多模态视觉模型路由与远程登录控制台。</p>
+                </div>
+                <div class="card-bottom">
+                    <span class="card-domain">xmcookie.21212121.xyz/pw</span>
+                    <span class="card-arrow">访问控制台 ↗</span>
+                </div>
+            </a>
+
+            <!-- 11. DeepSeek 逆向 API 网关 (网关级：Playwright / Wasm 逆向 / QQ 机器人桥接) -->
+            <a href="https://deepseekapi.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
+                <div class="card-top">
+                    <div class="card-badge-row">
+                        <div class="card-icon-box">
+                            <img src="assets/images/logos/logo_deepseek.png" alt="DeepSeek Logo" class="card-logo-img">
+                        </div>
+                        <span class="card-pill terracotta">Playwright/Wasm逆向</span>
+                    </div>
+                    <h3 class="card-title">DeepSeek 逆向 API 网关</h3>
+                    <p class="card-desc">DeepSeek 网页逆向桥接服务与 QQ 智能机器人网关，提供高可用 AI 语义推理与智能问答能力。</p>
+                </div>
+                <div class="card-bottom">
+                    <span class="card-domain">deepseekapi.21212121.xyz</span>
+                    <span class="card-arrow">访问网关 ↗</span>
+                </div>
+            </a>
+
+            <!-- 12. 浏览器 Cookie 导出守护 (工具级：Python / Chrome 扩展会话提取 / 自动保活) -->
+            <a href="https://xcookie.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
+                <div class="card-top">
+                    <div class="card-badge-row">
+                        <div class="card-icon-box">
+                            <img src="assets/images/logos/logo_xcookie.png" alt="Cookie导出Logo" class="card-logo-img">
+                        </div>
+                        <span class="card-pill sage">会话守护</span>
+                    </div>
+                    <h3 class="card-title">浏览器 Cookie 导出守护</h3>
+                    <p class="card-desc">跨域 Cookie 快速导出与云端自动化采集控制台，支持移动端自适应与养基异动监控数据保活。</p>
+                </div>
+                <div class="card-bottom">
+                    <span class="card-domain">xcookie.21212121.xyz</span>
+                    <span class="card-arrow">管理守护 ↗</span>
+                </div>
+            </a>
+
+            <!-- 13. 3D 水晶球梦幻相册 (视觉级：Three.js / 3D 渲染管线 / 粒子空间交互) -->
             <a href="https://3d.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="life">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9zM12 4.15L6.04 7.5 12 10.85l5.96-3.35L12 4.15zM5 8.9v6.2l6 3.38v-6.2L5 8.9zm14 6.2V8.9l-6 3.38v6.2l6-3.38z"/></svg>
+                            <img src="assets/images/logos/logo_3d.png" alt="3D相册Logo" class="card-logo-img">
                         </div>
-                        <span class="card-pill slate">Three.js</span>
+                        <span class="card-pill slate">Three.js / WebGL</span>
                     </div>
                     <h3 class="card-title">3D 水晶球梦幻相册</h3>
                     <p class="card-desc">基于 Three.js 打造的 3D 照片墙与元素周期表交互展示，支持摄像头手势翻转与滚轮缩放。</p>
@@ -582,12 +568,12 @@
                 </div>
             </a>
 
-            <!-- 15. 爱心树浪漫时光馆 (动画级：HTML5 Canvas 几何动态分形树 / 毫秒计时器) -->
+            <!-- 14. 爱心树浪漫时光馆 (动画级：HTML5 Canvas 几何动态分形树 / 毫秒计时器) -->
             <a href="https://love.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="life">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <img src="assets/images/logos/logo_love.png" alt="爱心树Logo" class="card-logo-img">
                         </div>
                         <span class="card-pill terracotta">2019-05-20</span>
                     </div>
@@ -597,6 +583,24 @@
                 <div class="card-bottom">
                     <span class="card-domain">love.21212121.xyz</span>
                     <span class="card-arrow">重温浪漫 ↗</span>
+                </div>
+            </a>
+
+            <!-- 15. 照妖镜趣味拍照应用 (娱乐级：PHP 8.5 / 环境指纹 / 邮件异步告警) -->
+            <a href="https://zyj.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
+                <div class="card-top">
+                    <div class="card-badge-row">
+                        <div class="card-icon-box">
+                            <img src="assets/images/logos/logo_zyj.png" alt="照妖镜Logo" class="card-logo-img">
+                        </div>
+                        <span class="card-pill terracotta">PHP 8.5 / WebRTC</span>
+                    </div>
+                    <h3 class="card-title">照妖镜趣味拍照应用</h3>
+                    <p class="card-desc">趣味伪装自拍生成工具，支持邮件异步提醒与实时安全防护，经典轻量 Web 娱乐应用。</p>
+                </div>
+                <div class="card-bottom">
+                    <span class="card-domain">zyj.21212121.xyz</span>
+                    <span class="card-arrow">体验应用 ↗</span>
                 </div>
             </a>
 
