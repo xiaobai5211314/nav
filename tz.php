@@ -704,8 +704,9 @@ if ($act_get == "rt")
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title><?php echo $title.$version; ?></title>
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- Powered by: Yahei.Net -->
 <style type="text/css">
@@ -754,6 +755,18 @@ input.btn:hover{background:#b85736; border-color:#b85736;}
 .resYes{color: #788c5d; font-weight:600;}
 .resNo{color: #c96442; font-weight:600;}
 .word{word-break:break-all;}
+@media (max-width: 768px) {
+    body { padding: 12px 0 env(safe-area-inset-bottom, 12px); }
+    #page { width: 100% !important; max-width: 100% !important; padding: 0 10px !important; box-sizing: border-box !important; }
+    .top-bar { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+    #header { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+    #header h1 { font-size: 18px !important; }
+    #header h1 small { display: block; margin-left: 0; margin-top: 4px; }
+    table { display: block !important; width: 100% !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    th, td { font-size: 12px !important; padding: 6px 8px !important; }
+    input[type="text"], input[type="password"] { max-width: 100% !important; box-sizing: border-box !important; }
+    input.btn { min-height: 36px; padding: 0 14px; touch-action: manipulation; }
+}
 -->
 </style>
 <script language="JavaScript" type="text/javascript" src="/jquery-1.7.2.min.js"></script>
@@ -850,7 +863,7 @@ function displayData(dataJSON)
 <body>
 
 <div id="page">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding:10px 16px; background:#ffffff; border:1px solid #e8e6dc; border-radius:10px; box-shadow:0 2px 8px rgba(20,20,19,0.03);">
+    <div class="top-bar" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding:10px 16px; background:#ffffff; border:1px solid #e8e6dc; border-radius:10px; box-shadow:0 2px 8px rgba(20,20,19,0.03);">
         <a href="./" style="color:#c96442; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-size:13px;">
             <span>← 返回小白数字空间 (a.21212121.xyz)</span>
         </a>
