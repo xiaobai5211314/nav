@@ -98,25 +98,28 @@ $valInt = isset($_POST['pInt']) ? $_POST['pInt'] : "未测试";
 $valFloat = isset($_POST['pFloat']) ? $_POST['pFloat'] : "未测试";
 $valIo = isset($_POST['pIo']) ? $_POST['pIo'] : "未测试";
 
-if ($_GET['act'] == "phpinfo") 
+$act_get = isset($_GET['act']) ? $_GET['act'] : '';
+$act_post = isset($_POST['act']) ? $_POST['act'] : '';
+
+if ($act_get == "phpinfo") 
 {
 	phpinfo();
 	exit();
 } 
-elseif($_POST['act'] == "整型测试")
+elseif($act_post == "整型测试")
 {
 	$valInt = test_int();
 } 
-elseif($_POST['act'] == "浮点测试")
+elseif($act_post == "浮点测试")
 {
 	$valFloat = test_float();
 } 
-elseif($_POST['act'] == "IO测试")
+elseif($act_post == "IO测试")
 {
 	$valIo = test_io();
 } 
 //网速测试-开始
-elseif($_POST['act']=="开始测试")
+elseif($act_post == "开始测试")
 {
 ?>
 	<script language="javascript" type="text/javascript">
@@ -139,7 +142,7 @@ elseif($_POST['act']=="开始测试")
 <?php
 }
 //网速测试-结束
-elseif($_GET['act'] == "Function")
+elseif($act_get == "Function")
 {
 	$arr = get_defined_functions();
 	Function php()
@@ -150,7 +153,7 @@ elseif($_GET['act'] == "Function")
 	print_r($arr);
 	echo "</pre>";
 	exit();
-}elseif($_GET['act'] == "disable_functions")
+}elseif($act_get == "disable_functions")
 {
 	$disFuns=get_cfg_var("disable_functions");
 	if(empty($disFuns))
@@ -172,7 +175,7 @@ elseif($_GET['act'] == "Function")
 }
 
 //MySQL检测
-if ($_POST['act'] == 'MySQL检测')
+if ($act_post == 'MySQL检测')
 {
 	$host = isset($_POST['host']) ? trim($_POST['host']) : '';
 	$port = isset($_POST['port']) ? (int) $_POST['port'] : '';
@@ -276,12 +279,53 @@ function test_io()
 	return($time);
 }
 
-function GetCoreInformation() {$data = file('/proc/stat');$cores = array();foreach( $data as $line ) {if( preg_match('/^cpu[0-9]/', $line) ){$info = explode(' ', $line);$cores[]=array('user'=>$info[1],'nice'=>$info[2],'sys' => $info[3],'idle'=>$info[4],'iowait'=>$info[5],'irq' => $info[6],'softirq' => $info[7]);}}return $cores;}
-function GetCpuPercentages($stat1, $stat2) {if(count($stat1)!==count($stat2)){return;}$cpus=array();for( $i = 0, $l = count($stat1); $i < $l; $i++) {	$dif = array();	$dif['user'] = $stat2[$i]['user'] - $stat1[$i]['user'];$dif['nice'] = $stat2[$i]['nice'] - $stat1[$i]['nice'];	$dif['sys'] = $stat2[$i]['sys'] - $stat1[$i]['sys'];$dif['idle'] = $stat2[$i]['idle'] - $stat1[$i]['idle'];$dif['iowait'] = $stat2[$i]['iowait'] - $stat1[$i]['iowait'];$dif['irq'] = $stat2[$i]['irq'] - $stat1[$i]['irq'];$dif['softirq'] = $stat2[$i]['softirq'] - $stat1[$i]['softirq'];$total = array_sum($dif);$cpu = array();foreach($dif as $x=>$y) $cpu[$x] = round($y / $total * 100, 2);$cpus['cpu' . $i] = $cpu;}return $cpus;}
-$stat1 = GetCoreInformation();sleep(1);$stat2 = GetCoreInformation();$data = GetCpuPercentages($stat1, $stat2);
-$cpu_show = $data['cpu0']['user']."%us,  ".$data['cpu0']['sys']."%sy,  ".$data['cpu0']['nice']."%ni, ".$data['cpu0']['idle']."%id,  ".$data['cpu0']['iowait']."%wa,  ".$data['cpu0']['irq']."%irq,  ".$data['cpu0']['softirq']."%softirq";
-function makeImageUrl($title, $data) {$api='http://api.yahei.net/tz/cpu_show.php?id=';$url.=$data['user'].',';$url.=$data['nice'].',';$url.=$data['sys'].',';$url.=$data['idle'].',';$url.=$data['iowait'];$url.='&chdl=User|Nice|Sys|Idle|Iowait&chdlp=b&chl=';$url.=$data['user'].'%25|';$url.=$data['nice'].'%25|';$url.=$data['sys'].'%25|';$url.=$data['idle'].'%25|';$url.=$data['iowait'].'%25';$url.='&chtt=Core+'.$title;return $api.base64_encode($url);}
-if($_GET['act'] == "cpu_percentage"){echo "<center><b><font face='Microsoft YaHei' color='#666666' size='3'>图片加载慢，请耐心等待！</font></b><br /><br />";foreach( $data as $k => $v ) {echo '<img src="' . makeImageUrl( $k, $v ) . '" style="width:360px;height:240px;border: #CCCCCC 1px solid;background: #FFFFFF;margin:5px;padding:5px;" />';}echo "</center>";exit();}
+function GetCoreInformation() {
+    $data = @file('/proc/stat');
+    if (!is_array($data)) return array();
+    $cores = array();
+    foreach( $data as $line ) {
+        if( preg_match('/^cpu[0-9]/', $line) ){
+            $info = explode(' ', $line);
+            $cores[]=array('user'=>isset($info[1])?$info[1]:0,'nice'=>isset($info[2])?$info[2]:0,'sys' => isset($info[3])?$info[3]:0,'idle'=>isset($info[4])?$info[4]:0,'iowait'=>isset($info[5])?$info[5]:0,'irq' => isset($info[6])?$info[6]:0,'softirq' => isset($info[7])?$info[7]:0);
+        }
+    }
+    return $cores;
+}
+
+function GetCpuPercentages($stat1, $stat2) {
+    if(!is_array($stat1) || !is_array($stat2) || count($stat1)!==count($stat2) || count($stat1) === 0){
+        return array();
+    }
+    $cpus=array();
+    for( $i = 0, $l = count($stat1); $i < $l; $i++) {
+        $dif = array();
+        $dif['user'] = isset($stat2[$i]['user'], $stat1[$i]['user']) ? ($stat2[$i]['user'] - $stat1[$i]['user']) : 0;
+        $dif['nice'] = isset($stat2[$i]['nice'], $stat1[$i]['nice']) ? ($stat2[$i]['nice'] - $stat1[$i]['nice']) : 0;
+        $dif['sys'] = isset($stat2[$i]['sys'], $stat1[$i]['sys']) ? ($stat2[$i]['sys'] - $stat1[$i]['sys']) : 0;
+        $dif['idle'] = isset($stat2[$i]['idle'], $stat1[$i]['idle']) ? ($stat2[$i]['idle'] - $stat1[$i]['idle']) : 0;
+        $dif['iowait'] = isset($stat2[$i]['iowait'], $stat1[$i]['iowait']) ? ($stat2[$i]['iowait'] - $stat1[$i]['iowait']) : 0;
+        $dif['irq'] = isset($stat2[$i]['irq'], $stat1[$i]['irq']) ? ($stat2[$i]['irq'] - $stat1[$i]['irq']) : 0;
+        $dif['softirq'] = isset($stat2[$i]['softirq'], $stat1[$i]['softirq']) ? ($stat2[$i]['softirq'] - $stat1[$i]['softirq']) : 0;
+        $total = array_sum($dif);
+        $cpu = array();
+        foreach($dif as $x=>$y) $cpu[$x] = ($total > 0) ? round($y / $total * 100, 2) : 0;
+        $cpus['cpu' . $i] = $cpu;
+    }
+    return $cpus;
+}
+
+$stat1 = GetCoreInformation();
+$data = array();
+if (!empty($stat1)) {
+    usleep(100000);
+    $stat2 = GetCoreInformation();
+    if (!empty($stat2)) {
+        $data = GetCpuPercentages($stat1, $stat2);
+    }
+}
+$cpu_show = isset($data['cpu0']) ? ($data['cpu0']['user']."%us,  ".$data['cpu0']['sys']."%sy,  ".$data['cpu0']['nice']."%ni, ".$data['cpu0']['idle']."%id,  ".$data['cpu0']['iowait']."%wa,  ".$data['cpu0']['irq']."%irq,  ".$data['cpu0']['softirq']."%softirq") : '未探测';
+function makeImageUrl($title, $data) {$api='http://api.yahei.net/tz/cpu_show.php?id=';$url='';if(is_array($data)){$url.=$data['user'].',';$url.=$data['nice'].',';$url.=$data['sys'].',';$url.=$data['idle'].',';$url.=$data['iowait'];$url.='&chdl=User|Nice|Sys|Idle|Iowait&chdlp=b&chl=';$url.=$data['user'].'%25|';$url.=$data['nice'].'%25|';$url.=$data['sys'].'%25|';$url.=$data['idle'].'%25|';$url.=$data['iowait'].'%25';$url.='&chtt=Core+'.$title;}return $api.base64_encode($url);}
+if($act_get == "cpu_percentage"){echo "<center><b><font face='Microsoft YaHei' color='#666666' size='3'>图片加载慢，请耐心等待！</font></b><br /><br />";if(is_array($data)){foreach( $data as $k => $v ) {echo '<img src="' . makeImageUrl( $k, $v ) . '" style="width:360px;height:240px;border: #CCCCCC 1px solid;background: #FFFFFF;margin:5px;padding:5px;" />';}}echo "</center>";exit();}
 
 // 根据不同系统取得CPU相关信息
 switch(PHP_OS)
@@ -562,7 +606,17 @@ function bar($percent)
 <?php
 }
 
-$uptime = $sysInfo['uptime']; //在线时间
+if (!is_array($sysInfo)) {
+    $sysInfo = array(
+        'memTotal' => 0, 'memUsed' => 0, 'memFree' => 0, 'memCached' => 0,
+        'memBuffers' => 0, 'swapTotal' => 0, 'swapUsed' => 0, 'swapFree' => 0,
+        'swapPercent' => 0, 'memRealUsed' => 0, 'memRealFree' => 0,
+        'memRealPercent' => 0, 'memPercent' => 0, 'memCachedPercent' => 0,
+        'loadAvg' => '未探测', 'uptime' => '未探测'
+    );
+}
+
+$uptime = isset($sysInfo['uptime']) ? $sysInfo['uptime'] : '未探测'; //在线时间
 $stime = date('Y-m-d H:i:s'); //系统当前时间
 
 //硬盘
@@ -571,7 +625,7 @@ $df = round(@disk_free_space(".")/(1024*1024*1024),3); //可用
 $du = $dt-$df; //已用
 $hdPercent = (floatval($dt)!=0)?round($du/$dt*100,2):0;
 
-$load = $sysInfo['loadAvg'];	//系统负载
+$load = isset($sysInfo['loadAvg']) ? $sysInfo['loadAvg'] : '未探测';	//系统负载
 
 
 //判断内存如果小于1G，就显示M，否则显示G单位
@@ -614,23 +668,36 @@ else
 
 //网卡流量
 $strs = @file("/proc/net/dev"); 
+$NetOutSpeed = array();
+$NetInputSpeed = array();
+$NetInput = array();
+$NetOut = array();
 
-for ($i = 2; $i < count($strs); $i++ )
+if (is_array($strs))
 {
-	preg_match_all( "/([^\s]+):[\s]{0,}(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/", $strs[$i], $info );
-	$NetOutSpeed[$i] = $info[10][0];
-	$NetInputSpeed[$i] = $info[2][0];
-	$NetInput[$i] = formatsize($info[2][0]);
-	$NetOut[$i]  = formatsize($info[10][0]);
+	for ($i = 2; $i < count($strs); $i++ )
+	{
+		preg_match_all( "/([^\s]+):[\s]{0,}(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/", $strs[$i], $info );
+		$NetOutSpeed[$i] = isset($info[10][0]) ? $info[10][0] : 0;
+		$NetInputSpeed[$i] = isset($info[2][0]) ? $info[2][0] : 0;
+		$NetInput[$i] = isset($info[2][0]) ? formatsize($info[2][0]) : '0B';
+		$NetOut[$i]  = isset($info[10][0]) ? formatsize($info[10][0]) : '0B';
+	}
 }
 
 //ajax调用实时刷新
-if ($_GET['act'] == "rt")
+if ($act_get == "rt")
 {
+    for ($k = 2; $k <= 10; $k++) {
+        if (!isset($NetOut[$k])) $NetOut[$k] = '0B';
+        if (!isset($NetInput[$k])) $NetInput[$k] = '0B';
+        if (!isset($NetOutSpeed[$k])) $NetOutSpeed[$k] = 0;
+        if (!isset($NetInputSpeed[$k])) $NetInputSpeed[$k] = 0;
+    }
 	$arr=array('useSpace'=>"$du",'freeSpace'=>"$df",'hdPercent'=>"$hdPercent",'barhdPercent'=>"$hdPercent%",'TotalMemory'=>"$mt",'UsedMemory'=>"$mu",'FreeMemory'=>"$mf",'CachedMemory'=>"$mc",'Buffers'=>"$mb",'TotalSwap'=>"$st",'swapUsed'=>"$su",'swapFree'=>"$sf",'loadAvg'=>"$load",'uptime'=>"$uptime",'freetime'=>"$freetime",'bjtime'=>"$bjtime",'stime'=>"$stime",'memRealPercent'=>"$memRealPercent",'memRealUsed'=>"$memRealUsed",'memRealFree'=>"$memRealFree",'memPercent'=>"$memPercent%",'memCachedPercent'=>"$memCachedPercent",'barmemCachedPercent'=>"$memCachedPercent%",'swapPercent'=>"$swapPercent",'barmemRealPercent'=>"$memRealPercent%",'barswapPercent'=>"$swapPercent%",'NetOut2'=>"$NetOut[2]",'NetOut3'=>"$NetOut[3]",'NetOut4'=>"$NetOut[4]",'NetOut5'=>"$NetOut[5]",'NetOut6'=>"$NetOut[6]",'NetOut7'=>"$NetOut[7]",'NetOut8'=>"$NetOut[8]",'NetOut9'=>"$NetOut[9]",'NetOut10'=>"$NetOut[10]",'NetInput2'=>"$NetInput[2]",'NetInput3'=>"$NetInput[3]",'NetInput4'=>"$NetInput[4]",'NetInput5'=>"$NetInput[5]",'NetInput6'=>"$NetInput[6]",'NetInput7'=>"$NetInput[7]",'NetInput8'=>"$NetInput[8]",'NetInput9'=>"$NetInput[9]",'NetInput10'=>"$NetInput[10]",'NetOutSpeed2'=>"$NetOutSpeed[2]",'NetOutSpeed3'=>"$NetOutSpeed[3]",'NetOutSpeed4'=>"$NetOutSpeed[4]",'NetOutSpeed5'=>"$NetOutSpeed[5]",'NetInputSpeed2'=>"$NetInputSpeed[2]",'NetInputSpeed3'=>"$NetInputSpeed[3]",'NetInputSpeed4'=>"$NetInputSpeed[4]",'NetInputSpeed5'=>"$NetInputSpeed[5]");
 	$jarr=json_encode($arr); 
-	$_GET['callback'] = htmlspecialchars($_GET['callback']);
-	echo $_GET['callback'],'(',$jarr,')';
+	$cb = isset($_GET['callback']) ? htmlspecialchars($_GET['callback']) : '';
+	echo $cb,'(',$jarr,')';
 	exit;
 }
 ?>
