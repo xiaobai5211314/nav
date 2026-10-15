@@ -5,84 +5,84 @@
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
     <!-- 全景聚合工作台主站 -->
     <url>
-        <loc>https://a.21212121.xyz/</loc>
+        <loc>https://nav.21212121.xyz/</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <!-- 站群矩阵与友链互联中心 -->
     <url>
-        <loc>https://a.21212121.xyz/links.html</loc>
+        <loc>https://nav.21212121.xyz/links.html</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <!-- 开发者与极客网址导航 -->
     <url>
-        <loc>https://a.21212121.xyz/dh/</loc>
+        <loc>https://nav.21212121.xyz/dh/</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <!-- 岁月静好爱心引导页 -->
     <url>
-        <loc>https://a.21212121.xyz/l/</loc>
+        <loc>https://nav.21212121.xyz/l/</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <!-- 在线音乐解析与播放器 -->
     <url>
-        <loc>https://a.21212121.xyz/yyjx/</loc>
+        <loc>https://nav.21212121.xyz/yyjx/</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <!-- 爱情相伴纪念时光馆 -->
     <url>
-        <loc>https://a.21212121.xyz/db/</loc>
+        <loc>https://nav.21212121.xyz/db/</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <!-- 爱情时钟纪念墙 -->
     <url>
-        <loc>https://a.21212121.xyz/bb/</loc>
+        <loc>https://nav.21212121.xyz/bb/</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <!-- 岁月静好恋爱时光轴 -->
     <url>
-        <loc>https://a.21212121.xyz/sj/</loc>
+        <loc>https://nav.21212121.xyz/sj/</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <!-- 沉浸式舔狗日记 -->
     <url>
-        <loc>https://a.21212121.xyz/tg/</loc>
+        <loc>https://nav.21212121.xyz/tg/</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <!-- 3D粒子梦幻相册馆 -->
     <url>
-        <loc>https://a.21212121.xyz/a/</loc>
+        <loc>https://nav.21212121.xyz/a/</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <!-- 小白原版个人主页 -->
     <url>
-        <loc>https://a.21212121.xyz/xb/</loc>
+        <loc>https://nav.21212121.xyz/xb/</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <!-- 典藏诗篇 · 你不懂我我不怪你 -->
     <url>
-        <loc>https://a.21212121.xyz/xb/%E8%AF%97%E6%AD%8C.html</loc>
+        <loc>https://nav.21212121.xyz/xb/%E8%AF%97%E6%AD%8C.html</loc>
         <lastmod>2026-10-15</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>

@@ -3,4 +3,4 @@ Allow: /
 Disallow: /assets/data/
 Disallow: /yyjx/cache/
 
-Sitemap: https://a.21212121.xyz/sitemap.xml
+Sitemap: https://nav.21212121.xyz/sitemap.xml
