@@ -650,6 +650,19 @@ $type   = isset($_REQUEST['types']) ? trim($_REQUEST['types']) : '';
 $source = norm_source(isset($_REQUEST['source']) ? $_REQUEST['source'] : 'kuwo');
 $id     = isset($_REQUEST['id']) ? trim($_REQUEST['id']) : '';
 
+// 兼容 CDN / 反向代理过滤 Query 参数而将数据以 JSON POST 传递的场景
+if ($type === '' && !empty($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') !== false) {
+    $rawInput = file_get_contents('php://input');
+    if (!empty($rawInput)) {
+        $jsonData = json_decode($rawInput, true);
+        if (is_array($jsonData)) {
+            if (!empty($jsonData['types'])) $type = trim($jsonData['types']);
+            if (!empty($jsonData['source'])) $source = norm_source($jsonData['source']);
+            if (!empty($jsonData['id'])) $id = trim($jsonData['id']);
+        }
+    }
+}
+
 // 专用动作
 if ($type === 'proxy' || $type === 'fetchsrc') {
     handle_proxy();

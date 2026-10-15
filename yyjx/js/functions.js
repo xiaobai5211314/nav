@@ -28,7 +28,7 @@ $(function(){
         console.warn('播放器调试模式已开启，正常使用时请在 js/player.js 中按说明关闭调试模式');
     }
     
-    rem.isMobile = isMobile.any();      // 判断是否是移动设备
+    rem.isMobile = isMobile.any() || (window.innerWidth <= 768) || (location.href.indexOf('m.php') !== -1);      // 判断是否是移动设备
     rem.webTitle = document.title;      // 记录页面原本的标题
     rem.errCount = 0;                   // 连续播放失败的歌曲数归零
     

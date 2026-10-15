@@ -38,7 +38,7 @@
   var state = {
     backends: [],
     searchId: 'builtin',
-    urlId: 'preset_quandouyao'
+    urlId: 'preset_全豆要[聚合音源]'
   };
 
   var sessions = {};
@@ -129,6 +129,7 @@
     // 绝大多数洛雪音源向第三方请求，浏览器直接 fetch 会受 CORS 限制，统一走同源代理
     var proxyUrl = 'backend.php?types=proxy&_t=' + Date.now();
     var payload = {
+      types: 'proxy',
       url: url,
       method: method,
       headers: headers,
@@ -432,7 +433,7 @@
                 sources: Object.keys((s.inited && s.inited.sources) || {})
               };
               state.backends.push(b);
-              if (meta.default && state.urlId === 'builtin') {
+              if (meta.default && (state.urlId === 'builtin' || state.urlId === 'preset_quandouyao' || !findBackend(state.urlId))) {
                 state.urlId = sid;
               }
               console.log('[SourceHub] 预置音源加载成功:', meta.name);
@@ -555,7 +556,10 @@
     '#sh-modal .msg.show{display:block;background:rgba(52,211,153,.12);color:#34d399;border:1px solid rgba(52,211,153,.25)}',
     '#sh-modal .msg.err{background:rgba(244,63,94,.12);color:#f43f5e;border:1px solid rgba(244,63,94,.25)}',
     '#sh-modal .close-btn{position:absolute;right:16px;top:16px;width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:transparent;color:#94a3b8;cursor:pointer}',
-    '@media(max-width:640px){#sh-btn{right:12px;bottom:12px;padding:6px 12px}}'
+    '@media(max-width:768px){',
+    '  #sh-btn{right:12px;bottom:calc(72px + env(safe-area-inset-bottom,0px));padding:6px 11px;font-size:11.5px}',
+    '  #sh-modal{width:min(540px,calc(100vw - 20px));padding:18px 14px;max-height:80vh}',
+    '}'
   ].join('\n');
 
   function renderUI() {
@@ -637,24 +641,40 @@
     Array.prototype.forEach.call(m.querySelectorAll('[data-test]'), function (btn) {
       btn.addEventListener('click', function () {
         var bid = btn.dataset.test;
-        showMsg('正在测试取链中...');
         var b = findBackend(bid);
         if (!b) return showMsg('音源不存在', true);
 
-        // 测试网易云、QQ、酷我三大平台解析
-        var testMusic = { source: 'kuwo', id: '2689227', name: '晴天', artist: '周杰伦' };
+        showMsg('正在探测取链 (' + b.name.replace(/\s*\(.*\)/, '') + ')...');
+
+        var probeSongs = [
+          { source: 'kuwo', id: '2689227', name: '晴天', artist: '周杰伦', label: '酷我' },
+          { source: 'netease', id: '436514312', name: '成都', artist: '赵雷', label: '网易云' },
+          { source: 'qq', id: '0039MnYb0qxYAx', songmid: '0039MnYb0qxYAx', name: '晴天', artist: '周杰伦', label: 'QQ音乐' }
+        ];
+
         var t0 = Date.now();
-        (b.kind === 'lx' ? resolveViaLx(b, testMusic, '128k') : fallbackBuiltinUrl(testMusic))
-          .then(function (u) {
-            var ms = Date.now() - t0;
-            if (u && /^https?:\/\//i.test(u)) {
-              showMsg('✅ 测试成功 (' + ms + 'ms) 直链已就绪: ' + u.slice(0, 60) + '...');
-            } else {
-              showMsg('⚠️ 音源响应但未返回有效直链 (' + ms + 'ms)', true);
-            }
-          }).catch(function (err) {
-            showMsg('❌ 测试失败: ' + (err && err.message), true);
-          });
+        var pIdx = 0;
+
+        function runProbe() {
+          if (pIdx >= probeSongs.length) {
+            showMsg('⚠️ 该音源在主流歌曲库中未能成功返回可用直链', true);
+            return;
+          }
+          var song = probeSongs[pIdx++];
+          (b.kind === 'lx' ? resolveViaLx(b, song, '128k') : fallbackBuiltinUrl(song))
+            .then(function (u) {
+              var ms = Date.now() - t0;
+              if (u && /^https?:\/\//i.test(u)) {
+                showMsg('✅ 测试通过 [' + song.label + '] (' + ms + 'ms) 直链: ' + u.slice(0, 55) + '...');
+              } else {
+                runProbe();
+              }
+            }).catch(function () {
+              runProbe();
+            });
+        }
+
+        runProbe();
       });
     });
 
