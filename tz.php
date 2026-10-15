@@ -710,44 +710,49 @@ if ($act_get == "rt")
 <!-- Powered by: Yahei.Net -->
 <style type="text/css">
 <!--
-body{text-align: center; margin: 0 auto; padding: 0; background-color:#FFFFFF;font-size:12px;font-family: Tahoma, "Microsoft Yahei", Arial;}
-h1 {font-size: 26px; padding: 0; margin: 0; color: #333333; font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;}
-h1 small {font-size: 11px; font-family: Tahoma; font-weight: bold; }
+body{text-align: center; margin: 0 auto; padding: 24px 0; background-color:#f5f4ed; color:#141413; font-size:13px; font-family: "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6;}
+h1 {font-size: 22px; padding: 0; margin: 0; color: #141413; font-weight: 700; font-family: "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;}
+h1 small {font-size: 12px; font-family: "Microsoft YaHei", sans-serif; font-weight: normal; color: #5e5d59; margin-left: 8px;}
 h2{position:fixed;top:500px;}
-a{color: #000000; text-decoration:none;}
-a.black{color: #000000; text-decoration:none;}
-b{color: #999999;}
-table{clear:both;padding: 0; margin: 0 0 10px;border-collapse:collapse; border-spacing: 0;}
-th{padding: 3px 6px; font-weight:bold;background:#3066a6;color:#FFFFFF;border:1px solid #3066a6; text-align:left;}
-.th_1{padding: 3px 6px; font-weight:bold;background:#666699;color:#FFFFFF;border:1px solid #3066a6; text-align:left;}
-.th_2{padding: 3px 6px; font-weight:bold;background:#417291;color:#FFFFFF;border:1px solid #3066a6; text-align:left;}
-.th_3{padding: 3px 6px; font-weight:bold;background:#067201;color:#FFFFFF;border:1px solid #3066a6; text-align:left;}
-.th_4{padding: 3px 6px; font-weight:bold;background:#666666;color:#FFFFFF;border:1px solid #CCCCCC; text-align:left;}
-.th_5{padding: 3px 6px; font-weight:bold;background:#333333;color:#FFFFFF;border:1px solid #CCCCCC; text-align:left;}
-.th_6{padding: 3px 6px; font-weight:bold;background:#FF6600;color:#FFFFFF;border:1px solid #FF6600; text-align:left;}
-tr{padding: 0; background:#F7F7F7;}
-td{padding: 3px 6px; border:1px solid #CCCCCC;}
-input{padding: 2px; background: #FFFFFF; border-top:1px solid #666666; border-left:1px solid #666666; border-right:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC; font-size:12px}
-input.btn{font-weight: bold; height: 20px; line-height: 20px; padding: 0 6px; color:#666666; background: #f2f2f2; border:1px solid #999;font-size:12px}
-.bar {border:1px solid #999999; background:#FFFFFF; height:5px; font-size:2px; width:89%; margin:2px 0 5px 0;padding:1px;overflow: hidden;}
-.bar_1 {border:1px dotted #999999; background:#FFFFFF; height:5px; font-size:2px; width:89%; margin:2px 0 5px 0;padding:1px;overflow: hidden;}
-.barli_red{background:#ff6600; height:5px; margin:0px; padding:0;}
-.barli_blue{background:#0099FF; height:5px; margin:0px; padding:0;}
-.barli_green{background:#36b52a; height:5px; margin:0px; padding:0;}
-.barli_black{background:#333; height:5px; margin:0px; padding:0;}
-.barli_1{background:#999999; height:5px; margin:0px; padding:0;}
-.barli{background:#36b52a; height:5px; margin:0px; padding:0;}
-#page {width: 920px; padding: 0 20px; margin: 0 auto; text-align: left;}
-#header{position: relative; padding: 10px;}
-#footer {padding: 15px 0; text-align: center; font-size: 11px; font-family: Tahoma, Verdana;}
-#download {position: absolute; top: 20px; right: 10px; text-align: right; font-weight: bold; color: #06C;}
-#download a {color: #0000FF; text-decoration: underline;}
-.w_small{font-family: Courier New;}
-.w_number{color: #f800fe;}
-.sudu {padding: 0; background:#5dafd1; }
+a{color: #c96442; text-decoration:none;}
+a:hover{color: #b85736; text-decoration:underline;}
+a.black{color: #141413; text-decoration:none;}
+b{color: #5e5d59;}
+table{clear:both;padding: 0; margin: 0 0 16px;border-collapse:collapse; border-spacing: 0; width: 100%; background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid #e8e6dc; box-shadow:0 2px 10px rgba(20,20,19,0.03);}
+th{padding: 8px 12px; font-weight:600;background:#c96442;color:#FFFFFF;border:1px solid #c96442; text-align:left; font-size:13px;}
+.th_1{padding: 8px 12px; font-weight:600;background:#788c5d;color:#FFFFFF;border:1px solid #788c5d; text-align:left;}
+.th_2{padding: 8px 12px; font-weight:600;background:#5b7f95;color:#FFFFFF;border:1px solid #5b7f95; text-align:left;}
+.th_3{padding: 8px 12px; font-weight:600;background:#87867f;color:#FFFFFF;border:1px solid #87867f; text-align:left;}
+.th_4{padding: 8px 12px; font-weight:600;background:#5e5d59;color:#FFFFFF;border:1px solid #5e5d59; text-align:left;}
+.th_5{padding: 8px 12px; font-weight:600;background:#2b2723;color:#FFFFFF;border:1px solid #2b2723; text-align:left;}
+.th_6{padding: 8px 12px; font-weight:600;background:#c96442;color:#FFFFFF;border:1px solid #c96442; text-align:left;}
+tr{padding: 0; background:#ffffff;}
+tr:nth-child(even){background:#faf9f5;}
+td{padding: 6px 10px; border:1px solid #e8e6dc; color:#141413; font-size:12px;}
+input{padding: 4px 8px; background: #ffffff; border:1px solid #d4d1c7; border-radius:6px; font-size:12px; color:#141413;}
+input:focus{outline:none; border-color:#c96442;}
+input.btn{font-weight: 500; height: 26px; line-height: 24px; padding: 0 12px; color:#ffffff; background: #c96442; border:1px solid #c96442; border-radius:6px; font-size:12px; cursor:pointer; transition:all 0.2s;}
+input.btn:hover{background:#b85736; border-color:#b85736;}
+.bar {border:1px solid #e8e6dc; background:#f0eee6; height:8px; font-size:2px; width:89%; margin:4px 0 6px 0;padding:0;overflow: hidden; border-radius:4px;}
+.bar_1 {border:1px dotted #e8e6dc; background:#f0eee6; height:8px; font-size:2px; width:89%; margin:4px 0 6px 0;padding:0;overflow: hidden; border-radius:4px;}
+.barli_red{background:#c96442; height:8px; margin:0px; padding:0;}
+.barli_blue{background:#5b7f95; height:8px; margin:0px; padding:0;}
+.barli_green{background:#788c5d; height:8px; margin:0px; padding:0;}
+.barli_black{background:#2b2723; height:8px; margin:0px; padding:0;}
+.barli_1{background:#87867f; height:8px; margin:0px; padding:0;}
+.barli{background:#788c5d; height:8px; margin:0px; padding:0;}
+#page {width: 980px; max-width: 95%; padding: 0 10px; margin: 0 auto; text-align: left;}
+#header{position: relative; padding: 12px 16px; margin-bottom:16px; background:#faf9f5; border:1px solid #e8e6dc; border-radius:12px; display:flex; justify-content:space-between; align-items:center;}
+#footer {padding: 20px 0; text-align: center; font-size: 12px; color:#5e5d59;}
+#download {font-weight: 500; color: #c96442;}
+#download a {color: #c96442; text-decoration: none;}
+#download a:hover {text-decoration: underline;}
+.w_small{font-family: Consolas, Menlo, Monaco, monospace;}
+.w_number{color: #c96442; font-weight:600;}
+.sudu {padding: 0; background:#788c5d; }
 .suduk { margin:0px; padding:0;}
-.resYes{}
-.resNo{color: #FF0000;}
+.resYes{color: #788c5d; font-weight:600;}
+.resNo{color: #c96442; font-weight:600;}
 .word{word-break:break-all;}
 -->
 </style>
@@ -845,9 +850,21 @@ function displayData(dataJSON)
 <body>
 
 <div id="page">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding:10px 16px; background:#ffffff; border:1px solid #e8e6dc; border-radius:10px; box-shadow:0 2px 8px rgba(20,20,19,0.03);">
+        <a href="./" style="color:#c96442; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-size:13px;">
+            <span>← 返回小白数字空间 (a.21212121.xyz)</span>
+        </a>
+        <div style="font-size:12px; color:#5e5d59;">
+            <span>腾讯云上海节点 · 节点公网: <strong style="color:#c96442;">150.158.159.111</strong></span>
+        </div>
+        <a href="https://21212121.xyz" target="_blank" rel="noopener" style="color:#5e5d59; text-decoration:none; font-size:12px;">
+            <span>岁月静好主博客 ↗</span>
+        </a>
+    </div>
+
     <div id="header">
-        <h1><a href="t.php"><?php echo $title;?></a></h1>
-        <div id="download"><A HREF="http://www.yahei.net/tz/tz.zip">探针下载</A></div>
+        <h1><a href="tz.php" style="color:#141413; text-decoration:none;"><?php echo $title;?></a> <small><?php echo $version;?> · 腾讯云上海实时节点</small></h1>
+        <div id="download"><a href="./">返回全景空间 ↗</a></div>
     </div>
 
 <!--服务器相关参数-->
@@ -855,7 +872,7 @@ function displayData(dataJSON)
   <tr><th colspan="4">服务器参数</th></tr>
   <tr>
     <td>服务器域名/IP地址</td>
-    <td colspan="3"><?php echo @get_current_user();?> - <?php echo $_SERVER['SERVER_NAME'];?>(<?php if('/'==DIRECTORY_SEPARATOR){echo $_SERVER['SERVER_ADDR'];}else{echo @gethostbyname($_SERVER['SERVER_NAME']);} ?>)&nbsp;&nbsp;你的IP地址是：<?php echo @$_SERVER['REMOTE_ADDR'];?></td>
+    <td colspan="3"><?php echo @get_current_user();?> - <?php echo $_SERVER['SERVER_NAME'];?> (<strong style="color:#c96442;">公网IP: 150.158.159.111</strong> | 内网: <?php if('/'==DIRECTORY_SEPARATOR){echo $_SERVER['SERVER_ADDR'];}else{echo @gethostbyname($_SERVER['SERVER_NAME']);} ?>)&nbsp;&nbsp;你的访客IP是：<?php echo @$_SERVER['REMOTE_ADDR'];?></td>
   </tr>
   <tr>
     <td>服务器标识</td>

@@ -120,7 +120,11 @@
 
         // 更新搜索状态指示
         if (DOM.searchCount) {
-            DOM.searchCount.textContent = '找到 ' + visibleCount + ' 项';
+            if (!q && filter === 'all') {
+                DOM.searchCount.textContent = visibleCount + ' 个项目';
+            } else {
+                DOM.searchCount.textContent = '找到 ' + visibleCount + ' 项';
+            }
         }
 
         if (DOM.emptyState) {
