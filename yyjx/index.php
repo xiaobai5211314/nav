@@ -1,4 +1,7 @@
 <?php
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
 
 if (isset ($_SERVER['HTTP_USER_AGENT'])) {
   $clientkeywords = array ('nokia',  'sony','ericsson','mot','samsung','htc','sgh','lg','sharp','oppo','sie-','philips','panasonic','alcatel','lenovo','iphone','ipod','blackberry','meizu','android','netfront','symbian','ucweb','windowsce','palm','operamini','operamobi','openwave','nexusone','cldc','midp','wap','mobile'); 

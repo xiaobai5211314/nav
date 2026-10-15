@@ -1,3 +1,8 @@
+<?php
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+?>
 <!doctype html>
 <html>
 <head>
@@ -247,22 +252,22 @@
 <script src="plugns/layer/layer.js"></script>
 
 <!-- 播放器数据加载模块 -->
-<script src="static/js/ajax.js?v=2.1.2"></script>
+<script src="static/js/ajax.v2.js"></script>
 
 <!-- 音源后端中心：切换 / 添加接口（链接或导入 .js 文件） -->
-<script src="static/js/sourcehub.js?v=2.1.2"></script>
+<script src="static/js/sourcehub.v2.js"></script>
 
 <!-- 播放器歌词解析模块 -->
-<script src="static/js/lyric.js?v=2.1.2"></script>
+<script src="static/js/lyric.js"></script>
 
 <!-- 音乐列表配置 -->
-<script src="static/js/musicList.js?v=2.1.2"></script>
+<script src="static/js/musicList.js"></script>
 
 <!-- 封装函数及ui交互模块 -->
-<script src="static/js/functions.js?v=2.1.2"></script>
+<script src="static/js/functions.v2.js"></script>
 
 <!-- 播放器主体功能模块 -->
-<script src="static/js/player.js?v=2.1.2"></script>
+<script src="static/js/player.v2.js"></script>
 
 <!-- 滚动条美化插件 -->
 <script src="static/js/jquery.mCustomScrollbar.concat.min.js"></script>
