@@ -11,7 +11,33 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
     <!-- Claude Anthropic 官方文学极简设计系统 (羊皮纸暖白) -->
-    <link rel="stylesheet" href="assets/css/parchment.css?v=20261015_v3">
+    <link rel="stylesheet" href="assets/css/parchment-v4.css">
+    <style>
+    /* 核心交互组件保障样式 (绕过 CDN 缓存差异) */
+    .audio-capsule { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 6px; background: #eceae1; border: 1px solid #e8e6dc; border-radius: 9999px; cursor: pointer; transition: all 0.25s ease; user-select: none; }
+    .audio-capsule:hover { background: #fff; border-color: rgba(201,100,66,0.4); }
+    .audio-capsule.playing { background: rgba(201,100,66,0.08); border-color: rgba(201,100,66,0.22); }
+    .audio-capsule-btn { width: 24px; height: 24px; border-radius: 50%; background: #faf9f5; border: 1px solid #e8e6dc; display: flex; align-items: center; justify-content: center; color: #141413; }
+    .audio-capsule.playing .audio-capsule-btn { background: #c96442; color: #fff; border-color: #c96442; }
+    .audio-capsule-btn svg { width: 11px; height: 11px; fill: currentColor; }
+    .audio-capsule-title { font-size: 11.5px; font-weight: 500; color: #5e5d59; white-space: nowrap; }
+    .audio-waves { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .audio-wave-bar { width: 2px; height: 4px; background: #87867f; border-radius: 1px; transition: height 0.2s ease; }
+    .audio-capsule.playing .audio-wave-bar { background: #c96442; animation: waveBounce 0.8s ease-in-out infinite alternate; }
+    .ambient-mode-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: #eceae1; border: 1px solid #e8e6dc; border-radius: 9999px; font-size: 12px; color: #5e5d59; cursor: pointer; transition: all 0.2s ease; user-select: none; }
+    .ambient-mode-btn:hover { background: #fff; color: #141413; border-color: rgba(201,100,66,0.4); }
+    .claude-search-wrap { width: 100%; margin-bottom: 20px; }
+    .claude-search-box { display: flex; align-items: center; gap: 12px; background: #faf9f5; border: 1px solid #e8e6dc; border-radius: 9999px; padding: 9px 18px; box-shadow: 0 4px 20px rgba(20,20,19,0.04); transition: all 0.25s ease; }
+    .claude-search-box:focus-within { border-color: #c96442; box-shadow: 0 0 0 3px rgba(201,100,66,0.08); background: #fff; }
+    .claude-search-box svg { width: 16px; height: 16px; fill: #87867f; flex-shrink: 0; }
+    .claude-search-input { border: none; background: transparent; outline: none; font-size: 14px; color: #141413; width: 100%; }
+    .claude-search-input::placeholder { color: #87867f; }
+    .claude-search-badge { font-size: 11px; color: #87867f; background: #eceae1; padding: 3px 9px; border-radius: 9999px; white-space: nowrap; }
+    .claude-search-clear { border: none; background: transparent; color: #87867f; font-size: 18px; line-height: 1; cursor: pointer; padding: 2px 6px; border-radius: 50%; display: none; transition: all 0.2s ease; }
+    .claude-search-clear:hover { color: #c96442; background: #eceae1; }
+    .claude-search-clear.show { display: block; }
+    @media (max-width: 680px) { .audio-capsule-title { display: none; } }
+    </style>
 </head>
 <body>
 
@@ -19,7 +45,7 @@
     <canvas id="sakura-canvas"></canvas>
 
     <!-- 全局 Toast 提示组件 -->
-    <div id="toast-msg" class="claude-toast">已复制到剪贴板</div>
+    <div id="toast-msg" class="toast-msg">已复制到剪贴板</div>
 
     <!-- 背景音频随身听 (520 · 岁月静好) -->
     <audio id="bgm-audio" preload="none" loop>
@@ -602,6 +628,6 @@
     </div>
 
     <!-- 核心应用驱动脚本 -->
-    <script src="assets/js/parchment.js?v=20261015_v3"></script>
+    <script src="assets/js/parchment-v4.js"></script>
 </body>
 </html>
