@@ -62,7 +62,35 @@
     </script>
 
     <!-- 全局样式表 (Claude 官方极简设计系统 · 羊皮纸暖白) -->
-    <link rel="stylesheet" href="assets/css/parchment.css?v=20261015">
+    <link rel="stylesheet" href="assets/css/parchment.css?v=20261015_v3">
+    <style>
+    /* 关键新组件高优先级保护样式 */
+    .audio-capsule { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 6px; background: #eceae1; border: 1px solid #e8e6dc; border-radius: 9999px; cursor: pointer; transition: all 0.25s ease; user-select: none; }
+    .audio-capsule:hover { background: #fff; border-color: rgba(201,100,66,0.4); }
+    .audio-capsule.playing { background: rgba(201,100,66,0.08); border-color: rgba(201,100,66,0.22); }
+    .audio-capsule-btn { width: 24px; height: 24px; border-radius: 50%; background: #faf9f5; border: 1px solid #e8e6dc; display: flex; align-items: center; justify-content: center; color: #141413; }
+    .audio-capsule.playing .audio-capsule-btn { background: #c96442; color: #fff; border-color: #c96442; }
+    .audio-capsule-btn svg { width: 11px; height: 11px; fill: currentColor; }
+    .audio-capsule-title { font-size: 11.5px; font-weight: 500; color: #5e5d59; white-space: nowrap; }
+    .audio-waves { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .audio-wave-bar { width: 2px; height: 4px; background: #87867f; border-radius: 1px; transition: height 0.2s ease; }
+    .audio-capsule.playing .audio-wave-bar { background: #c96442; animation: waveBounce 0.8s ease-in-out infinite alternate; }
+    .audio-capsule.playing .audio-wave-bar:nth-child(1) { animation-delay: 0.1s; }
+    .audio-capsule.playing .audio-wave-bar:nth-child(2) { animation-delay: 0.3s; }
+    .audio-capsule.playing .audio-wave-bar:nth-child(3) { animation-delay: 0.2s; }
+    .audio-capsule.playing .audio-wave-bar:nth-child(4) { animation-delay: 0.4s; }
+    .ambient-mode-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: #eceae1; border: 1px solid #e8e6dc; border-radius: 9999px; font-size: 12px; color: #5e5d59; cursor: pointer; transition: all 0.2s ease; user-select: none; }
+    .ambient-mode-btn:hover { background: #fff; color: #141413; border-color: rgba(201,100,66,0.4); }
+    .dimension-literary-card { background: #faf9f5; border: 1px solid #e8e6dc; border-radius: 16px; padding: 24px 30px; margin: 0 auto 32px; max-width: 820px; box-shadow: 0 4px 20px rgba(20,20,19,0.04); position: relative; overflow: hidden; text-align: left; border-left: 3.5px solid #c96442; }
+    .dimension-literary-card::before { content: "“"; position: absolute; right: 24px; bottom: -20px; font-family: Georgia, serif; font-size: 110px; line-height: 1; color: #f0eee6; pointer-events: none; user-select: none; opacity: 0.8; }
+    .dimension-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+    .dimension-tag { color: #c96442; display: inline-flex; align-items: center; gap: 5px; }
+    .dimension-source { color: #87867f; }
+    .dimension-body { font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif; font-size: 16px; line-height: 1.85; color: #141413; font-style: italic; margin-bottom: 14px; position: relative; z-index: 1; }
+    .dimension-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 12.5px; color: #87867f; border-top: 1px solid #f0eee6; padding-top: 12px; }
+    .dimension-footer .author-badge { color: #5e5d59; font-weight: 500; }
+    @media (max-width: 680px) { .audio-capsule-title, .dimension-source { display: none; } }
+    </style>
     <script src="assets/data/data.js"></script>
 </head>
 <body>
@@ -178,7 +206,7 @@
                 <!-- 随身轻音乐胶囊 (融合自 l/ 空间 BGM 520.mp3) -->
                 <div class="audio-capsule" id="audio-capsule" title="轻触播放/暂停《520 · 岁月静好》背景轻音乐">
                     <div class="audio-capsule-btn" id="btn-bgm">
-                        <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        <svg width="12" height="12" style="width:12px;height:12px;display:block;" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
                     </div>
                     <span class="audio-capsule-title">520 · 岁月静好</span>
                     <div class="audio-waves">
@@ -754,6 +782,6 @@
     </div>
 
     <!-- 核心应用驱动脚本 (Claude 官方极简设计系统 · 羊皮纸暖白) -->
-    <script src="assets/js/parchment.js?v=20261015"></script>
+    <script src="assets/js/parchment.js?v=20261015_v3"></script>
 </body>
 </html>
