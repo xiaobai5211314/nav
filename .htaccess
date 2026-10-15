@@ -63,8 +63,8 @@ RewriteRule ^(.*)$ sj/$1?Rewrite [L,QSA]
 
 
 # 路径级 301 永久重定向（合并废弃子目录）
-RewriteRule ^wzdh/(.*)$ /l/$1 [R=301,L]
-RewriteRule ^yy/(.*)$ /yyjx/$1 [R=301,L]
+RewriteRule ^wzdh(?:/(.*))?$ /l/$1 [R=301,L]
+RewriteRule ^yy(?:/(.*))?$ /yyjx/$1 [R=301,L]
 
 # 域名级重写与重定向
 RewriteCond %{HTTP_HOST} ^wzdh\.21212121\.xyz$ [NC]
