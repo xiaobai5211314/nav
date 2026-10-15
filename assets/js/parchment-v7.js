@@ -512,7 +512,7 @@
         }
     });
 
-    // 11. 访客足迹右下角悬浮提示
+    // 11. 访客足迹右下角悬浮提示 (严格真实 IP 与省市归属地，杜绝伪信息)
     function initVisitorBadge() {
         var badge = document.getElementById('visitor-badge');
         if (!badge) return;
@@ -527,23 +527,32 @@
             });
         }
 
-        var resolved = false;
-        function showVisitor(loc, ip) {
-            if (resolved) return;
-            resolved = true;
-            if (locEl) locEl.textContent = loc || '华夏大地';
-            if (ipEl) ipEl.textContent = '访客 IP: ' + (ip || '已连接');
-            badge.classList.add('show');
-            setTimeout(function() {
-                badge.classList.remove('show');
-            }, 15000);
+        var hasShown = false;
+        var hideTimer = null;
+
+        function updateAndShow(loc, ip) {
+            if (!ip || ip === '已连接' || ip === '127.0.0.1') return; // 严格校验：无真实公网IP绝不弹窗
+            var cleanLoc = (loc && loc !== '华夏大地') ? loc : '中国';
+            if (locEl) locEl.textContent = cleanLoc;
+            if (ipEl) ipEl.textContent = '访客 IP: ' + ip;
+            if (!hasShown) {
+                hasShown = true;
+                badge.classList.add('show');
+                if (hideTimer) clearTimeout(hideTimer);
+                hideTimer = setTimeout(function() {
+                    badge.classList.remove('show');
+                }, 12000);
+            }
         }
 
+        // 1. 优先请求本站 visitor.php
+        var visitorPhpDone = false;
         fetch('api/visitor.php')
             .then(function(res) { return res.json(); })
             .then(function(data) {
-                if (data && data.ip) {
-                    showVisitor(data.location, data.ip);
+                if (data && data.ip && data.ip !== '127.0.0.1') {
+                    visitorPhpDone = true;
+                    updateAndShow(data.location, data.ip);
                 } else {
                     fallbackClient();
                 }
@@ -552,27 +561,42 @@
                 fallbackClient();
             });
 
+        // 2. 客户端高可用备用方案 (若 1.6 秒后本站 visitor.php 未返回或失败)
         function fallbackClient() {
-            fetch('https://api.ipify.org?format=json')
-                .then(function(res) { return res.json(); })
-                .then(function(d) {
-                    if (d && d.ip) {
-                        showVisitor('华夏大地', d.ip);
-                    } else {
-                        showVisitor('华夏大地', '已连接');
-                    }
-                })
-                .catch(function() {
-                    showVisitor('华夏大地', '已连接');
-                });
+            if (visitorPhpDone) return;
+            // 采用太平洋 IP 高可用 JSONP 接口 (全平台穿透跨域与拦截，直出真实省市)
+            var script = document.createElement('script');
+            window.__navIpCallback = function(data) {
+                if (data && data.ip) {
+                    var location = data.addr || ((data.pro || '') + ' ' + (data.city || '')) || '中国';
+                    updateAndShow(location.trim(), data.ip);
+                }
+                try { if (script.parentNode) script.parentNode.removeChild(script); } catch(e) {}
+                delete window.__navIpCallback;
+            };
+            script.src = 'https://whois.pconline.com.cn/ipJson.jsp?callback=__navIpCallback&t=' + Date.now();
+            script.onerror = function() {
+                try { if (script.parentNode) script.parentNode.removeChild(script); } catch(e) {}
+                delete window.__navIpCallback;
+                // 第三重备用：ipapi.co
+                fetch('https://ipapi.co/json/')
+                    .then(function(res) { return res.json(); })
+                    .then(function(d) {
+                        if (d && d.ip) {
+                            var l = [d.city, d.region, d.country_name].filter(Boolean).join(' ');
+                            updateAndShow(l, d.ip);
+                        }
+                    }).catch(function() {});
+            };
+            document.head.appendChild(script);
         }
 
-        // 3秒兜底超时，确保即便极度弱网也不会挂起未渲染
+        // 若 visitor.php 在 1.6 秒内因网络延迟无响应，立即并发启动客户端备选解析
         setTimeout(function() {
-            if (!resolved) {
-                showVisitor('华夏大地', '已连接');
+            if (!hasShown && !visitorPhpDone) {
+                fallbackClient();
             }
-        }, 3000);
+        }, 1600);
     }
 
     // 12. 初始化入口

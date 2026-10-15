@@ -114,9 +114,32 @@ if ($location === '华夏大地' && filter_var($ip, FILTER_VALIDATE_IP, FILTER_F
     }
 }
 
-// 4. 最终降级保障
+// 4. 服务端高可用公网 IP 归属地兜底查询 (避免落入未知)
+if ($location === '华夏大地' && filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+    try {
+        $ctx = stream_context_create([
+            'http' => ['timeout' => 1.5, 'header' => "User-Agent: Mozilla/5.0\r\n"]
+        ]);
+        $rawPc = @file_get_contents("https://whois.pconline.com.cn/ipJson.jsp?json=true&ip=" . urlencode($ip), false, $ctx);
+        if ($rawPc) {
+            $rawPc = iconv('GBK', 'UTF-8//IGNORE', $rawPc) ?: $rawPc;
+            $dPc = json_decode($rawPc, true);
+            if (!empty($dPc['addr'])) {
+                $location = trim($dPc['addr']);
+            } elseif (!empty($dPc['pro']) || !empty($dPc['city'])) {
+                $location = trim(($dPc['pro'] ?? '') . ' ' . ($dPc['city'] ?? ''));
+            }
+        }
+    } catch (\Throwable $e) {}
+}
+
+// 5. 内网环境标识
 if (!$location || $location === '0' || strpos($location, '内网IP') !== false) {
-    $location = '华夏大地';
+    if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        $location = '局域网';
+    } else {
+        $location = '中国';
+    }
 }
 
 echo json_encode([
