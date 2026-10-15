@@ -219,42 +219,53 @@ function ajaxPlayList(lid, id, callback) {
             musicList[id].isloading = false;    // 列表已经加载完了
         },  // complete
         success: function(jsonData){
+            if(!jsonData || !jsonData.playlist) {
+                $(".sheet-item[data-no='" + id + "'] .sheet-name").html('<span style="color: #EA8383">读取失败</span>');
+                return false;
+            }
+            
+            var pl = jsonData.playlist;
+            var creatorNick = (pl.creator && pl.creator.nickname) ? pl.creator.nickname : "";
+            var creatorAvatar = (pl.creator && pl.creator.avatarUrl) ? pl.creator.avatarUrl : "";
+            
             // 存储歌单信息
             var tempList = {
                 id: lid,    // 列表的网易云 id
-                name: jsonData.playlist.name,   // 列表名字
-                cover: jsonData.playlist.coverImgUrl,   // 列表封面
-                creatorName: jsonData.playlist.creator.nickname,   // 列表创建者名字
-                creatorAvatar: jsonData.playlist.creator.avatarUrl,   // 列表创建者头像
+                name: pl.name || "歌单",   // 列表名字
+                cover: pl.coverImgUrl || "",   // 列表封面
+                creatorName: creatorNick,   // 列表创建者名字
+                creatorAvatar: creatorAvatar,   // 列表创建者头像
                 item: []
             };
             
-            if(jsonData.playlist.coverImgUrl !== '') {
-                tempList.cover = jsonData.playlist.coverImgUrl + "?param=200y200";
+            if(tempList.cover !== '') {
+                tempList.cover = tempList.cover + "?param=200y200";
             } else {
-                tempList.cover = musicList[id].cover;
+                tempList.cover = (musicList[id] && musicList[id].cover) ? musicList[id].cover : "images/player_cover.png";
             }
             
-            if(typeof jsonData.playlist.tracks !== undefined || jsonData.playlist.tracks.length !== 0) {
-                // 存储歌单中的音乐信息
-                for (var i = 0; i < jsonData.playlist.tracks.length; i++) {
-                    tempList.item[i] =  {
-                        id: jsonData.playlist.tracks[i].id,  // 音乐ID
-                        name: jsonData.playlist.tracks[i].name,  // 音乐名字
-                        artist: jsonData.playlist.tracks[i].ar[0].name, // 艺术家名字
-                        album: jsonData.playlist.tracks[i].al.name,    // 专辑名字
-                        source: "netease",     // 音乐来源
-                        url_id: jsonData.playlist.tracks[i].id,  // 链接ID
-                        pic_id: null,  // 封面ID
-                        lyric_id: jsonData.playlist.tracks[i].id,  // 歌词ID
-                        pic: jsonData.playlist.tracks[i].al.picUrl + "?param=300y300",    // 专辑图片
-                        url: null   // mp3链接
-                    };
-                }
+            var tracks = (pl.tracks && Array.isArray(pl.tracks)) ? pl.tracks : [];
+            for (var i = 0; i < tracks.length; i++) {
+                var t = tracks[i];
+                var artName = (t.ar && t.ar[0] && t.ar[0].name) ? t.ar[0].name : ((t.artists && t.artists[0] && t.artists[0].name) ? t.artists[0].name : "未知歌手");
+                var albName = (t.al && t.al.name) ? t.al.name : ((t.album && t.album.name) ? t.album.name : "未知专辑");
+                var picUrl = (t.al && t.al.picUrl) ? t.al.picUrl : ((t.album && t.album.picUrl) ? t.album.picUrl : "");
+                tempList.item[i] =  {
+                    id: t.id,  // 音乐ID
+                    name: t.name || "未知歌曲",  // 音乐名字
+                    artist: artName, // 艺术家名字
+                    album: albName,    // 专辑名字
+                    source: "netease",     // 音乐来源
+                    url_id: t.id,  // 链接ID
+                    pic_id: null,  // 封面ID
+                    lyric_id: t.id,  // 歌词ID
+                    pic: picUrl ? (picUrl + "?param=300y300") : "",    // 专辑图片
+                    url: null   // mp3链接
+                };
             }
             
             // 歌单用户 id 不能丢
-            if(musicList[id].creatorID) {
+            if(musicList[id] && musicList[id].creatorID) {
                 tempList.creatorID = musicList[id].creatorID;
                 if(musicList[id].creatorID === rem.uid) {   // 是当前登录用户的歌单，要保存到缓存中
                     var tmpUlist = playerReaddata('ulist');    // 读取本地记录的用户歌单
@@ -333,15 +344,15 @@ function ajaxUserList(uid)
 {
     var tmpLoading = layer.msg('加载中...', {icon: 16,shade: 0.01});
     $.ajax({
-        type: mkPlayer.method,
-        url: mkPlayer.api,
-        data: "types=userlist&uid=" + uid,
+        type: mkPlayer.method, 
+        url: mkPlayer.api, 
+        data: "types=userlist&uid=" + uid + "&_t=" + new Date().getTime(),
         dataType : "jsonp",
         complete: function(XMLHttpRequest, textStatus) {
             if(tmpLoading) layer.close(tmpLoading);    // 关闭加载中动画
         },  // complete
         success: function(jsonData){
-            if(jsonData.code == "-1" || jsonData.code == 400){
+            if(!jsonData || jsonData.code == "-1" || jsonData.code == 400 || !jsonData.playlist){
                 layer.msg('用户 uid 输入有误');
                 return false;
             }

@@ -1,0 +1,347 @@
+{
+  "version": "2.0.0",
+  "updated": "2026-10-15",
+  "defaultSource": "全豆要[聚合音源].js",
+  "sources": [
+    {
+      "id": "全豆要[聚合音源]",
+      "file": "全豆要[聚合音源].js",
+      "name": "全豆要[聚合音源]",
+      "version": "v4.1",
+      "description": "迭代4.1版本，聚合 星海/溯音/念心/长青/歌一刀专属汽水音乐，多链路自动回退",
+      "author": "全豆要 and Gemini优化 Toskysun去混淆 TZB679兼容性处理，修复部分平台播放无法获取链接语音问题",
+      "verified": true,
+      "default": true,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "lx-玉宁熙-Pro",
+      "file": "lx-玉宁熙-Pro.js",
+      "name": "lx-玉宁熙-Pro",
+      "version": "v1.2.2",
+      "description": "不出意外的话 最后一版 有缘再见",
+      "author": "ynx(2363768762)",
+      "verified": true,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "墨澜聚合音源",
+      "file": "墨澜聚合音源.js",
+      "name": "墨澜聚合音源",
+      "version": "2.3.0",
+      "description": "全平台支持flac，wy，qq，kw，kg支持母带",
+      "author": "白姬9527(2449067834)",
+      "verified": true,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "幻音音源",
+      "file": "幻音音源.js",
+      "name": "幻音音源",
+      "version": "v3",
+      "description": "",
+      "author": "竹佀",
+      "verified": true,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "念心音源",
+      "file": "念心音源.js",
+      "name": "念心音源",
+      "version": "1.0.2",
+      "description": "音源更新，关注微信公众号: 念心小站",
+      "author": "念心小站",
+      "verified": true,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "溯音音源",
+      "file": "溯音音源.js",
+      "name": "溯音音源",
+      "version": "v1",
+      "description": "集成QQ、网易、酷我、咪咕音乐平台 ，QQ群1078955749",
+      "author": "竹佀",
+      "verified": true,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "聚合API接口 (CF)",
+      "file": "聚合API接口 (CF).js",
+      "name": "聚合API接口 (CF)",
+      "version": "3",
+      "description": "v3",
+      "author": "t.me/JHMS_Channel",
+      "verified": true,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "非常刀",
+      "file": "非常刀.js",
+      "name": "非常刀",
+      "version": "v5",
+      "description": "聚合音源，进群链接 https://t.me/gydjlfk",
+      "author": "群主要进去",
+      "verified": true,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "👖裤佬SVIP音源",
+      "file": "👖裤佬SVIP音源.js",
+      "name": "👖裤佬SVIP音源",
+      "version": "✈️TG频道https://t.me/stymei",
+      "description": "🔗官网https://Jsnzkpg.github.io",
+      "author": "🐈‍⬛Github项目地址https://github.com/Jsnzkpg/Jsnzkpg",
+      "verified": true,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "gdstudio音乐源",
+      "file": "gdstudio音乐源.js",
+      "name": "gdstudio音乐源",
+      "version": "1.0.1",
+      "description": "通过 music-api.gdstudio.xyz 提供音乐播放链接",
+      "author": "lx-music",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "六音音源",
+      "file": "六音音源.js",
+      "name": "六音音源",
+      "version": "v1.2.1",
+      "description": "v1.2.1 如失效请前往 www.sixyin.com 下载最新版本",
+      "author": "六音",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "屿溪-终章",
+      "file": "屿溪-终章.js",
+      "name": "屿溪-终章",
+      "version": "0.0.0",
+      "description": "山水两相离，此篇至终章",
+      "author": "屿溪",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "收集の聚合接口(LX版)",
+      "file": "收集の聚合接口(LX版).js",
+      "name": "收集の聚合接口(LX版)",
+      "version": "1.0.0-beta",
+      "description": "聚合接口-来源于网络 整理:QZ",
+      "author": "QZ",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "星澜聚合音源 (StellarWave)",
+      "file": "星澜聚合音源 (StellarWave).js",
+      "name": "星澜聚合音源 (StellarWave)",
+      "version": "v3.2.0",
+      "description": "基于墨澜 v2.3.1 与星澜 v3.1.1.1 融合，删除失效 API，新增 FFAPI，智能缓存 + 并发 Fallback，支持母带/全景声",
+      "author": "星澜团队",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "独家音源",
+      "file": "独家音源.js",
+      "name": "独家音源",
+      "version": "5",
+      "description": "后续更新，请关注微信公众号: 洛雪科技",
+      "author": "w",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "稳定版音源 v1.0.3",
+      "file": "稳定版音源 v1.0.3.js",
+      "name": "稳定版音源 v1.0.3",
+      "version": "1.0.3",
+      "description": "多平台稳定获取播放链接，无调试日志",
+      "author": "LX",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "统一音乐源",
+      "file": "统一音乐源.js",
+      "name": "统一音乐源",
+      "version": "1.0.0",
+      "description": "基于GD音乐台（music.gdstudio.xyz）的通用音乐源",
+      "author": "脚本作者：7878gyc API提供者：GDSTUDIO",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "西瓜聚合源",
+      "file": "西瓜聚合源.js",
+      "name": "西瓜聚合源",
+      "version": "v1.40",
+      "description": "聚合星海/溯音/CHKSZ/长青/念心/Huibq等10+API后端，多源自动回退",
+      "author": "整合自多个音源",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "长青SVIP音源(二改修复版)",
+      "file": "长青SVIP音源(二改修复版).js",
+      "name": "长青SVIP音源(二改修复版)",
+      "version": "v1.2.0",
+      "description": "二改版",
+      "author": "作者不愿透露姓名",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    },
+    {
+      "id": "𝖧౿ᥣᥣ𝗈 Ԝ𝗈𝗋ᥣᑯ",
+      "file": "𝖧౿ᥣᥣ𝗈 Ԝ𝗈𝗋ᥣᑯ.js",
+      "name": "𝖧౿ᥣᥣ𝗈 Ԝ𝗈𝗋ᥣᑯ",
+      "version": "260809",
+      "description": "缝合怪,轻点喷",
+      "author": "hello world",
+      "verified": false,
+      "default": false,
+      "platforms": [
+        "wy",
+        "tx",
+        "kw",
+        "kg",
+        "mg"
+      ]
+    }
+  ]
+}
