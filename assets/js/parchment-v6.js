@@ -235,10 +235,11 @@
         }
         if (DOM.quoteDate) {
             var now = new Date();
-            var y = now.getFullYear();
-            var m = String(now.getMonth() + 1).padStart(2, '0');
-            var d = String(now.getDate()).padStart(2, '0');
-            DOM.quoteDate.textContent = y + '年' + m + '月' + d + '日';
+            var m = now.getMonth() + 1;
+            var d = now.getDate();
+            var weathers = ['晴', '晴', '多云', '微风有泪', '阴转大雨', '心雨淅淅沥沥', '暴雨封心', '晴转相思'];
+            var weather = weathers[Math.floor(Math.random() * weathers.length)];
+            DOM.quoteDate.textContent = m + '月' + d + '日 · ' + weather;
         }
     }
 
@@ -248,13 +249,14 @@
         if (DOM.btnRefreshQuote) {
             DOM.btnRefreshQuote.addEventListener('click', function() {
                 renderQuote();
-                window.showToast('已更新一篇舔狗日记');
+                window.showToast('已更新一篇正宗舔狗日记');
             });
         }
 
         if (DOM.btnCopyQuote) {
             DOM.btnCopyQuote.addEventListener('click', function() {
-                window.copyField(State.currentQuote, '舔狗日记');
+                var header = DOM.quoteDate ? ('舔狗日记  ' + DOM.quoteDate.textContent + '\n') : '';
+                window.copyField(header + State.currentQuote, '舔狗日记');
             });
         }
     }

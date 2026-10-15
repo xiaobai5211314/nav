@@ -112,7 +112,7 @@
     .visitor-ip-close:hover { color: #141413; background: #eceae1; }
     @media (max-width: 680px) { .audio-capsule-title, .dimension-source { display: none; } .visitor-ip-badge { right: 16px; bottom: 16px; left: 16px; max-width: none; } }
     </style>
-    <script src="assets/data/data-v3.js"></script>
+    <script src="assets/data/data-v4.js"></script>
 </head>
 <body>
 
@@ -279,15 +279,15 @@
                 </div>
             </div>
 
-            <!-- 3. 舔狗日记卡片 (Claude Artifact 风格) -->
+            <!-- 3. 舔狗日记卡片 (正宗灵魂版 · 熊猫头写日记 + 经典日记体格式) -->
             <div class="claude-artifact-card">
                 <div class="artifact-header">
-                    <div class="artifact-badge">
-                        <span>✦</span>
+                    <div class="artifact-badge" style="display:inline-flex; align-items:center; gap:8px;">
+                        <img src="assets/images/panda-tg.png" alt="熊猫头写日记" style="width:24px; height:20px; object-fit:contain; vertical-align:middle;">
                         <span>舔狗日记</span>
                     </div>
                     <div class="artifact-meta-group">
-                        <span id="quote-date">2026年10月15日</span>
+                        <span id="quote-date" style="font-weight:600; color:#c96442;">10月15日 · 晴 ☀️</span>
                     </div>
                 </div>
 
@@ -604,6 +604,6 @@
     </div>
 
     <!-- 核心应用驱动脚本 (Claude 官方极简设计系统 · 羊皮纸暖白) -->
-    <script src="assets/js/parchment-v6.js"></script>
+    <script src="assets/js/parchment-v7.js"></script>
 </body>
 </html>
