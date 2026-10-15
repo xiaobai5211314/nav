@@ -74,12 +74,41 @@ body{
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
+    .back-blog-float {
+        position: fixed;
+        top: 15px;
+        left: 115px;
+        z-index: 999999;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        background: rgba(18, 24, 38, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        color: #93c5fd;
+        text-decoration: none;
+        font-size: 12px;
+        transition: all 0.25s ease;
+    }
+    .back-blog-float:hover {
+        background: rgba(37, 99, 235, 0.85);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
     </style>
 </head>
 <body>
 <a href="../" class="back-home-float" title="返回全景工作台">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     <span>全景主站</span>
+</a>
+<a href="https://21212121.xyz" target="_blank" rel="noopener" class="back-blog-float" title="访问岁月静好主博客">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    <span>博客主站</span>
 </a>
 <!-- 中间主体区域 -->
 <div class="center">
@@ -172,12 +201,6 @@ body{
 
 <!-- 背景模糊化插件 -->
 <script src="js/background-blur.min.js"></script>
-
-<!-- 站长统计代码 -->
-<span style="display: none">
-    <!-- 各类统计代码都放在这里…… -->
-    <script type="text/javascript" src="//js.users.51.la/20150531.js"></script>
-</span>
 
 </body>
 </html>

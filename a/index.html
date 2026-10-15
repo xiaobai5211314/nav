@@ -78,9 +78,12 @@ canvas{display:block}
 </head>
 <body>
 
-<a href="../" class="back-home-float" title="返回全景工作台">
+<a href="../" target="_top" class="back-home-float" title="返回全景工作台">
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
   <span>全景主站</span>
+</a>
+<a href="https://21212121.xyz" target="_blank" class="back-home-float" style="left:116px;" title="访问岁月静好主博客">
+  <span>✍️ 主博客</span>
 </a>
 
 <div id="cursor-glow"></div>
@@ -621,7 +624,9 @@ function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), .05);
   const t = clock.getElapsedTime();
-  TWEEN.update();
+  if (typeof TWEEN !== 'undefined' && TWEEN.update) {
+    TWEEN.update();
+  }
   controls.update();
   updateHandRotation(dt);
   updateStars(dt, t);

@@ -4,8 +4,56 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>小白的数字空间 · 岁月静好全景应用平台</title>
-    <meta name="description" content="小白个人综合全景空间，聚合3D视觉展厅、在线音乐台、爱心树浪漫纪年、舔狗日记与网址导航。">
+    <meta name="description" content="小白个人综合全景空间，聚合3D视觉展厅、在线音乐台、爱心树浪漫纪年、舔狗日记与网址导航。以21212121.xyz主站为依托的站群全景数字空间。">
+    <meta name="keywords" content="小白,岁月静好,小白的数字空间,21212121.xyz,a.21212121.xyz,在线音乐播放器,3D展厅,极客导航,爱情纪念,站群矩阵">
+    <meta name="author" content="小白">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://a.21212121.xyz/">
     <link rel="shortcut icon" href="dh/favicon.ico" type="image/x-icon">
+
+    <!-- Open Graph / 社交卡片优化 -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://a.21212121.xyz/">
+    <meta property="og:title" content="小白的数字空间 · 岁月静好全景应用平台">
+    <meta property="og:description" content="小白个人综合全景空间，聚合3D视觉展厅、在线音乐台、爱心树浪漫纪年、舔狗日记与网址导航。">
+    <meta property="og:image" content="https://tc1.21212121.xyz/asite/assets/images/521.png">
+    <meta property="og:site_name" content="小白的数字空间">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://a.21212121.xyz/">
+    <meta name="twitter:title" content="小白的数字空间 · 岁月静好全景应用平台">
+    <meta name="twitter:description" content="小白个人综合全景空间，聚合3D视觉展厅、在线音乐台、爱心树浪漫纪年、舔狗日记与网址导航。">
+    <meta name="twitter:image" content="https://tc1.21212121.xyz/asite/assets/images/521.png">
+
+    <!-- JSON-LD 结构化数据 (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://a.21212121.xyz/#website",
+          "url": "https://a.21212121.xyz/",
+          "name": "小白的数字空间",
+          "description": "小白个人综合全景空间，聚合3D视觉展厅、在线音乐台、爱心树浪漫纪年与网址导航。",
+          "publisher": {
+            "@id": "https://21212121.xyz/#person"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://21212121.xyz/#person",
+          "name": "小白",
+          "url": "https://21212121.xyz/",
+          "sameAs": [
+            "https://a.21212121.xyz/",
+            "https://github.com/xiaobai5211314"
+          ]
+        }
+      ]
+    }
+    </script>
 
     <!-- 全局现代样式表与 CDN 配置 -->
     <link rel="stylesheet" href="assets/css/style.css">
@@ -153,6 +201,12 @@
 
             <!-- 顶部小工具控制器 -->
             <div class="header-actions">
+                <a href="https://21212121.xyz" target="_blank" rel="noopener" class="btn-chip" title="访问岁月静好主博客" style="text-decoration:none;font-size:12px;padding:6px 14px;background:linear-gradient(135deg,rgba(59,130,246,0.25),rgba(37,99,235,0.35));border:1px solid rgba(96,165,250,0.5);color:#93c5fd;border-radius:999px;display:inline-flex;align-items:center;gap:4px;font-weight:600;">
+                    <span>✍️ 主博客</span>
+                </a>
+                <a href="links.html" class="btn-chip" title="站群矩阵与友链互联" style="text-decoration:none;font-size:12px;padding:6px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#e2e8f0;border-radius:999px;display:inline-flex;align-items:center;gap:4px;">
+                    <span>🔗 站群友链</span>
+                </a>
                 <div class="clock-widget">
                     <span class="time" id="clock-time">00:00:00</span>
                     <span class="date" id="clock-date">2026年10月15日</span>
@@ -274,15 +328,15 @@
                 <div class="music-sidebar">
                     <h3 style="color:#fff; font-size:1.15rem; margin-bottom:12px;">🎵 音乐精选</h3>
                     <div class="song-list-scroll">
-                        <div class="song-item active" onclick="DOM.bgmAudio.src='assets/audio/520.mp3'; DOM.bgmAudio.play(); showToast('正在播放《520》');">
+                        <div class="song-item active" onclick="playTrack('assets/audio/520.mp3', '《520》');">
                             <span>01. 经典浪漫 · 520 纯音</span>
                             <span style="font-size:11px; opacity:0.6;">4:15</span>
                         </div>
-                        <div class="song-item" onclick="DOM.bgmAudio.src='assets/audio/1.mp3'; DOM.bgmAudio.play(); showToast('正在播放《心动告白》');">
+                        <div class="song-item" onclick="playTrack('assets/audio/1.mp3', '《心动告白》');">
                             <span>02. 心动回忆 · 告白旋律</span>
                             <span style="font-size:11px; opacity:0.6;">0:42</span>
                         </div>
-                        <div class="song-item" onclick="DOM.bgmAudio.src='https://tc1.21212121.xyz/xb/521.mp3'; DOM.bgmAudio.play(); showToast('正在播放小白专属曲目');">
+                        <div class="song-item" onclick="playTrack('https://tc1.21212121.xyz/xb/521.mp3', '小白专属曲目');">
                             <span>03. 小白专属 · 521 记忆</span>
                             <span style="font-size:11px; opacity:0.6;">1:48</span>
                         </div>
@@ -298,15 +352,15 @@
                 <!-- 右侧：黑胶唱片与歌词主台 -->
                 <div class="music-main-stage">
                     <div id="vinyl-disc" class="vinyl-disc">
-                        <img src="assets/images/521.png" alt="唱片封面" class="vinyl-cover">
+                        <img src="assets/images/521.png" alt="唱片封面" class="vinyl-cover" loading="lazy">
                     </div>
                     <div class="now-playing-title">520 经典浪漫曲目</div>
                     <div class="now-playing-artist">小白 · 岁月静好精选集</div>
 
                     <div class="audio-control-bar">
-                        <button type="button" class="btn-sub" onclick="DOM.bgmAudio.currentTime -= 10;">⏮ 10s</button>
+                        <button type="button" class="btn-sub" onclick="seekAudio(-10);">⏮ 10s</button>
                         <button type="button" class="play-main-btn" id="play-main-btn">▶</button>
-                        <button type="button" class="btn-sub" onclick="DOM.bgmAudio.currentTime += 10;">10s ⏭</button>
+                        <button type="button" class="btn-sub" onclick="seekAudio(10);">10s ⏭</button>
                     </div>
                 </div>
             </div>
@@ -351,12 +405,40 @@
 
         <!-- ================= 视窗 5: 导航与服务 (Links) ================= -->
         <section id="view-links" class="view-panel">
+            <!-- 核心主站与站群矩阵导流横幅 -->
+            <div style="margin-bottom:24px; padding:22px; background:linear-gradient(135deg, rgba(30,58,138,0.4), rgba(88,28,135,0.4)); border:1px solid rgba(147,197,253,0.3); border-radius:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+                <div>
+                    <h3 style="color:#fff; font-size:1.15rem; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+                        <span>✍️</span> 岁月静好 · 个人主博客 (21212121.xyz)
+                    </h3>
+                    <p style="color:#cbd5e1; font-size:13px; margin:0; line-height:1.6;">
+                        小白的技术随笔、生活记录与站群核心中枢。本全景空间及所有子项目均以主博客为权威基准站。
+                    </p>
+                </div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <a href="https://21212121.xyz" target="_blank" rel="noopener" class="btn-chip" style="background:#2563eb; color:#fff; border-color:#60a5fa; text-decoration:none; font-weight:600; padding:8px 18px;">
+                        访问主站博客 →
+                    </a>
+                    <a href="links.html" class="btn-chip" style="background:rgba(255,255,255,0.12); color:#fff; border-color:rgba(255,255,255,0.3); text-decoration:none; padding:8px 18px;">
+                        🔗 站群与友链矩阵 →
+                    </a>
+                </div>
+            </div>
+
             <div class="links-grid">
-                <a href="https://21212121.xyz" target="_blank" class="link-tile">
+                <a href="https://21212121.xyz" target="_blank" class="link-tile" style="border-color:rgba(59,130,246,0.4); background:rgba(30,58,138,0.2);">
                     <div class="link-icon">🌐</div>
                     <div class="link-info">
                         <h4>岁月静好博客</h4>
                         <p>个人官方博客 · 温柔只给意中人</p>
+                    </div>
+                </a>
+
+                <a href="links.html" class="link-tile" style="border-color:rgba(168,85,247,0.4); background:rgba(88,28,135,0.2);">
+                    <div class="link-icon">🔗</div>
+                    <div class="link-info">
+                        <h4>站群与友链互联中心</h4>
+                        <p>10+ 姐妹子系统矩阵与友链互通</p>
                     </div>
                 </a>
 
@@ -444,6 +526,12 @@
 
         <!-- 底部版权与 CDN 状态 -->
         <footer class="app-footer">
+            <div style="margin-bottom:14px; display:flex; justify-content:center; align-items:center; gap:16px; flex-wrap:wrap;">
+                <a href="https://21212121.xyz" target="_blank" rel="noopener" style="color:#60a5fa; text-decoration:none; font-size:13px; font-weight:600;">🏠 岁月静好主博客</a>
+                <a href="links.html" style="color:#93c5fd; text-decoration:none; font-size:13px;">🔗 站群矩阵与友链互联</a>
+                <a href="sitemap.xml" target="_blank" style="color:#94a3b8; text-decoration:none; font-size:13px;">🗺️ 网站地图</a>
+                <a href="https://github.com/xiaobai5211314/asite" target="_blank" rel="noopener" style="color:#94a3b8; text-decoration:none; font-size:13px;">💻 GitHub 开源</a>
+            </div>
             <div style="margin-bottom:10px;">
                 <span class="pill" style="font-size:11px; background:rgba(16, 185, 129, 0.15); border-color:rgba(16, 185, 129, 0.3); color:#6ee7b7;">
                     ⚡ 又拍云 CDN 深度加速 · 架构收敛单域名版

@@ -318,6 +318,7 @@
         iframe.style.height = '100%';
         iframe.style.border = 'none';
         iframe.style.display = 'block';
+        iframe.setAttribute('allow', 'camera; accelerometer; gyroscope; microphone');
         container.appendChild(iframe);
     }
 
@@ -433,6 +434,28 @@
         setTimeout(function() {
             DOM.toast.classList.remove('show');
         }, 2200);
+    };
+
+    // 挂载全局方法，确保 HTML 内联事件无报错
+    window.switchView = switchView;
+    window.DOM = DOM;
+    window.playTrack = function(src, name) {
+        if (!DOM.bgmAudio) return;
+        DOM.bgmAudio.src = src;
+        DOM.bgmAudio.play().then(function() {
+            State.bgmPlaying = true;
+            if (DOM.btnBgm) DOM.btnBgm.classList.add('playing');
+            if (DOM.vinylDisc) DOM.vinylDisc.classList.add('playing');
+            if (DOM.playMainBtn) DOM.playMainBtn.textContent = '⏸ 暂停播放';
+            window.showToast('正在播放: ' + name);
+        }).catch(function() {
+            window.showToast('点击播放: ' + name);
+        });
+    };
+    window.seekAudio = function(delta) {
+        if (!DOM.bgmAudio) return;
+        DOM.bgmAudio.currentTime = Math.max(0, DOM.bgmAudio.currentTime + delta);
+        window.showToast((delta > 0 ? '快进 ' : '快退 ') + Math.abs(delta) + ' 秒');
     };
 
     // 13. 初始化启动

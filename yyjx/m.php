@@ -18,9 +18,9 @@
     <meta name="x5-fullscreen" content="true"><!--QQ强制全屏-->
     <meta name="x5-page-mode" content="app"><!--QQ应用模式-->
     
-    <title>princeli在线音乐</title>
-    <meta name="description" content="一款开源的基于网易云音乐api的在线音乐播放器。具有音乐搜索、播放、下载、歌词同步显示、个人音乐播放列表同步等功能。"/>
-    <meta name="keywords" content="princeli播放器,在线音乐播放器,MKOnlinePlayer,网易云音乐,音乐api,音乐播放器源代码"/>
+    <title>小白在线音乐播放器</title>
+    <meta name="description" content="小白在线音乐播放器，基于网易云音乐API的现代化在线音乐随身听。"/>
+    <meta name="keywords" content="小白在线音乐,在线音乐播放器,MKOnlinePlayer,网易云音乐,全景空间"/>
     
     <!-- 不支持IE8及以下版本浏览器 -->
     <!--[if lte IE 8]>
@@ -56,19 +56,38 @@
         text-decoration: none;
         font-size: 11px;
     }
+    .back-blog-float {
+        position: fixed;
+        top: 15px;
+        left: 80px;
+        z-index: 999999;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 10px;
+        background: rgba(18, 24, 38, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        color: #93c5fd;
+        text-decoration: none;
+        font-size: 11px;
+    }
     </style>
 </head>
 <body>
 <a href="../" class="back-home-float" title="返回全景工作台">⌂ 主站</a>
+<a href="https://21212121.xyz" target="_blank" rel="noopener" class="back-blog-float" title="访问岁月静好主博客">✎ 博客</a>
 <!-- 中间主体区域 -->
 <div class="center">
     <div class="container">
         <!--头部导航 -->
         <nav class="leo-mnav-head"> 
             <font class="leo-font" style="margin:8px 15px 0px 15px;" >Music</font>
-                    <a class="leo-small-r">
-                      <span class="iconfont"  ><font size="2"></font></span></a> 
-                    <a class="leo-small-r"  tapmode >
+            <a class="leo-small-r" href="https://21212121.xyz" target="_blank" rel="noopener" title="岁月静好博客" style="color:#94a3b8;font-size:12px;margin-right:15px;text-decoration:none;">
+                <span class="iconfont">博客</span>
+            </a>
         </nav>
         <div class="btn-bar"> 
             <!-- tab按钮区 -->
@@ -158,12 +177,6 @@
 
 <!-- 背景模糊化插件 -->
 <script src="static/js/background-blur.min.js"></script>
-
-<!-- 站长统计代码 -->
-<span style="display: none">
-    <!-- 各类统计代码都放在这里…… -->
-<script type="text/javascript" src="//js.users.51.la/20150531.js"></script>    
-</span>
 
 </body>
 </html>

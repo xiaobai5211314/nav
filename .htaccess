@@ -48,11 +48,10 @@ RewriteCond %{REQUEST_URI} !^/tuchuang/
 RewriteRule ^(.*)$ tuchuang/$1?Rewrite [L,QSA]
 
 
-RewriteCond %{HTTP_HOST} ^a\.21212121\.xyz$ [NC]
-
-RewriteCond %{REQUEST_URI} !^/a/
-
-RewriteRule ^(.*)$ a/$1?Rewrite [L,QSA]
+# a.21212121.xyz 现作为全景聚合主站根目录，不再重写重定向至 /a/
+# RewriteCond %{HTTP_HOST} ^a\.21212121\.xyz$ [NC]
+# RewriteCond %{REQUEST_URI} !^/a/
+# RewriteRule ^(.*)$ a/$1?Rewrite [L,QSA]
 
 
 
