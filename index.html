@@ -55,8 +55,13 @@
     }
     </script>
 
+    <script>
+    document.documentElement.removeAttribute('data-theme');
+    try { localStorage.removeItem('claude-theme'); } catch(e) {}
+    </script>
+
     <!-- 全局样式表 (Claude 官方极简设计系统 · 羊皮纸暖白) -->
-    <link rel="stylesheet" href="assets/css/claude.css?v=20261015_parchment_v1">
+    <link rel="stylesheet" href="assets/css/parchment.css?v=20261015">
     <script src="assets/data/data.js"></script>
 </head>
 <body>
@@ -644,6 +649,6 @@
     </div>
 
     <!-- 核心应用驱动脚本 (Claude 官方极简设计系统 · 羊皮纸暖白) -->
-    <script src="assets/js/claude.js?v=20261015_parchment_v1"></script>
+    <script src="assets/js/parchment.js?v=20261015"></script>
 </body>
 </html>
