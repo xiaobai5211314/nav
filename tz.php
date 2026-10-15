@@ -855,7 +855,7 @@ function displayData(dataJSON)
             <span>← 返回小白数字空间 (a.21212121.xyz)</span>
         </a>
         <div style="font-size:12px; color:#5e5d59;">
-            <span>腾讯云上海节点 · 节点公网: <strong style="color:#c96442;">150.158.159.111</strong></span>
+            <span>腾讯云上海数据中心 · 运行正常</span>
         </div>
         <a href="https://21212121.xyz" target="_blank" rel="noopener" style="color:#5e5d59; text-decoration:none; font-size:12px;">
             <span>岁月静好主博客 ↗</span>
@@ -872,7 +872,7 @@ function displayData(dataJSON)
   <tr><th colspan="4">服务器参数</th></tr>
   <tr>
     <td>服务器域名/IP地址</td>
-    <td colspan="3"><?php echo @get_current_user();?> - <?php echo $_SERVER['SERVER_NAME'];?> (<strong style="color:#c96442;">公网IP: 150.158.159.111</strong> | 内网: <?php if('/'==DIRECTORY_SEPARATOR){echo $_SERVER['SERVER_ADDR'];}else{echo @gethostbyname($_SERVER['SERVER_NAME']);} ?>)&nbsp;&nbsp;你的访客IP是：<?php echo @$_SERVER['REMOTE_ADDR'];?></td>
+    <td colspan="3"><?php echo @get_current_user();?> - <?php echo $_SERVER['SERVER_NAME'];?> (<?php if('/'==DIRECTORY_SEPARATOR){echo $_SERVER['SERVER_ADDR'];}else{echo @gethostbyname($_SERVER['SERVER_NAME']);} ?>)&nbsp;&nbsp;你的访客IP是：<?php echo @$_SERVER['REMOTE_ADDR'];?></td>
   </tr>
   <tr>
     <td>服务器标识</td>

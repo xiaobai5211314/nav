@@ -36,7 +36,18 @@
     .claude-search-clear { border: none; background: transparent; color: #87867f; font-size: 18px; line-height: 1; cursor: pointer; padding: 2px 6px; border-radius: 50%; display: none; transition: all 0.2s ease; }
     .claude-search-clear:hover { color: #c96442; background: #eceae1; }
     .claude-search-clear.show { display: block; }
-    @media (max-width: 680px) { .audio-capsule-title { display: none; } }
+    .empty-search-state { display: none; }
+    .empty-search-state.show { display: block; }
+    .visitor-ip-badge { position: fixed; right: 24px; bottom: 24px; z-index: 1000; background: rgba(250, 249, 245, 0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid #e8e6dc; border-radius: 12px; padding: 12px 16px; box-shadow: 0 8px 30px rgba(20,20,19,0.08); display: flex; align-items: center; gap: 12px; opacity: 0; transform: translateY(20px) scale(0.96); pointer-events: none; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); max-width: 320px; }
+    .visitor-ip-badge.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+    .visitor-ip-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(201,100,66,0.12); color: #c96442; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .visitor-ip-info { flex: 1; min-width: 0; }
+    .visitor-ip-title { font-size: 12.5px; font-weight: 600; color: #141413; margin-bottom: 2px; }
+    .visitor-ip-loc { color: #c96442; font-weight: 600; }
+    .visitor-ip-desc { font-size: 11px; color: #87867f; font-family: ui-monospace, monospace; }
+    .visitor-ip-close { background: transparent; border: none; color: #87867f; font-size: 16px; cursor: pointer; padding: 2px 4px; line-height: 1; border-radius: 4px; }
+    .visitor-ip-close:hover { color: #141413; background: #eceae1; }
+    @media (max-width: 680px) { .audio-capsule-title { display: none; } .visitor-ip-badge { right: 16px; bottom: 16px; left: 16px; max-width: none; } }
     </style>
 </head>
 <body>
@@ -48,9 +59,7 @@
     <div id="toast-msg" class="toast-msg">已复制到剪贴板</div>
 
     <!-- 背景音频随身听 (520 · 岁月静好) -->
-    <audio id="bgm-audio" preload="none" loop>
-        <source src="https://tc1.21212121.xyz/xb/520.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgm-audio" src="assets/audio/520.mp3" preload="metadata" loop></audio>
 
     <!-- 页面核心主容器 -->
     <div class="claude-container">
@@ -134,19 +143,19 @@
         <section class="claude-filter-section">
             <div class="claude-search-wrap">
                 <div class="claude-search-box">
-                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <svg width="16" height="16" style="width:16px;height:16px;min-width:16px;min-height:16px;max-width:16px;max-height:16px;flex-shrink:0;" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                     <input type="text" class="claude-search-input" id="search-input" placeholder="输入关键词即时检索站群项目、微服务或域名 (按 / 聚焦)..." autocomplete="off">
-                    <span class="claude-search-badge" id="search-count">21 个项目</span>
+                    <span class="claude-search-badge" id="search-count">13 个项目</span>
                     <button type="button" class="claude-search-clear" id="btn-clear-search" title="清除搜索">&times;</button>
                 </div>
             </div>
 
             <!-- 分类筛选标签组 -->
             <div class="filter-tab-group">
-                <button type="button" class="filter-tab-btn active" data-filter="all">全部 All (21)</button>
-                <button type="button" class="filter-tab-btn" data-filter="microservices">核心微服务 Services (9)</button>
-                <button type="button" class="filter-tab-btn" data-filter="apps">独立应用 Apps (6)</button>
-                <button type="button" class="filter-tab-btn" data-filter="life">浪漫与交互 Romance (6)</button>
+                <button type="button" class="filter-tab-btn active" data-filter="all">全部 All (13)</button>
+                <button type="button" class="filter-tab-btn" data-filter="microservices">核心微服务 Services (5)</button>
+                <button type="button" class="filter-tab-btn" data-filter="apps">独立应用 Apps (5)</button>
+                <button type="button" class="filter-tab-btn" data-filter="life">浪漫与交互 Romance (3)</button>
                 <button type="button" class="filter-tab-btn" data-filter="exchange">🤝 友链申请与规则 (Apply)</button>
             </div>
             <div class="filter-status-tag">
@@ -155,7 +164,7 @@
             </div>
         </section>
 
-        <!-- 4. Bento 网格矩阵 (21 个实体应用项目，零功能重复) -->
+        <!-- 4. Bento 网格矩阵 (13 个精选实体应用与交互展厅，无冗余) -->
         <main class="claude-bento-grid" id="project-grid">
 
             <!-- 01. 岁月静好主博客 -->
@@ -212,187 +221,7 @@
                 </div>
             </a>
 
-            <!-- 04. 科技热榜推送机器人 -->
-            <a href="https://github.com/xiaobai5211314" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-                        </div>
-                        <span class="card-pill slate">Python 3</span>
-                    </div>
-                    <h3 class="card-title">科技热榜推送机器人</h3>
-                    <p class="card-desc">科技新闻抓取、全网多平台热榜聚合与 Telegram 自动化资讯推送服务，晨报与夜报定时投递。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">github.com/xiaobai5211314</span>
-                    <span class="card-arrow">查看源码 ↗</span>
-                </div>
-            </a>
-
-            <!-- 05. 3D 水晶球梦幻相册 -->
-            <a href="a/" target="_blank" class="claude-card" data-category="life">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9zM12 4.15L6.04 7.5 12 10.85l5.96-3.35L12 4.15zM5 8.9v6.2l6 3.38v-6.2L5 8.9zm14 6.2V8.9l-6 3.38v6.2l6-3.38z"/></svg>
-                        </div>
-                        <span class="card-pill slate">Three.js</span>
-                    </div>
-                    <h3 class="card-title">3D 水晶球梦幻相册</h3>
-                    <p class="card-desc">基于 Three.js 打造的 3D 照片墙与元素周期表交互展示，支持摄像头手势翻转与滚轮缩放。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/a/</span>
-                    <span class="card-arrow">进入展厅 ↗</span>
-                </div>
-            </a>
-
-            <!-- 06. 在线音乐播放器 -->
-            <a href="yyjx/" target="_blank" class="claude-card" data-category="life">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-                        </div>
-                        <span class="card-pill slate">MKOnline</span>
-                    </div>
-                    <h3 class="card-title">全网解析音乐播放器</h3>
-                    <p class="card-desc">全网多音源在线解析播放器，支持滚动高亮歌词、高斯模糊唱片背景、个性歌单与桌面移动自适应。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/yyjx/</span>
-                    <span class="card-arrow">打开音乐 ↗</span>
-                </div>
-            </a>
-
-            <!-- 07. 午间异动选股助手 -->
-            <a href="https://github.com/xiaobai5211314" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
-                        </div>
-                        <span class="card-pill terracotta">Python 3.11</span>
-                    </div>
-                    <h3 class="card-title">午间异动选股助手</h3>
-                    <p class="card-desc">午间异动股票量价智能评分、主力资金动向挖掘与自动化研报生成系统，助力结构性交易决策。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">stock_assistant</span>
-                    <span class="card-arrow">查看项目 ↗</span>
-                </div>
-            </a>
-
-            <!-- 08. 落樱唯美全屏时钟 -->
-            <a href="sj/" target="_blank" class="claude-card" data-category="life">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                        </div>
-                        <span class="card-pill sage">Canvas 动效</span>
-                    </div>
-                    <h3 class="card-title">落樱唯美全屏时钟</h3>
-                    <p class="card-desc">纯净沉浸式全屏落樱粒子特效时钟，陪伴专注工作、代码编写与沉思的极简时间展台。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/sj/</span>
-                    <span class="card-arrow">沉浸时钟 ↗</span>
-                </div>
-            </a>
-
-            <!-- 09. 爱心树浪漫时光馆 -->
-            <a href="db/" target="_blank" class="claude-card" data-category="life">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        </div>
-                        <span class="card-pill terracotta">2019-05-20</span>
-                    </div>
-                    <h3 class="card-title">爱心树浪漫时光馆</h3>
-                    <p class="card-desc">HTML5 Canvas 经典动态爱心树绽放动画，精准计时记录大白与小白相伴以来的日夜分秒。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/db/</span>
-                    <span class="card-arrow">重温浪漫 ↗</span>
-                </div>
-            </a>
-
-            <!-- 10. 告白打字机浪漫网页 -->
-            <a href="bb/" target="_blank" class="claude-card" data-category="life">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                        </div>
-                        <span class="card-pill terracotta">逐字告白</span>
-                    </div>
-                    <h3 class="card-title">告白打字机浪漫网页</h3>
-                    <p class="card-desc">极富温情的逐字打印告白文字，重现心动瞬间与真挚话语的网页纪念作。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/bb/</span>
-                    <span class="card-arrow">查看告白 ↗</span>
-                </div>
-            </a>
-
-            <!-- 11. 舔狗日记情感拾遗 -->
-            <a href="tg/" target="_blank" class="claude-card" data-category="life">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
-                        </div>
-                        <span class="card-pill sage">每日随笔</span>
-                    </div>
-                    <h3 class="card-title">舔狗日记情感拾遗</h3>
-                    <p class="card-desc">便签风格每日心绪记录，支持日历选择、一键换一篇与本地离线随身阅读，诙谐幽默中见真性情。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/tg/</span>
-                    <span class="card-arrow">查阅日记 ↗</span>
-                </div>
-            </a>
-
-            <!-- 12. 2018 青春原版纪念页 -->
-            <a href="xb/" target="_blank" class="claude-card" data-category="life">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-                        </div>
-                        <span class="card-pill terracotta">2018 原版</span>
-                    </div>
-                    <h3 class="card-title">2018 青春原版纪念页</h3>
-                    <p class="card-desc">小白个人最初的表白网页原貌，完好沉淀当年的散文诗篇《你不懂我 我不怪你》与初心影像。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/xb/</span>
-                    <span class="card-arrow">回望初心 ↗</span>
-                </div>
-            </a>
-
-            <!-- 13. DNSPod 家宽 IP 智能解析 -->
-            <a href="https://github.com/xiaobai5211314" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
-                <div class="card-top">
-                    <div class="card-badge-row">
-                        <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                        </div>
-                        <span class="card-pill slate">DDNS</span>
-                    </div>
-                    <h3 class="card-title">DNSPod 家宽 IP 智能解析</h3>
-                    <p class="card-desc">家庭宽带动态公网 IPv4/IPv6 自动监测、DNSPod API 域名实时同步与 UPnP 端口穿透服务。</p>
-                </div>
-                <div class="card-bottom">
-                    <span class="card-domain">ddns_dnspod</span>
-                    <span class="card-arrow">查看服务 ↗</span>
-                </div>
-            </a>
-
-            <!-- 14. 《高性价比人生指南》 -->
+            <!-- 04. 《高性价比人生指南》 -->
             <a href="https://rensheng.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
@@ -410,7 +239,7 @@
                 </div>
             </a>
 
-            <!-- 15. 程序员全真模拟面试 -->
+            <!-- 05. 程序员全真模拟面试 -->
             <a href="https://ms.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
@@ -428,7 +257,7 @@
                 </div>
             </a>
 
-            <!-- 16. 上海驾考科目一速过宝典 -->
+            <!-- 06. 上海驾考科目一速过宝典 -->
             <a href="https://jiakao.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
@@ -446,7 +275,7 @@
                 </div>
             </a>
 
-            <!-- 17. EasyImage 极简云图床 -->
+            <!-- 07. EasyImage 极简云图床 -->
             <a href="https://tuchuang.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
@@ -464,14 +293,14 @@
                 </div>
             </a>
 
-            <!-- 18. 照妖镜趣味拍照应用 -->
+            <!-- 08. 照妖镜趣味拍照应用 -->
             <a href="https://zyj.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
                             <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                         </div>
-                        <span class="card-pill terracotta">PHP 7.3</span>
+                        <span class="card-pill terracotta">PHP 8.5</span>
                     </div>
                     <h3 class="card-title">照妖镜趣味拍照应用</h3>
                     <p class="card-desc">趣味伪装自拍生成工具，支持邮件异步提醒与实时安全防护，经典轻量 Web 娱乐应用。</p>
@@ -482,7 +311,7 @@
                 </div>
             </a>
 
-            <!-- 19. 二级域名分发管理系统 -->
+            <!-- 09. 二级域名分发管理系统 -->
             <a href="https://ff.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
@@ -500,7 +329,7 @@
                 </div>
             </a>
 
-            <!-- 20. DeepSeek 逆向 API 网关 -->
+            <!-- 10. DeepSeek 逆向 API 网关 -->
             <a href="https://deepseekapi.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
@@ -518,33 +347,69 @@
                 </div>
             </a>
 
-            <!-- 21. 云探针服务器实时监控 -->
-            <a href="tz.php" target="_blank" class="claude-card" data-category="microservices">
+            <!-- 11. 3D 水晶球梦幻相册 -->
+            <a href="a/" target="_blank" class="claude-card" data-category="life">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z M2 4v16h20V4H2zm4 4h4v2H6V8zm0 4h7v2H6v-2zm0 4h10v2H6v-2z"/></svg>
+                            <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9zM12 4.15L6.04 7.5 12 10.85l5.96-3.35L12 4.15zM5 8.9v6.2l6 3.38v-6.2L5 8.9zm14 6.2V8.9l-6 3.38v6.2l6-3.38z"/></svg>
                         </div>
-                        <span class="card-pill sage">节点监控</span>
+                        <span class="card-pill slate">Three.js</span>
                     </div>
-                    <h3 class="card-title">云探针服务器实时监控</h3>
-                    <p class="card-desc">腾讯云上海节点服务器状态、CPU/内存占用、网络带宽与各微服务存活实时监控平台。</p>
+                    <h3 class="card-title">3D 水晶球梦幻相册</h3>
+                    <p class="card-desc">基于 Three.js 打造的 3D 照片墙与元素周期表交互展示，支持摄像头手势翻转与滚轮缩放。</p>
                 </div>
                 <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/tz.php</span>
-                    <span class="card-arrow">查看探针 ↗</span>
+                    <span class="card-domain">a.21212121.xyz/a/</span>
+                    <span class="card-arrow">进入展厅 ↗</span>
+                </div>
+            </a>
+
+            <!-- 12. 全网解析音乐播放器 -->
+            <a href="yyjx/" target="_blank" class="claude-card" data-category="life">
+                <div class="card-top">
+                    <div class="card-badge-row">
+                        <div class="card-icon-box">
+                            <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        </div>
+                        <span class="card-pill slate">MKOnline</span>
+                    </div>
+                    <h3 class="card-title">全网解析音乐播放器</h3>
+                    <p class="card-desc">全网多音源在线解析播放器，支持滚动高亮歌词、高斯模糊唱片背景、个性歌单与桌面移动自适应。</p>
+                </div>
+                <div class="card-bottom">
+                    <span class="card-domain">a.21212121.xyz/yyjx/</span>
+                    <span class="card-arrow">打开音乐 ↗</span>
+                </div>
+            </a>
+
+            <!-- 13. 爱心树浪漫时光馆 -->
+            <a href="db/" target="_blank" class="claude-card" data-category="life">
+                <div class="card-top">
+                    <div class="card-badge-row">
+                        <div class="card-icon-box">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <span class="card-pill terracotta">2019-05-20</span>
+                    </div>
+                    <h3 class="card-title">爱心树浪漫时光馆</h3>
+                    <p class="card-desc">HTML5 Canvas 经典动态爱心树绽放动画，精准计时记录大白与小白相伴以来的日夜分秒。</p>
+                </div>
+                <div class="card-bottom">
+                    <span class="card-domain">a.21212121.xyz/db/</span>
+                    <span class="card-arrow">重温浪漫 ↗</span>
                 </div>
             </a>
 
             <!-- 搜索无结果占位卡片 -->
             <div class="empty-search-state" id="empty-search-state">
-                <h4>未找到匹配的站群项目或服务</h4>
-                <p>换个关键词（如：养基、MiMo、图床、音乐、API、相册、面试）或清空搜索框试试。</p>
+                <h4>未找到匹配的项目或服务</h4>
+                <p>换个关键词（如：养基、图床、音乐、API、相册、面试）或清空搜索框试试。</p>
             </div>
 
         </main>
 
-        <!-- 5. 站群互联与友链交换中心 (一键复制凭据与契约) -->
+        <!-- 5. 站群互联与友链交换中心 (专页专属) -->
         <section class="claude-exchange-section" id="exchange">
             <div class="exchange-header">
                 <h2 class="exchange-title">
@@ -614,17 +479,25 @@
                 <a href="https://github.com/xiaobai5211314" target="_blank" rel="noopener">GitHub</a>
                 <span>·</span>
                 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" rel="noopener">又拍云联盟</a>
-                <span>·</span>
-                <a href="tz.php" target="_blank" rel="noopener">上海节点探针</a>
             </div>
             <div>
                 © 2026 小白 · 岁月静好 · <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:inherit; text-decoration:none;">皖ICP备2021004128号-1</a>
             </div>
             <div class="footer-sub">
-                静态资源托管于 又拍云 (Upyun) 高速 CDN 全球分发网络 · 节点托管于腾讯云上海数据中心 (150.158.159.111)
+                静态资源托管于 又拍云 (Upyun) 高速 CDN 全球分发网络 · 节点托管于腾讯云上海数据中心
             </div>
         </footer>
 
+    </div>
+
+    <!-- 访客足迹右下角悬浮提示 -->
+    <div id="visitor-badge" class="visitor-ip-badge">
+        <div class="visitor-ip-icon">✦</div>
+        <div class="visitor-ip-info">
+            <div class="visitor-ip-title">欢迎来自 <span class="visitor-ip-loc" id="visitor-loc">...</span> 的朋友</div>
+            <div class="visitor-ip-desc" id="visitor-ip">正在连接...</div>
+        </div>
+        <button type="button" class="visitor-ip-close" id="btn-close-visitor" title="关闭">&times;</button>
     </div>
 
     <!-- 核心应用驱动脚本 -->

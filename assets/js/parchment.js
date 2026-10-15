@@ -504,13 +504,68 @@
         }
     });
 
-    // 11. 初始化入口
+    // 11. 访客足迹右下角悬浮提示
+    function initVisitorBadge() {
+        var badge = document.getElementById('visitor-badge');
+        if (!badge) return;
+        var locEl = document.getElementById('visitor-loc');
+        var ipEl = document.getElementById('visitor-ip');
+        var btnClose = document.getElementById('btn-close-visitor');
+
+        if (btnClose) {
+            btnClose.addEventListener('click', function(e) {
+                e.stopPropagation();
+                badge.classList.remove('show');
+            });
+        }
+
+        function showVisitor(loc, ip) {
+            if (locEl) locEl.textContent = loc || '华夏大地';
+            if (ipEl) ipEl.textContent = '访客 IP: ' + (ip || '已连接');
+            setTimeout(function() {
+                badge.classList.add('show');
+            }, 600);
+            setTimeout(function() {
+                badge.classList.remove('show');
+            }, 8500);
+        }
+
+        fetch('api/visitor.php')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data && data.ip) {
+                    showVisitor(data.location, data.ip);
+                } else {
+                    fallbackIp();
+                }
+            })
+            .catch(function() {
+                fallbackIp();
+            });
+
+        function fallbackIp() {
+            var s = document.createElement('script');
+            window.IPCallBack = function(d) {
+                if (d) {
+                    showVisitor((d.pro || '') + ' ' + (d.city || ''), d.ip);
+                }
+            };
+            s.src = 'https://whois.pconline.com.cn/ipJson.jsp?callback=IPCallBack';
+            s.onerror = function() {
+                showVisitor('远方', '已安全接入');
+            };
+            document.body.appendChild(s);
+        }
+    }
+
+    // 12. 初始化入口
     function init() {
         initCategoryFilter();
         initSearchEngine();
         initQuotesEngine();
         initMusicController();
         initAmbientCanvas();
+        initVisitorBadge();
 
         updateClockAndLoveTime();
         setInterval(updateClockAndLoveTime, 1000);
