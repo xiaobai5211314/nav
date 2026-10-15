@@ -618,3 +618,6 @@
         init();
     }
 })();
+
+/* 2026-10-16: 滚动时提高导航栏不透明度 */
+(function(){var h=document.querySelector("header.claude-header");if(!h)return;function t(){h.classList.toggle("scrolled",window.scrollY>40);}window.addEventListener("scroll",t,{passive:true});t();})();

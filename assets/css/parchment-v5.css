@@ -765,7 +765,7 @@ footer.claude-footer {
     border-bottom: 1px solid var(--claude-border);
 }
 
-.modal-head h3 {
+.modal-head h2 {
     font-family: var(--font-serif);
     font-size: 1.15rem;
     font-weight: 500;
@@ -1298,4 +1298,10 @@ footer.claude-footer {
         left: 16px;
         max-width: none;
     }
+}
+
+/* 2026-10-16: 滚动后提高导航栏不透明度,避免下方卡片内容透字 */
+header.claude-header.scrolled {
+    background: rgba(245, 244, 237, 0.97);
+    box-shadow: 0 8px 28px rgba(120, 100, 80, 0.14);
 }
