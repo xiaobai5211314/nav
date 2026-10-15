@@ -155,10 +155,10 @@
 <script src="plugns/layer/layer.js"></script>
 
 <!-- 播放器数据加载模块 -->
-<script src="static/js/ajax.js"></script>
+<script src="static/js/ajax.js?v=2.1.0"></script>
 
 <!-- 音源后端中心：切换 / 添加接口（链接或导入 .js 文件） -->
-<script src="static/js/sourcehub.js"></script>
+<script src="static/js/sourcehub.js?v=2.1.0"></script>
 
 <!-- 播放器歌词解析模块 -->
 <script src="static/js/lyric.js"></script>
