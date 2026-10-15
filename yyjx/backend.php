@@ -11,6 +11,11 @@
  *   6. 防 CDN 误缓存：强制输出 Cache-Control: no-store，避免边缘节点静态化
  */
 
+// 0. 严密屏蔽任何非致命性警告或废弃通知，防止输出到响应体污染 JSON/JSONP 结果（针对 PHP 8.0 ~ 8.5+）
+error_reporting(0);
+@ini_set('display_errors', '0');
+@ini_set('log_errors', '1');
+
 // 1. 强制禁用 CDN 缓存，防止又拍云等 CDN 缓存动态接口响应
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0');
 header('Pragma: no-cache');
@@ -138,7 +143,9 @@ function http_request($url, $method = 'GET', $headers = [], $body = null, $timeo
     $respBody = curl_exec($ch);
     $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $err = curl_error($ch);
-    curl_close($ch);
+    if (PHP_VERSION_ID < 80000 && is_resource($ch)) {
+        @curl_close($ch);
+    }
 
     return [$httpCode, $respBody, $respHeaders, $err];
 }
@@ -254,7 +261,9 @@ function handle_stream()
 
     curl_setopt_array($ch, $curlOpts);
     curl_exec($ch);
-    curl_close($ch);
+    if (PHP_VERSION_ID < 80000 && is_resource($ch)) {
+        @curl_close($ch);
+    }
     exit();
 }
 
