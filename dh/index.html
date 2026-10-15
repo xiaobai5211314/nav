@@ -1,307 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小白作品导航 · 站群互联精选</title>
-    <meta name="description" content="小白作品导航页，集中呈现岁月静好主博客、3D展厅、在线音乐台、爱心树纪念页与全系个人应用。">
-    <meta name="keywords" content="小白导航页,博客,作品集,站群互联,a.21212121.xyz">
-    
-    <!-- font-awesome 图标字体 -->
-    <link href="font-awesome.min.css" media="screen" rel="stylesheet" type="text/css">
-    
-    <!-- 实验室核心样式文件 -->
-    <link rel="stylesheet" href="index.css">
-
+    <title>作品导航已全面整合升级 · 正在跳转全景主站</title>
+    <meta http-equiv="refresh" content="0;url=../">
+    <link rel="canonical" href="https://a.21212121.xyz/">
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <script>
+        window.location.replace('../');
+    </script>
     <style>
-    .back-home-float {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 9999;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        background: rgba(18, 24, 38, 0.75);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 999px;
-        color: #fff;
-        text-decoration: none;
-        font-size: 13px;
-        transition: all 0.25s ease;
-    }
-    .back-home-float:hover {
-        background: rgba(59, 130, 246, 0.85);
-        border-color: rgba(255, 255, 255, 0.4);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    }
+        body {
+            background-color: #f5f4ed;
+            color: #141413;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .redirect-card {
+            background: #faf9f5;
+            border: 1px solid #e8e6dc;
+            border-radius: 16px;
+            padding: 40px 32px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(20, 20, 19, 0.04);
+        }
+        .spark {
+            color: #c96442;
+            font-size: 24px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 12px;
+            color: #141413;
+        }
+        p {
+            font-size: 14px;
+            color: #5e5d59;
+            line-height: 1.6;
+            margin: 0 0 24px;
+        }
+        .btn-jump {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 24px;
+            background: #c96442;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-jump:hover {
+            background: #b85736;
+        }
     </style>
 </head>
 <body>
-
-<a href="../" class="back-home-float" title="返回全景工作台">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    <span>全景主站</span>
-</a>
-<a href="https://21212121.xyz" target="_blank" class="back-home-float" style="left:116px;" title="访问岁月静好主博客">
-    <span>✍️ 主博客</span>
-</a>
-
-
-<header class="header">
-    <!-- 动画展示区域 -->
-    <div id="victor-container"><div id="victor-output"></div></div>
-    
-    <div class="welcome">
-        <p>— 欢迎访问 —</p>
-        
+    <div class="redirect-card">
+        <span class="spark">✦</span>
+        <h2>作品导航已融合升级</h2>
+        <p>星空粒子连线动效与精选作品导航已全面并入全景聚合主站，正在为您无缝跳转...</p>
+        <a href="../" class="btn-jump">进入全景主站 ↗</a>
     </div>
-    
-    <!--向下滚动提示-->
-    <a class="scroll-down-tips" href="#product" onclick="$('html, body').animate({scrollTop: $('.header').height()}, '500');return false;">
-        <i class="fa fa-angle-double-down" aria-hidden="true"></i>
-        向下滚动
-    </a>
-</header>     <!-- header -->
-
-<div class="container">
-
-<section class="section">
-
-<a name="product"></a>
-<h3 class="mk-sub-title">
-    <span>Product</span>
-    <span>/</span>
-   作品
-</h3>
-
-<p class="mk-title-describe">没错，这些都是我的作品</p>
-
-<div class="mk-item-box">
-
-<center>
-<div class="mk-item">
-    <a href="https://21212121.xyz/" target="_blank">
-        <article class="mk-color-item color2">
-        	<img src="img/2.jpg">
-            <div class="">
-                <i  aria-hidden="true"></i>
-            </div>
-            <h3>岁月静好博客</h3>
-            <p>温柔只给意中人</p>
-           
-        </article>
-    </a>
-</div>      <!-- mk-item -->
-
-  <div class="mk-item">
-    <a href="../tg/">
-        <article class="mk-color-item color1">
-        	<img src="img/3.jpg">
-            <div class="">
-                <i  aria-hidden="true"></i>
-            </div>
-            <h3>舔狗日记</h3>
-            <p>舔狗</p>
-           
-        </article>
-    </a>
-</div>      <!-- mk-item -->
-  
-<div class="mk-item">
-    <a href="../l/">
-        <article class="mk-color-item color3">
-        	<img src="img/2.jpg">
-            <div class="">
-                <i  aria-hidden="true"></i>
-            </div>
-            <h3>网站导航</h3>
-            <p>小白网站导航</p>
-               </article>
-    </a>
-</div>      <!-- mk-item -->
-
-<div class="mk-item">
-    <a href="../sj/">
-        <article class="mk-color-item color1">
-        	<img src="img/2.jpg">
-            <div class="">
-                <i  aria-hidden="true"></i>
-            </div>
-            <h3>时间源码</h3>
-            <p>时间</p>
-           
-        </article>
-    </a>
-</div>  
-
-
-<div class="mk-item">
-    <a href="../bb/">
-        <article class="mk-color-item color1">
-        	<img src="img/11.jpg">
-            <div class="">
-                <i  aria-hidden="true"></i>
-            </div>
-            <h3>表白网页</h3>
-            <p>表白</p>
-                 </article>
-    </a>
-</div>  
-
-
-
-
-<div class="mk-item">
-    <a href="../db/">
-        <article class="mk-color-item color1">
-        	<img src="img/11.jpg">
-            <div class="">
-                <i  aria-hidden="true"></i>
-            </div>
-            <h3>表白网</h3>
-            <p>表白</p>
-           
-        </article>
-    </a>
-</div>  
-
-<div class="mk-item">
-    <a href="http://tuchuang.21212121.xyz/" target="_blank">
-        <article class="mk-color-item color1">
-        	<img src="img/3.jpg">
-            <div class="">
-                <i ria-hidden="true"></i>
-            </div>
-            <h3>图床</h3>
-            <p>图片</p>
-           
-        </article>
-    </a>
-</div>  
-
-<div class="mk-item">
-    <a href="../a/">
-        <article class="mk-color-item color1">
-        	<img src="img/11.jpg">
-            <div class="">
-          </div>
-            <h3>水晶球</h3>
-            <p>相册</p>
-                   </article>
-    </a>
-</div>  
-
-
-<div class="mk-item">
-    <a href="../yyjx/">
-        <article class="mk-color-item color1">
-        	<img src="img/12.jpg">
-            <div class="">
-                <i  aria-hidden="true"></i>
-            </div>
-            <h3>音乐欣赏</h3>
-            <p>音乐解析</p>
-                   </article>
-    </a>
-</div>  
-
-<div class="mk-item">
-    <a href="https://ff.21212121.xyz" target="_blank">
-        <article class="mk-color-item color1">
-        	<img src="img/3.jpg">
-            <div class="">
-                <i ria-hidden="true"></i>
-            </div>
-            <h3>二级域名分发</h3>
-            <p>二级域名</p>
-           
-        </article>
-    </a>
-</div>
-
-
-</center>
-</div>  <!-- mk-item-box -->
-
-</section>  <!--  class="section" -->
-
-<section class="section">  <!--  class="section" -->
-    <div class="mk-big-title">
-        <h4>About</h4>
-    </div>
-    
-    <div class="about-content">
-    <center><p>欲了解更多内容，请访问我的 <a href="https://21212121.xyz" target="_blank">个人博客</a>。</p></center>
-    </div>
-</section>
-
-</div>     <!-- class=container -->
-
-<footer class="footer">
-     <p>Copyright &copy; 2019-2026 by 
-        <a href="https://21212121.xyz" target="_blank">岁月静好博客</a> · <a href="../">全景主站</a>.</p>
-  <p>ICP证：<a href="http://beian.miit.gov.cn" target="_blank">20002611号</a></p>
-</footer>
-
-<!-- 返回顶部 -->
-<div class="mk-uptop" title="点击返回顶部"></div>
-
-<!-- jq -->
-<script src="jquery.min.js"></script>
-<script src="vector.js"></script>
-
-<script>
-$(function(){
-    
-    // 页面加载完毕后固定页头高度，防止在某些自动隐藏工具栏的移动浏览器上出现页面抖动现象
-    $(".header").height($(window).height());
-    
-	// 初始化 传入dom id
-	var victor = new Victor("victor-container", "victor-output");
-	var theme = [
-			["#002c4a", "#005584"],
-			["#35ac03", "#3f4303"],
-			["#ac0908", "#cd5726"],
-			["#18bbff", "#00486b"]
-		];
-	var color = theme[fRandomBy(0, 3)];
-	victor(color).set();
-	
-	// 监听滚动变化
-    $(window).scroll(function() {
-        if($(window).scrollTop() < 300) {
-            $(".mk-uptop").removeClass("show");
-        } else {
-            $(".mk-uptop").addClass("show");
-        }
-    });
-    
-    // 返回顶部
-    $(".mk-uptop").click(function(){
-		$("html, body").animate({scrollTop:0}, "normal"); 
-		return false; 
-	});
-	
-});
-
-/*******************************
- * 函数名：生成指定范围的随机数
- * 输入：  (under)下限   (over)上限
- * 输出： 所需要的数值
- * *****************************/
-function fRandomBy(under, over) { 
-   switch(arguments.length){ 
-     case 1: return parseInt(Math.random()*under+1); 
-     case 2: return parseInt(Math.random()*(over-under+1) + under); 
-     default: return 0; 
-   } 
-} 
-</script>
-
 </body>
 </html>

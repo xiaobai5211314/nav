@@ -860,4 +860,358 @@ footer.claude-footer {
         width: 100%;
         justify-content: flex-start;
     }
+    .audio-capsule-title, .dimension-source {
+        display: none;
+    }
+    .claude-exchange-section {
+        padding: 24px 18px;
+    }
+    .exchange-table td {
+        padding: 10px 12px;
+        font-size: 12.5px;
+    }
+    .copy-chip-btn {
+        margin-left: 4px;
+        padding: 2px 6px;
+        font-size: 11px;
+    }
+}
+
+/* ================= 9. 全局实时检索与状态 ================= */
+.claude-search-wrap {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.claude-search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--claude-surface);
+    border: 1px solid var(--claude-border);
+    border-radius: var(--radius-pill);
+    padding: 9px 18px;
+    box-shadow: var(--shadow-whisper);
+    transition: all 0.25s ease;
+}
+.claude-search-box:focus-within {
+    border-color: var(--claude-terracotta);
+    box-shadow: 0 0 0 3px var(--claude-terracotta-soft), var(--shadow-whisper);
+    background: var(--claude-surface-hover);
+}
+.claude-search-box svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--claude-text-muted);
+    flex-shrink: 0;
+}
+.claude-search-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: var(--claude-text);
+    width: 100%;
+}
+.claude-search-input::placeholder {
+    color: var(--claude-text-muted);
+}
+.claude-search-badge {
+    font-size: 11px;
+    color: var(--claude-text-muted);
+    background: var(--claude-surface-muted);
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+}
+.claude-search-clear {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--claude-text-muted);
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 50%;
+    display: none;
+    transition: all 0.2s;
+}
+.claude-search-clear:hover {
+    color: var(--claude-text);
+    background: var(--claude-surface-muted);
+}
+.claude-search-clear.show {
+    display: block;
+}
+.empty-search-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--claude-surface);
+    border: 1px dashed var(--claude-border);
+    border-radius: var(--radius-lg);
+    color: var(--claude-text-secondary);
+    display: none;
+}
+.empty-search-state.show {
+    display: block;
+}
+.empty-search-state h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--claude-text);
+}
+.empty-search-state p {
+    font-size: 13.5px;
+    color: var(--claude-text-muted);
+}
+
+/* ================= 10. 维度诗篇名片 (融合 l/ 空间灵魂) ================= */
+.dimension-literary-card {
+    background: var(--claude-surface);
+    border: 1px solid var(--claude-border);
+    border-radius: var(--radius-lg);
+    padding: 24px 30px;
+    margin: 0 auto 32px;
+    max-width: 820px;
+    box-shadow: var(--shadow-whisper);
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    border-left: 3.5px solid var(--claude-terracotta);
+}
+.dimension-literary-card::before {
+    content: "“";
+    position: absolute;
+    right: 24px;
+    bottom: -20px;
+    font-family: Georgia, serif;
+    font-size: 110px;
+    line-height: 1;
+    color: var(--claude-border-subtle);
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.8;
+}
+.dimension-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.dimension-tag {
+    color: var(--claude-terracotta);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.dimension-source {
+    color: var(--claude-text-muted);
+}
+.dimension-body {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--claude-text);
+    font-style: italic;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+}
+.dimension-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12.5px;
+    color: var(--claude-text-muted);
+    border-top: 1px solid var(--claude-border-subtle);
+    padding-top: 12px;
+}
+.dimension-footer .author-badge {
+    color: var(--claude-text-secondary);
+    font-weight: 500;
+}
+
+/* ================= 11. 随身音乐胶囊与星空模式控制器 ================= */
+.audio-capsule {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px 4px 6px;
+    background: var(--claude-surface-muted);
+    border: 1px solid var(--claude-border);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    user-select: none;
+}
+.audio-capsule:hover {
+    background: var(--claude-surface-hover);
+    border-color: var(--claude-border-hover);
+}
+.audio-capsule.playing {
+    background: var(--claude-terracotta-soft);
+    border-color: var(--claude-terracotta-border);
+}
+.audio-capsule-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--claude-surface);
+    border: 1px solid var(--claude-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--claude-text);
+    transition: all 0.2s;
+}
+.audio-capsule.playing .audio-capsule-btn {
+    background: var(--claude-terracotta);
+    color: #fff;
+    border-color: var(--claude-terracotta);
+}
+.audio-capsule-btn svg {
+    width: 10px;
+    height: 10px;
+    fill: currentColor;
+}
+.audio-capsule-title {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--claude-text-secondary);
+    white-space: nowrap;
+}
+.audio-waves {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 12px;
+}
+.audio-wave-bar {
+    width: 2px;
+    height: 4px;
+    background: var(--claude-text-muted);
+    border-radius: 1px;
+    transition: height 0.2s ease;
+}
+.audio-capsule.playing .audio-wave-bar {
+    background: var(--claude-terracotta);
+    animation: waveBounce 0.8s ease-in-out infinite alternate;
+}
+.audio-capsule.playing .audio-wave-bar:nth-child(1) { animation-delay: 0.1s; }
+.audio-capsule.playing .audio-wave-bar:nth-child(2) { animation-delay: 0.3s; }
+.audio-capsule.playing .audio-wave-bar:nth-child(3) { animation-delay: 0.2s; }
+.audio-capsule.playing .audio-wave-bar:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes waveBounce {
+    0% { height: 3px; }
+    100% { height: 12px; }
+}
+
+.ambient-mode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: var(--claude-surface-muted);
+    border: 1px solid var(--claude-border);
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    color: var(--claude-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+.ambient-mode-btn:hover {
+    background: var(--claude-surface-hover);
+    color: var(--claude-text);
+    border-color: var(--claude-border-hover);
+}
+
+/* ================= 12. 站群互联与友链交换专区 (融合 links.html) ================= */
+.claude-exchange-section {
+    margin: 56px 0 48px;
+    background: var(--claude-surface);
+    border: 1px solid var(--claude-border);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    box-shadow: var(--shadow-whisper);
+    scroll-margin-top: 100px;
+}
+.exchange-header {
+    margin-bottom: 24px;
+}
+.exchange-title {
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    font-weight: 500;
+    color: var(--claude-text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.exchange-desc {
+    font-size: 14px;
+    color: var(--claude-text-secondary);
+    line-height: 1.7;
+}
+.exchange-table-wrap {
+    overflow-x: auto;
+    margin: 20px 0;
+    border: 1px solid var(--claude-border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--claude-bg);
+}
+.exchange-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+}
+.exchange-table tr {
+    border-bottom: 1px solid var(--claude-border-subtle);
+}
+.exchange-table tr:last-child {
+    border-bottom: none;
+}
+.exchange-table td {
+    padding: 12px 18px;
+    color: var(--claude-text);
+}
+.exchange-table td.field-label {
+    width: 110px;
+    color: var(--claude-text-secondary);
+    font-weight: 500;
+    background: var(--claude-surface-muted);
+}
+.copy-chip-btn {
+    margin-left: 10px;
+    padding: 3px 10px;
+    font-size: 11.5px;
+    border-radius: 6px;
+    border: 1px solid var(--claude-border);
+    background: var(--claude-surface);
+    color: var(--claude-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.copy-chip-btn:hover {
+    background: var(--claude-terracotta);
+    color: #fff;
+    border-color: var(--claude-terracotta);
+}
+.exchange-rules-box {
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: var(--claude-surface-muted);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--claude-terracotta);
+    font-size: 13px;
+    color: var(--claude-text-secondary);
+    line-height: 1.8;
 }

@@ -4,12 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>小白的数字空间 · 岁月静好全景应用平台</title>
-    <meta name="description" content="小白个人综合全景数字空间，采用 Anthropic Claude 官方文学极简与典雅设计规范，聚合 3D 视觉展厅、在线音乐播放器、爱心树纪年与全栈独立站群矩阵。">
-    <meta name="keywords" content="小白,岁月静好,小白的数字空间,21212121.xyz,a.21212121.xyz,Claude,在线音乐播放器,3D展厅,站群矩阵,友链中心">
+    <meta name="description" content="小白个人综合全景数字空间，采用 Anthropic Claude 官方文学极简与典雅设计规范，聚合 3D 视觉展厅、在线音乐播放器、爱心树纪年、维度空间诗篇与全栈独立站群矩阵。">
+    <meta name="keywords" content="小白,岁月静好,小白的数字空间,21212121.xyz,a.21212121.xyz,Claude,在线音乐播放器,3D展厅,站群矩阵,友链中心,极客星空,维度空间">
     <meta name="author" content="小白">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://a.21212121.xyz/">
-    <link rel="shortcut icon" href="dh/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
     <!-- Open Graph 社交卡片 -->
     <meta property="og:type" content="website">
@@ -66,10 +67,10 @@
 </head>
 <body>
 
-    <!-- 落樱轻微粒子画板 -->
+    <!-- 自然落樱与极客星空双模画板 (融合来自 dh/ 的星空粒子) -->
     <canvas id="sakura-canvas"></canvas>
 
-    <!-- 背景音频播放器 -->
+    <!-- 背景音频播放器 (520.mp3 融合来自 l/ 维度空间) -->
     <audio id="bgm-audio" src="assets/audio/520.mp3" preload="metadata" loop></audio>
 
     <!-- 全局轻提示 Toast -->
@@ -165,21 +166,32 @@
                 <a href="https://21212121.xyz" target="_blank" rel="noopener" class="claude-nav-link primary" title="访问官方 Typecho 主博客">
                     <span>岁月静好主博客 ↗</span>
                 </a>
-                <a href="links.html" class="claude-nav-link secondary" title="查看站群矩阵与友链互联中心">
-                    <span>站群友链中心 ↗</span>
+                <a href="#exchange" class="claude-nav-link secondary" title="直达站群矩阵与友链互联中心">
+                    <span>站群友链中心 ↓</span>
                 </a>
             </div>
 
             <!-- 控制小工具 -->
             <div class="header-controls">
                 <div class="time-widget" id="clock-time">00:00:00</div>
-                <!-- 音乐播放按钮 -->
-                <button type="button" class="ctrl-btn" id="btn-bgm" title="播放/暂停背景音乐">
-                    <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-                </button>
-                <!-- 落樱特效开关 -->
-                <button type="button" class="ctrl-btn active" id="btn-sakura" title="切换落樱特效">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+
+                <!-- 随身轻音乐胶囊 (融合自 l/ 空间 BGM 520.mp3) -->
+                <div class="audio-capsule" id="audio-capsule" title="轻触播放/暂停《520 · 岁月静好》背景轻音乐">
+                    <div class="audio-capsule-btn" id="btn-bgm">
+                        <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                    </div>
+                    <span class="audio-capsule-title">520 · 岁月静好</span>
+                    <div class="audio-waves">
+                        <span class="audio-wave-bar"></span>
+                        <span class="audio-wave-bar"></span>
+                        <span class="audio-wave-bar"></span>
+                        <span class="audio-wave-bar"></span>
+                    </div>
+                </div>
+
+                <!-- 氛围画板模式切换 (落樱 / 极客星空 / 纯净) -->
+                <button type="button" class="ambient-mode-btn" id="btn-ambient" title="切换背景动效（柔和落樱 / 极客星空 / 极简静音）">
+                    <span>🌸 柔和落樱</span>
                 </button>
             </div>
         </header>
@@ -188,13 +200,13 @@
         <section class="claude-hero-section">
             <div class="claude-eyebrow-pill">
                 <span class="spark">✦</span>
-                <span>岁月静好 · 个人全景数字空间</span>
+                <span>岁月静好 · 聚合门户与全景作品集</span>
             </div>
             <h1 class="claude-hero-title">
                 让技术归于生活，<br>记录岁月中的每一寸光阴
             </h1>
             <p class="claude-hero-desc">
-                基于文学极简与沉静典雅设计系统，聚合 3D 视觉交互、在线音乐台、岁月随笔与全栈独立站群矩阵。
+                基于文学极简与沉静典雅设计系统，全面整合极客星空作品集、维度个人主页与全栈独立微服务站群。
             </p>
 
             <!-- 核心行动按钮群 -->
@@ -202,8 +214,8 @@
                 <a href="https://21212121.xyz" target="_blank" rel="noopener" class="btn-claude-primary">
                     <span>访问岁月静好主博客 ↗</span>
                 </a>
-                <a href="links.html" class="btn-claude-secondary">
-                    <span>站群友链互联中心 ↗</span>
+                <a href="#exchange" class="btn-claude-secondary">
+                    <span>站群友链中心 ↓</span>
                 </a>
                 <button type="button" class="btn-claude-secondary" onclick="openModal('poem-modal')">
                     <span>典藏散文诗</span>
@@ -211,6 +223,21 @@
                 <button type="button" class="btn-claude-secondary" onclick="openModal('video-modal')">
                     <span>记忆微电影</span>
                 </button>
+            </div>
+
+            <!-- 维度寄语名片 (融合自 l/ 维度空间的核心灵魂) -->
+            <div class="dimension-literary-card">
+                <div class="dimension-header">
+                    <span class="dimension-tag">✦ 维度空间 · 人生寄语</span>
+                    <span class="dimension-source">源自《小白 · 维度主页》</span>
+                </div>
+                <div class="dimension-body">
+                    “你的笑，是大海拥抱海岛的笑，是星星跳跃浪花的笑，是椰树遮掩椰果的笑。你笑着，使黑夜奔逃。”
+                </div>
+                <div class="dimension-footer">
+                    <span class="author-badge">温柔只给意中人 · 做一个快乐的人</span>
+                    <span>心之所向 · 岁月静好</span>
+                </div>
             </div>
 
             <!-- 3. 典藏心绪卡片 (Claude Artifact 风格) -->
@@ -246,25 +273,37 @@
             </div>
         </section>
 
-        <!-- 4. 分类筛选导航 -->
+        <!-- 4. 全局检索与分类筛选导航 -->
         <section class="claude-filter-section">
+            <!-- 全局即时模糊检索框 -->
+            <div class="claude-search-wrap">
+                <div class="claude-search-box">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" class="claude-search-input" id="search-input" placeholder="输入关键词即时检索项目、独立微服务、技术栈或域名 (按 / 聚焦)..." autocomplete="off">
+                    <span class="claude-search-badge" id="search-count">20 个项目</span>
+                    <button type="button" class="claude-search-clear" id="btn-clear-search" title="清除搜索">&times;</button>
+                </div>
+            </div>
+
+            <!-- 分类筛选标签组 -->
             <div class="filter-tab-group">
-                <button type="button" class="filter-tab-btn active" data-filter="all">全部项目 All (20)</button>
-                <button type="button" class="filter-tab-btn" data-filter="experience">全景体验 Experience (4)</button>
-                <button type="button" class="filter-tab-btn" data-filter="life">记忆与生活 Life & Memory (5)</button>
-                <button type="button" class="filter-tab-btn" data-filter="matrix">独立站群 Sister Sites (11)</button>
+                <button type="button" class="filter-tab-btn active" data-filter="all">全部 All (20)</button>
+                <button type="button" class="filter-tab-btn" data-filter="microservices">核心微服务 Services (8)</button>
+                <button type="button" class="filter-tab-btn" data-filter="apps">独立应用 Apps (6)</button>
+                <button type="button" class="filter-tab-btn" data-filter="life">浪漫与交互 Romance (6)</button>
+                <button type="button" class="filter-tab-btn" data-filter="exchange">🤝 站群友链与申请 (Links)</button>
             </div>
             <div class="filter-status-tag">
                 <span class="status-dot"></span>
-                <span>又拍云 CDN 高速存储与分发就绪</span>
+                <span>又拍云 CDN 高速存储 · 腾讯云上海节点在线</span>
             </div>
         </section>
 
-        <!-- 5. Bento 网格矩阵 (20个项目，全原生超链接) -->
+        <!-- 5. Bento 网格矩阵 (20 个实体应用项目，零功能重复) -->
         <main class="claude-bento-grid" id="project-grid">
 
             <!-- 01. 岁月静好主博客 -->
-            <a href="https://21212121.xyz" target="_blank" rel="noopener" class="claude-card featured" data-category="matrix">
+            <a href="https://21212121.xyz" target="_blank" rel="noopener" class="claude-card featured" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -281,26 +320,26 @@
                 </div>
             </a>
 
-            <!-- 02. 站群矩阵与友链互联中心 -->
-            <a href="links.html" class="claude-card featured" data-category="matrix">
+            <!-- 02. 科技热榜推送机器人 (替代原重复链接卡片) -->
+            <a href="https://github.com/xiaobai5211314" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
                         </div>
-                        <span class="card-pill terracotta">互通中心</span>
+                        <span class="card-pill slate">Python 3</span>
                     </div>
-                    <h3 class="card-title">站群矩阵与友链互联</h3>
-                    <p class="card-desc">站群矩阵全貌、双向反向链接网络与友链交换规范中心，支持一键复制本站链接申请互换。</p>
+                    <h3 class="card-title">科技热榜推送机器人</h3>
+                    <p class="card-desc">科技新闻抓取、全网多平台热榜聚合与 Telegram 自动化资讯推送服务，晨报与夜报定时投递。</p>
                 </div>
                 <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/links.html</span>
-                    <span class="card-arrow">进入中心 ↗</span>
+                    <span class="card-domain">github.com/xiaobai5211314</span>
+                    <span class="card-arrow">查看源码 ↗</span>
                 </div>
             </a>
 
             <!-- 03. 3D 水晶球梦幻相册 -->
-            <a href="a/" target="_blank" class="claude-card" data-category="experience">
+            <a href="a/" target="_blank" class="claude-card" data-category="life">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -318,7 +357,7 @@
             </a>
 
             <!-- 04. 在线音乐播放器 -->
-            <a href="yyjx/" target="_blank" class="claude-card" data-category="experience">
+            <a href="yyjx/" target="_blank" class="claude-card" data-category="life">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -335,26 +374,26 @@
                 </div>
             </a>
 
-            <!-- 05. 极客星空作品集导航 -->
-            <a href="dh/" target="_blank" class="claude-card" data-category="experience">
+            <!-- 05. 午间异动选股助手 (替代原 dh 重复卡片) -->
+            <a href="https://github.com/xiaobai5211314" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+                            <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
                         </div>
-                        <span class="card-pill slate">Victor.js</span>
+                        <span class="card-pill terracotta">Python 3.11</span>
                     </div>
-                    <h3 class="card-title">极客星空作品集导航</h3>
-                    <p class="card-desc">动态星座粒子背景连线，汇聚站长常用工具、技术文档、个人项目集与精选高频网址导航。</p>
+                    <h3 class="card-title">午间异动选股助手</h3>
+                    <p class="card-desc">午间异动股票量价智能评分、主力资金动向挖掘与自动化研报生成系统，助力结构性交易决策。</p>
                 </div>
                 <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/dh/</span>
-                    <span class="card-arrow">浏览导航 ↗</span>
+                    <span class="card-domain">stock_assistant</span>
+                    <span class="card-arrow">查看项目 ↗</span>
                 </div>
             </a>
 
             <!-- 06. 落樱唯美全屏时钟 -->
-            <a href="sj/" target="_blank" class="claude-card" data-category="experience">
+            <a href="sj/" target="_blank" class="claude-card" data-category="life">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -443,26 +482,26 @@
                 </div>
             </a>
 
-            <!-- 11. 次元风轻量作品导航 -->
-            <a href="l/" target="_blank" class="claude-card" data-category="life">
+            <!-- 11. DNSPod 家宽 IP 智能解析 (替代原 l/ 重复卡片) -->
+            <a href="https://github.com/xiaobai5211314" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
-                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
                         </div>
-                        <span class="card-pill slate">轻量引导</span>
+                        <span class="card-pill slate">DDNS</span>
                     </div>
-                    <h3 class="card-title">次元风轻量作品导航</h3>
-                    <p class="card-desc">二次元风格轻量级引导页，快速直达站长核心站点、个人社交媒体与作品集。</p>
+                    <h3 class="card-title">DNSPod 家宽 IP 智能解析</h3>
+                    <p class="card-desc">家庭宽带动态公网 IPv4/IPv6 自动监测、DNSPod API 域名实时同步与 UPnP 端口穿透服务。</p>
                 </div>
                 <div class="card-bottom">
-                    <span class="card-domain">a.21212121.xyz/l/</span>
-                    <span class="card-arrow">进入导航 ↗</span>
+                    <span class="card-domain">ddns_dnspod</span>
+                    <span class="card-arrow">查看服务 ↗</span>
                 </div>
             </a>
 
             <!-- 12. 《高性价比人生指南》 -->
-            <a href="https://rensheng.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="matrix">
+            <a href="https://rensheng.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -480,7 +519,7 @@
             </a>
 
             <!-- 13. 程序员全真模拟面试 -->
-            <a href="https://ms.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="matrix">
+            <a href="https://ms.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -498,7 +537,7 @@
             </a>
 
             <!-- 14. 上海驾考科目一速过宝典 -->
-            <a href="https://jiakao.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="matrix">
+            <a href="https://jiakao.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -516,7 +555,7 @@
             </a>
 
             <!-- 15. 小白养基量化分析系统 -->
-            <a href="https://guzhicdn.21212121.xyz/" target="_blank" rel="noopener" class="claude-card" data-category="matrix">
+            <a href="https://guzhicdn.21212121.xyz/" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -534,7 +573,7 @@
             </a>
 
             <!-- 16. EasyImage 极简云图床 -->
-            <a href="https://tuchuang.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="matrix">
+            <a href="https://tuchuang.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -552,7 +591,7 @@
             </a>
 
             <!-- 17. 照妖镜趣味拍照应用 -->
-            <a href="https://zyj.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="matrix">
+            <a href="https://zyj.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="apps">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -570,7 +609,7 @@
             </a>
 
             <!-- 18. 二级域名分发管理系统 -->
-            <a href="https://ff.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="matrix">
+            <a href="https://ff.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -588,7 +627,7 @@
             </a>
 
             <!-- 19. DeepSeek 逆向 API 网关 -->
-            <a href="https://deepseekapi.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="matrix">
+            <a href="https://deepseekapi.21212121.xyz" target="_blank" rel="noopener" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -606,7 +645,7 @@
             </a>
 
             <!-- 20. 云探针服务器实时监控 -->
-            <a href="tz.php" target="_blank" class="claude-card" data-category="matrix">
+            <a href="tz.php" target="_blank" class="claude-card" data-category="microservices">
                 <div class="card-top">
                     <div class="card-badge-row">
                         <div class="card-icon-box">
@@ -623,14 +662,80 @@
                 </div>
             </a>
 
+            <!-- 搜索无结果占位卡片 -->
+            <div class="empty-search-state" id="empty-search-state">
+                <h4>未找到匹配的项目或服务</h4>
+                <p>换个关键词（如：养基、图床、音乐、API、相册、面试）或清空搜索框试试。</p>
+            </div>
+
         </main>
 
-        <!-- 6. Claude 官方风格极简页脚 -->
+        <!-- 6. 站群互联与友链交换中心 (融合自 links.html 的全部资产) -->
+        <section class="claude-exchange-section" id="exchange">
+            <div class="exchange-header">
+                <h2 class="exchange-title">
+                    <span>🤝</span>
+                    <span>站群互联与友链交换中心</span>
+                </h2>
+                <p class="exchange-desc">
+                    全站所有微服务、独立工具与视觉应用均以 <strong style="color:var(--claude-terracotta);">岁月静好主博客 (21212121.xyz)</strong> 为精神中枢与基准主站，通过双向反向链接与规范化架构收敛形成高内聚的个人数字空间。欢迎志同道合的技术与生活博友互换友链！
+                </p>
+            </div>
+
+            <div class="exchange-table-wrap">
+                <table class="exchange-table">
+                    <tr>
+                        <td class="field-label">主博客地址</td>
+                        <td>
+                            <span>https://21212121.xyz</span>
+                            <button type="button" class="copy-chip-btn" onclick="copyField('https://21212121.xyz', '主博客地址')">复制网址</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="field-label">博客名称</td>
+                        <td>
+                            <span>岁月静好</span>
+                            <button type="button" class="copy-chip-btn" onclick="copyField('岁月静好', '博客名称')">复制名称</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="field-label">全景聚合主站</td>
+                        <td>
+                            <span>https://a.21212121.xyz/</span>
+                            <button type="button" class="copy-chip-btn" onclick="copyField('https://a.21212121.xyz/', '全景主站')">复制网址</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="field-label">Logo 图标</td>
+                        <td>
+                            <span>https://tc1.21212121.xyz/asite/assets/images/521.png</span>
+                            <button type="button" class="copy-chip-btn" onclick="copyField('https://tc1.21212121.xyz/asite/assets/images/521.png', 'Logo链接')">复制图标</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="field-label">站点简介</td>
+                        <td>
+                            <span>心之所向，岁月静好；聚合3D展厅、在线音乐与极客工具的数字全景空间。</span>
+                            <button type="button" class="copy-chip-btn" onclick="copyField('心之所向，岁月静好；聚合3D展厅、在线音乐与极客工具的数字全景空间。', '站点描述')">复制描述</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="exchange-rules-box">
+                📌 <strong>友链交换契约与规范：</strong><br>
+                1. 优先欢迎原创技术、生活随笔、开源软件类独立个人博客；<br>
+                2. 网站需支持全站 HTTPS 安全访问，且能长期稳定运行；<br>
+                3. 请先在贵站添加本站友链（优先添加主博客 <code style="color:var(--claude-terracotta);">21212121.xyz</code> 或本站），再前往 <a href="https://21212121.xyz/links.html" target="_blank" rel="noopener" style="color:var(--claude-terracotta); font-weight:600;">主博客友链留言区 ↗</a> 或邮件联系小白申请互换。
+            </div>
+        </section>
+
+        <!-- 7. Claude 官方风格极简页脚 -->
         <footer class="claude-footer">
             <div class="footer-nav">
                 <a href="https://21212121.xyz" target="_blank" rel="noopener">岁月静好主博客</a>
                 <span>·</span>
-                <a href="links.html">站群友链中心</a>
+                <a href="#exchange">站群友链中心</a>
                 <span>·</span>
                 <a href="https://github.com/xiaobai5211314" target="_blank" rel="noopener">GitHub</a>
                 <span>·</span>

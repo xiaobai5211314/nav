@@ -2,705 +2,79 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>站群矩阵与友链互联中心 · 岁月静好 & 小白的数字空间</title>
-    <meta name="description" content="小白个人站群矩阵与友情链接互联中心。以21212121.xyz主博客为核心基准站，汇聚技术随笔、高性价比人生指南、模拟面试、驾考速学、3D全景空间及优秀博主友链。">
-    <meta name="keywords" content="小白,岁月静好,21212121.xyz,a.21212121.xyz,友情链接,站群矩阵,个人博客,技术博客,导航互联">
-    <meta name="author" content="小白">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://a.21212121.xyz/links.html">
-    <link rel="shortcut icon" href="dh/favicon.ico" type="image/x-icon">
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://a.21212121.xyz/links.html">
-    <meta property="og:title" content="站群矩阵与友链互联中心 · 岁月静好 & 小白的数字空间">
-    <meta property="og:description" content="全站所有项目以岁月静好主博客为权威基准站，构建深度互联的个人数字空间与友情链接网络。">
-    <meta property="og:image" content="https://tc1.21212121.xyz/asite/assets/images/521.png">
-    <meta property="og:site_name" content="小白的数字空间">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://a.21212121.xyz/links.html">
-    <meta name="twitter:title" content="站群矩阵与友链互联中心 · 岁月静好 & 小白的数字空间">
-    <meta name="twitter:description" content="全站所有项目以岁月静好主博客为权威基准站，构建深度互联的个人数字空间与友情链接网络。">
-    <meta name="twitter:image" content="https://tc1.21212121.xyz/asite/assets/images/521.png">
-
-    <!-- JSON-LD 结构化数据 (Schema.org) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            {
-              "@type": "ListItem",
-              "position": 1,
-              "name": "空间全景",
-              "item": "https://a.21212121.xyz/"
-            },
-            {
-              "@type": "ListItem",
-              "position": 2,
-              "name": "站群矩阵与友链互联",
-              "item": "https://a.21212121.xyz/links.html"
-            }
-          ]
-        },
-        {
-          "@type": "CollectionPage",
-          "@id": "https://a.21212121.xyz/links.html#page",
-          "url": "https://a.21212121.xyz/links.html",
-          "name": "站群矩阵与友链互联中心",
-          "description": "汇聚小白核心站群矩阵与精选友情链接。",
-          "isPartOf": {
-            "@id": "https://a.21212121.xyz/#website"
-          }
-        }
-      ]
-    }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>站群友链中心已全面整合升级 · 正在跳转全景主站</title>
+    <meta http-equiv="refresh" content="0;url=./#exchange">
+    <link rel="canonical" href="https://a.21212121.xyz/#exchange">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <script>
+        window.location.replace('./#exchange');
     </script>
-
-    <link rel="stylesheet" href="assets/css/style.css">
     <style>
-        body, button, input, textarea {
-            font-family: "Microsoft YaHei", "微软雅黑", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-        }
-        .links-page-wrap {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px 80px;
-        }
-        .page-nav-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 30px;
-            padding: 12px 24px;
-            background: #161b22;
-            border: 1px solid var(--border-card);
-            border-radius: 999px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-        .hero-banner {
-            background: linear-gradient(135deg, rgba(224, 108, 67, 0.15), rgba(22, 27, 34, 0.95));
-            border: 1px solid rgba(224, 108, 67, 0.35);
-            border-radius: 16px;
-            padding: 36px 32px;
-            margin-bottom: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-        .hero-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(96, 165, 250, 0.25), transparent 70%);
-            pointer-events: none;
-        }
-        .section-header-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 40px 0 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .section-header-box h2 {
-            font-size: 1.35rem;
-            color: #f8fafc;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 0;
-        }
-        .matrix-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .matrix-card {
-            background: rgba(22, 30, 49, 0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 22px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            color: inherit;
-        }
-        .matrix-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(96, 165, 250, 0.5);
-            background: rgba(30, 41, 68, 0.85);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
-        }
-        .matrix-card.featured {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(30, 41, 68, 0.8));
-            border-color: rgba(96, 165, 250, 0.55);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
-        }
-        .card-top {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            margin-bottom: 14px;
-        }
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+        body {
+            background-color: #f5f4ed;
+            color: #141413;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-            overflow: hidden;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
-        .card-icon img {
+        .redirect-card {
+            background: #faf9f5;
+            border: 1px solid #e8e6dc;
+            border-radius: 16px;
+            padding: 40px 32px;
+            max-width: 480px;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(20, 20, 19, 0.04);
         }
-        .card-meta h3 {
-            font-size: 1.1rem;
-            color: #fff;
-            margin: 0 0 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .spark {
+            color: #c96442;
+            font-size: 24px;
+            margin-bottom: 12px;
+            display: block;
         }
-        .card-badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 999px;
-            background: rgba(59, 130, 246, 0.2);
-            color: #93c5fd;
-            border: 1px solid rgba(59, 130, 246, 0.35);
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 12px;
+            color: #141413;
         }
-        .card-desc {
-            font-size: 13px;
-            color: #94a3b8;
+        p {
+            font-size: 14px;
+            color: #5e5d59;
             line-height: 1.6;
-            margin: 0 0 16px;
-            flex-grow: 1;
+            margin: 0 0 24px;
         }
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            color: #64748b;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .card-link-text {
-            color: #38bdf8;
+        .btn-jump {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            font-weight: 500;
-        }
-        .exchange-box {
-            background: rgba(18, 24, 38, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 16px;
-            padding: 28px;
-            margin-top: 40px;
-        }
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-            font-size: 13px;
-        }
-        .info-table td {
-            padding: 10px 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            color: #cbd5e1;
-        }
-        .info-table td:first-child {
-            color: #94a3b8;
-            width: 110px;
-            font-weight: 500;
-        }
-        .copy-btn {
-            padding: 4px 10px;
-            font-size: 11px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            gap: 6px;
+            padding: 10px 24px;
+            background: #c96442;
             color: #fff;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-left: 8px;
+            text-decoration: none;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 500;
             transition: all 0.2s;
         }
-        .copy-btn:hover {
-            background: #3b82f6;
-            border-color: #60a5fa;
+        .btn-jump:hover {
+            background: #b85736;
         }
     </style>
 </head>
 <body>
-    <div class="ambient-glow"></div>
-
-    <div class="links-page-wrap">
-        <!-- 导航胶囊条 -->
-        <nav class="page-nav-bar">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <img src="assets/images/521.png" alt="小白头像" style="width:32px; height:32px; border-radius:50%; border:1px solid rgba(255,255,255,0.2);">
-                <span style="font-weight:600; color:#fff; font-size:14px;">小白的数字空间</span>
-                <span class="pill" style="font-size:10px;">站群与友链</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:10px;">
-                <a href="./" class="btn-chip" style="text-decoration:none; color:#e2e8f0; font-size:12px; padding:6px 14px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:999px;">
-                    ⌂ 返回全景主站
-                </a>
-                <a href="https://21212121.xyz" target="_blank" rel="noopener" class="btn-chip" style="text-decoration:none; color:#fff; font-size:12px; padding:6px 14px; background:linear-gradient(135deg,#3b82f6,#2563eb); border:1px solid #60a5fa; border-radius:999px; font-weight:600;">
-                    ✍️ 岁月静好主博客 →
-                </a>
-            </div>
-        </nav>
-
-        <!-- 顶部 Hero 展牌 -->
-        <header class="hero-banner">
-            <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(96,165,250,0.2); border:1px solid rgba(96,165,250,0.4); border-radius:999px; padding:4px 14px; color:#93c5fd; font-size:12px; margin-bottom:14px;">
-                <span>🌐</span> 权威主站驱动 · 深度站群互联
-            </div>
-            <h1 style="font-size:2rem; font-weight:700; color:#fff; margin:0 0 12px; letter-spacing:0.5px;">
-                站群矩阵与友情链接中心
-            </h1>
-            <p style="color:#cbd5e1; font-size:14px; line-height:1.8; margin:0 0 20px; max-width:760px;">
-                全站所有微服务、独立工具与视觉应用均以 <strong style="color:#60a5fa;">岁月静好主博客 (21212121.xyz)</strong> 为基准主站，通过双向友链、结构化数据与架构收敛形成高内聚的个人数字空间。欢迎志同道合的博友互换友链！
-            </p>
-            <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                <a href="https://21212121.xyz/links.html" target="_blank" rel="noopener" class="btn-chip" style="background:#2563eb; color:#fff; border-color:#60a5fa; text-decoration:none; font-weight:600; padding:8px 20px;">
-                    访问博客友链页 ↗
-                </a>
-                <a href="#exchange" class="btn-chip" style="background:rgba(255,255,255,0.1); color:#fff; border-color:rgba(255,255,255,0.25); text-decoration:none; padding:8px 20px;">
-                    申请加入友链 ↓
-                </a>
-            </div>
-        </header>
-
-        <!-- 1. 核心基准主站 -->
-        <section>
-            <div class="section-header-box">
-                <h2><span>🌟</span> 核心基准主站 (Primary Authority Site)</h2>
-                <span style="font-size:12px; color:#94a3b8;">主站核心权重节点</span>
-            </div>
-            <a href="https://21212121.xyz" target="_blank" rel="noopener" class="matrix-card featured" style="padding:28px;">
-                <div class="card-top">
-                    <div class="card-icon" style="width:56px; height:56px; font-size:28px; background:rgba(37,99,235,0.3); border-color:#60a5fa;">
-                        🌐
-                    </div>
-                    <div class="card-meta">
-                        <h3 style="font-size:1.3rem;">岁月静好 · 个人主博客 <span class="card-badge" style="background:#2563eb; color:#fff;">主站核心</span></h3>
-                        <div style="font-size:12px; color:#93c5fd; margin-top:2px;">https://21212121.xyz</div>
-                    </div>
-                </div>
-                <p class="card-desc" style="font-size:14px; color:#e2e8f0; margin-bottom:20px;">
-                    小白的官方主博客，采用 Typecho 框架驱动，涵盖前沿技术探索、AI Agent 研发实践、生活回忆录与深度随笔。是全站所有小项目与微服务的精神中枢与根基准站。
-                </p>
-                <div class="card-footer">
-                    <span>Typecho / MySQL / 优质原创内容</span>
-                    <span class="card-link-text">进入主博客探索 ➔</span>
-                </div>
-            </a>
-        </section>
-
-        <!-- 2. 独立业务与微服务站群矩阵 -->
-        <section>
-            <div class="section-header-box">
-                <h2><span>🚀</span> 独立项目与微服务站群矩阵 (Sister Projects)</h2>
-                <span style="font-size:12px; color:#94a3b8;">9 大独立功能服务</span>
-            </div>
-            <div class="matrix-grid">
-                <!-- 高性价比人生指南 -->
-                <a href="https://rensheng.21212121.xyz/" target="_blank" rel="noopener" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">📖</div>
-                        <div class="card-meta">
-                            <h3>高性价比人生指南 <span class="card-badge">开源电子书</span></h3>
-                            <div style="font-size:11px; color:#64748b;">rensheng.21212121.xyz</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">《高性价比人生指南》开源电子书检索站，覆盖生活消费、科技数码、效率工具与成长决策经验。</p>
-                    <div class="card-footer">
-                        <span>Markdown / Node.js</span>
-                        <span class="card-link-text">在线阅读 ↗</span>
-                    </div>
-                </a>
-
-                <!-- 模拟面试站 -->
-                <a href="https://ms.21212121.xyz/" target="_blank" rel="noopener" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">💼</div>
-                        <div class="card-meta">
-                            <h3>程序员模拟面试 <span class="card-badge">刷题站</span></h3>
-                            <div style="font-size:11px; color:#64748b;">ms.21212121.xyz</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">程序员全真模拟面试与考点刷题站，包含前端、后端、网络协议与算法精选高频真题。</p>
-                    <div class="card-footer">
-                        <span>原生 SPA / 本地存储</span>
-                        <span class="card-link-text">开始刷题 ↗</span>
-                    </div>
-                </a>
-
-                <!-- 驾考速学 -->
-                <a href="https://jiakao.21212121.xyz/" target="_blank" rel="noopener" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">🚗</div>
-                        <div class="card-meta">
-                            <h3>上海驾考科目一速学 <span class="card-badge">离线刷题</span></h3>
-                            <div style="font-size:11px; color:#64748b;">jiakao.21212121.xyz</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">上海科目一速过训练站，极速单页无广告无干扰离线刷题，针对扣分、罚款题型专项突破。</p>
-                    <div class="card-footer">
-                        <span>IndexedDB / 极速离线</span>
-                        <span class="card-link-text">进入考场 ↗</span>
-                    </div>
-                </a>
-
-                <!-- 小白养基量化 -->
-                <a href="https://guzhicdn.21212121.xyz/" target="_blank" rel="noopener" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">📈</div>
-                        <div class="card-meta">
-                            <h3>小白养基量化系统 <span class="card-badge">.NET 8</span></h3>
-                            <div style="font-size:11px; color:#64748b;">guzhicdn.21212121.xyz</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">场外基金量化回测、实时净值估值分析与投资组合管理系统，提供专业的多维度评分报告。</p>
-                    <div class="card-footer">
-                        <span>C# / Blazor / 量化分析</span>
-                        <span class="card-link-text">查看估值 ↗</span>
-                    </div>
-                </a>
-
-                <!-- 照妖镜 -->
-                <a href="https://zyj.21212121.xyz/" target="_blank" rel="noopener" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">📷</div>
-                        <div class="card-meta">
-                            <h3>照妖镜趣味拍照 <span class="card-badge">安全测试</span></h3>
-                            <div style="font-size:11px; color:#64748b;">zyj.21212121.xyz</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">趣味伪装拍照与实时邮件通知 Web 应用，支持多重场景模板与设备环境检测。</p>
-                    <div class="card-footer">
-                        <span>PHP 7.3+ / 邮件通知</span>
-                        <span class="card-link-text">访问应用 ↗</span>
-                    </div>
-                </a>
-
-                <!-- 小白图床 -->
-                <a href="https://tuchuang.21212121.xyz/" target="_blank" rel="noopener" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">🖼️</div>
-                        <div class="card-meta">
-                            <h3>EasyImage 图床 <span class="card-badge">云存储</span></h3>
-                            <div style="font-size:11px; color:#64748b;">tuchuang.21212121.xyz</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">轻量无数据库图床私有实例，结合七牛云 Kodo 与又拍云全球加速，稳定托管全站图片资源。</p>
-                    <div class="card-footer">
-                        <span>七牛云 / 又拍云 CDN</span>
-                        <span class="card-link-text">上传图片 ↗</span>
-                    </div>
-                </a>
-
-                <!-- 二级域名分发 -->
-                <a href="https://ff.21212121.xyz/" target="_blank" rel="noopener" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">🔀</div>
-                        <div class="card-meta">
-                            <h3>二级域名分发系统 <span class="card-badge">域名解析</span></h3>
-                            <div style="font-size:11px; color:#64748b;">ff.21212121.xyz</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">二级域名智能分发与解析管理服务，提供便捷的子域名申请与泛解析路由调度。</p>
-                    <div class="card-footer">
-                        <span>PHP / Nginx 动态路由</span>
-                        <span class="card-link-text">管理域名 ↗</span>
-                    </div>
-                </a>
-
-                <!-- DeepSeek API 网关 -->
-                <a href="https://deepseekapi.21212121.xyz/" target="_blank" rel="noopener" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">🤖</div>
-                        <div class="card-meta">
-                            <h3>DeepSeek API 网关 <span class="card-badge">AI 桥接</span></h3>
-                            <div style="font-size:11px; color:#64748b;">deepseekapi.21212121.xyz</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">DeepSeek 逆向 API 与机器人桥接服务，支持流式高并发响应与多端模型路由。</p>
-                    <div class="card-footer">
-                        <span>Python / Playwright / Wasm</span>
-                        <span class="card-link-text">查看文档 ↗</span>
-                    </div>
-                </a>
-
-                <!-- 全景空间主站 -->
-                <a href="https://a.21212121.xyz/" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">🪐</div>
-                        <div class="card-meta">
-                            <h3>小白的数字空间 <span class="card-badge">全景聚合</span></h3>
-                            <div style="font-size:11px; color:#64748b;">a.21212121.xyz</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">个人全景应用聚合工作台，集合 3D 视觉展厅、在线音乐播放器、爱心树纪年与极客网址导航。</p>
-                    <div class="card-footer">
-                        <span>HTML5 / Three.js / 又拍云</span>
-                        <span class="card-link-text">当前空间 ➔</span>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- 3. 全景子项目直达 -->
-        <section>
-            <div class="section-header-box">
-                <h2><span>💎</span> 全景空间子模块精选 (Sub-modules)</h2>
-                <span style="font-size:12px; color:#94a3b8;">收敛统一单域名架构</span>
-            </div>
-            <div class="matrix-grid">
-                <a href="yyjx/" target="_blank" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">🎵</div>
-                        <div class="card-meta">
-                            <h3>在线音乐播放器</h3>
-                            <div style="font-size:11px; color:#64748b;">a.21212121.xyz/yyjx/</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">MKOnline 全网歌曲检索、歌词滚动、自建歌单与又拍云加速流媒体播放器。</p>
-                    <div class="card-footer">
-                        <span>网易云/QQ多音源解析</span>
-                        <span class="card-link-text">听音乐 ↗</span>
-                    </div>
-                </a>
-
-                <a href="dh/" target="_blank" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">🧭</div>
-                        <div class="card-meta">
-                            <h3>极客星空作品集导航</h3>
-                            <div style="font-size:11px; color:#64748b;">a.21212121.xyz/dh/</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">Victor.js 动态星座粒子背景，精选站长工具、开发文档、视听娱乐与个人作品导航。</p>
-                    <div class="card-footer">
-                        <span>动态粒子连线</span>
-                        <span class="card-link-text">浏览导航 ↗</span>
-                    </div>
-                </a>
-
-                <a href="a/" target="_blank" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">🌌</div>
-                        <div class="card-meta">
-                            <h3>3D 水晶球梦幻相册</h3>
-                            <div style="font-size:11px; color:#64748b;">a.21212121.xyz/a/</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">Three.js 驱动的 3D 照片墙与水晶球空间，支持 MediaPipe 手势追踪与螺旋旋转。</p>
-                    <div class="card-footer">
-                        <span>WebGL / 手势识别</span>
-                        <span class="card-link-text">开启体验 ↗</span>
-                    </div>
-                </a>
-
-                <a href="db/" target="_blank" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">💖</div>
-                        <div class="card-meta">
-                            <h3>爱情相伴时光馆</h3>
-                            <div style="font-size:11px; color:#64748b;">a.21212121.xyz/db/</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">HTML5 Canvas 经典动态爱心树，精准记录从 2019 年 5 月 20 日起相伴的日夜分秒。</p>
-                    <div class="card-footer">
-                        <span>Canvas 爱心生长树</span>
-                        <span class="card-link-text">重温浪漫 ↗</span>
-                    </div>
-                </a>
-
-                <a href="tg/" target="_blank" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">📖</div>
-                        <div class="card-meta">
-                            <h3>舔狗日记全屏版</h3>
-                            <div style="font-size:11px; color:#64748b;">a.21212121.xyz/tg/</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">68 条幽默治愈的日记库，支持随机翻阅、一键复制与离线无依赖秒开。</p>
-                    <div class="card-footer">
-                        <span>离线双模极速版</span>
-                        <span class="card-link-text">翻阅日记 ↗</span>
-                    </div>
-                </a>
-
-                <a href="l/" target="_blank" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">🪐</div>
-                        <div class="card-meta">
-                            <h3>小白次元引导主页</h3>
-                            <div style="font-size:11px; color:#64748b;">a.21212121.xyz/l/</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">HTML5 UP Dimension 经典弹窗框架，融合动态爱心特效与多维度个人介绍。</p>
-                    <div class="card-footer">
-                        <span>星空背景 / 弹窗框架</span>
-                        <span class="card-link-text">进入次元 ↗</span>
-                    </div>
-                </a>
-
-                <a href="bb/" target="_blank" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">💌</div>
-                        <div class="card-meta">
-                            <h3>告白打字机单页</h3>
-                            <div style="font-size:11px; color:#64748b;">a.21212121.xyz/bb/</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">抖音甜蜜互动单页，做我女朋友好不好？逃跑按钮与答应模态弹窗。</p>
-                    <div class="card-footer">
-                        <span>甜蜜互动 / 打字机动效</span>
-                        <span class="card-link-text">甜蜜互动 ↗</span>
-                    </div>
-                </a>
-
-                <a href="sj/" target="_blank" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">⏳</div>
-                        <div class="card-meta">
-                            <h3>全屏落樱时钟</h3>
-                            <div style="font-size:11px; color:#64748b;">a.21212121.xyz/sj/</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">沉浸式落樱星空时钟，大字号时间展示，适合夜间伴读、屏幕屏保与冥想。</p>
-                    <div class="card-footer">
-                        <span>落樱动效 / 沉浸翻页</span>
-                        <span class="card-link-text">开启时钟 ↗</span>
-                    </div>
-                </a>
-
-                <a href="xb/" target="_blank" class="matrix-card">
-                    <div class="card-top">
-                        <div class="card-icon">📜</div>
-                        <div class="card-meta">
-                            <h3>2018 原版主页与诗歌</h3>
-                            <div style="font-size:11px; color:#64748b;">a.21212121.xyz/xb/</div>
-                        </div>
-                    </div>
-                    <p class="card-desc">小白最初的建站代码起点，典藏散文诗《你不懂我 我不怪你》与经典微电影回放。</p>
-                    <div class="card-footer">
-                        <span>时光胶囊 / 人文典藏</span>
-                        <span class="card-link-text">回溯初心 ↗</span>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- 4. 友链交换契约与信息 -->
-        <section id="exchange" class="exchange-box">
-            <h2 style="color:#fff; font-size:1.3rem; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
-                <span>🤝</span> 申请友链与本站信息
-            </h2>
-            <p style="color:#cbd5e1; font-size:13px; line-height:1.8; margin:0 0 16px;">
-                如果您也是热爱技术、生活与写作的站长，欢迎在您的网站添加本站友链后，前往 <a href="https://21212121.xyz/links.html" target="_blank" rel="noopener" style="color:#60a5fa; font-weight:600;">主博客友链留言区</a> 或发送邮件联系小白。
-            </p>
-
-            <table class="info-table">
-                <tr>
-                    <td>主站博客：</td>
-                    <td>
-                        <span>https://21212121.xyz</span>
-                        <button class="copy-btn" onclick="copyText('https://21212121.xyz')">复制网址</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>主站名称：</td>
-                    <td>
-                        <span>岁月静好</span>
-                        <button class="copy-btn" onclick="copyText('岁月静好')">复制名称</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>全景空间：</td>
-                    <td>
-                        <span>https://a.21212121.xyz/</span>
-                        <button class="copy-btn" onclick="copyText('https://a.21212121.xyz/')">复制网址</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Logo 图标：</td>
-                    <td>
-                        <span>https://tc1.21212121.xyz/asite/assets/images/521.png</span>
-                        <button class="copy-btn" onclick="copyText('https://tc1.21212121.xyz/asite/assets/images/521.png')">复制链接</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>站点描述：</td>
-                    <td>
-                        <span>心之所向，岁月静好；聚合3D展厅、在线音乐与极客工具的数字全景空间。</span>
-                        <button class="copy-btn" onclick="copyText('心之所向，岁月静好；聚合3D展厅、在线音乐与极客工具的数字全景空间。')">复制描述</button>
-                    </td>
-                </tr>
-            </table>
-
-            <div style="margin-top:20px; padding:14px; background:rgba(0,0,0,0.25); border-radius:10px; font-size:12px; color:#94a3b8; line-height:1.7;">
-                📌 <strong>友链须知：</strong><br>
-                1. 优先欢迎原创技术、生活随笔、开源软件类独立个人博客；<br>
-                2. 网站需支持 HTTPS 访问，且能长期稳定运行；<br>
-                3. 请先在贵站添加本站友链（优先添加主博客 <code style="color:#93c5fd;">21212121.xyz</code> 或本站），再提交申请。
-            </div>
-        </section>
-
-        <!-- 页面底部 -->
-        <footer class="app-footer" style="margin-top:60px;">
-            <div style="margin-bottom:12px; display:flex; justify-content:center; align-items:center; gap:16px; flex-wrap:wrap;">
-                <a href="https://21212121.xyz" target="_blank" rel="noopener" style="color:#60a5fa; text-decoration:none; font-size:13px; font-weight:600;">🏠 岁月静好主博客</a>
-                <a href="./" style="color:#93c5fd; text-decoration:none; font-size:13px;">🪐 全景聚合工作台</a>
-                <a href="sitemap.xml" target="_blank" style="color:#94a3b8; text-decoration:none; font-size:13px;">🗺️ 网站地图</a>
-                <a href="https://github.com/xiaobai5211314/asite" target="_blank" rel="noopener" style="color:#94a3b8; text-decoration:none; font-size:13px;">💻 GitHub 源码</a>
-            </div>
-            <p>Copyright &copy; 2019 - 2026 小白 (21212121.xyz & a.21212121.xyz). All Rights Reserved.</p>
-            <p style="font-size:11px; margin-top:4px; opacity:0.75;">
-                ICP证：<a href="http://beian.miit.gov.cn" target="_blank" style="color:inherit; text-decoration:none;">20002611号</a> | 执子之手，与子偕老
-            </p>
-        </footer>
+    <div class="redirect-card">
+        <span class="spark">✦</span>
+        <h2>站群友链中心已融合升级</h2>
+        <p>站群矩阵与友链交换信息已全面融入全景聚合主站，正在为您跳转至友链中心...</p>
+        <a href="./#exchange" class="btn-jump">进入友链中心 ↗</a>
     </div>
-
-    <script>
-    function copyText(text) {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('已复制到剪贴板：' + text);
-            }).catch(() => {
-                prompt('请手动复制：', text);
-            });
-        } else {
-            prompt('请手动复制：', text);
-        }
-    }
-    </script>
 </body>
 </html>
