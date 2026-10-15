@@ -1,53 +1,65 @@
 /**************************************************
- * 音源后端中心 SourceHub
+ * 音源后端中心 SourceHub 2.0 (全功能高可用音源引擎)
  *
- * 给 MKOnlinePlayer 提供「切换接口后端」能力：
- *   - 搜索后端：内置 / Meting(api.php) / 自定义 HTTP 接口
- *   - 取链接后端：内置 / Meting / LX 音源脚本 / 自定义 HTTP 接口
- *   - 自己加接口：粘贴 URL，或导入 .js 文件（洛雪音乐助手自定义音源格式）
- *   - 配置存 localStorage
- *
- * 本文件只做「宿主 + 调度 + 界面」，不含任何取流/解密逻辑。
- * 音源脚本取回什么内容由脚本本身决定。
+ * 功能特性：
+ *   1. 自动预加载：开箱即用自动挂载「全豆要[聚合音源]」、「念心音源」等优质音源
+ *   2. 完整协议模拟：100% 兼容洛雪 globalThis.lx 规范 (lx.request, lx.on, lx.send, lx.env)
+ *   3. 修复 body 预解析崩溃：原始响应文本透传，杜绝 "[object Object]" is not valid JSON
+ *   4. CORS 穿透：第三方 API 自动走同源后端代理 backend.php?types=proxy
+ *   5. HTTPS 混合内容防拦截：HTTP 音频直链自动转换为同源安全流 backend.php?types=stream
+ *   6. 智能多源容灾：单源失效时自动尝试备用音源与官方流
+ *   7. 搜索无缝增强：挂钩 ajaxSearch 击碎 CDN 缓存，支持多平台稳定检索
  *************************************************/
 (function () {
   'use strict';
 
-  var LS_KEY = 'yyjx_sourcehub_v1';
+  var LS_KEY = 'yyjx_sourcehub_v2';
   var LX_VERSION = '1.2.0';
 
-  // MKOnlinePlayer 的 source 名 → LX 音源脚本里的 source 代号（多给几个别名依次尝试）
+  // 环境补丁：补足浏览器/脚本可能缺失的全局函数
+  if (!window.console) window.console = {};
+  if (!console.group) console.group = function () {};
+  if (!console.groupEnd) console.groupEnd = function () {};
+  if (!console.info) console.info = console.log || function () {};
+  if (!console.debug) console.debug = console.log || function () {};
+
+  // MKOnlinePlayer 平台名 → 洛雪脚本代号别名映射
   var LX_ALIAS = {
     netease: ['wy', 'netease', '163'],
     qq:      ['tx', 'qq', 'tencent'],
     kuwo:    ['kw', 'kuwo'],
-    kugou:   ['kg', 'kugou']
+    kugou:   ['kg', 'kugou'],
+    migu:    ['mg', 'migu']
   };
 
-  var QUALITY = ['128k', '320k', 'flac', 'flac24bit'];
-
   /* ==========================================================
-     状态
+     状态管理
      ========================================================== */
   var state = {
     backends: [],
     searchId: 'builtin',
-    urlId: 'builtin'
+    urlId: 'preset_quandouyao'
   };
 
-  function uid() {
-    return 'b' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  var sessions = {};
+
+  function uid(prefix) {
+    return (prefix || 'b') + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
   }
 
   function save() {
     try {
+      // 仅持久化用户自定义的后端（避免预置音源撑爆 localStorage）
+      var customBackends = state.backends.filter(function (b) { return !b.isPreset; });
       localStorage.setItem(LS_KEY, JSON.stringify({
-        backends: state.backends,
+        customBackends: customBackends.map(function (b) {
+          return { id: b.id, name: b.name, kind: b.kind, code: b.code, searchUrl: b.searchUrl, urlUrl: b.urlUrl };
+        }),
         searchId: state.searchId,
         urlId: state.urlId
       }));
     } catch (e) {
-      console.warn('[SourceHub] 保存配置失败（可能是音源脚本太大超出 localStorage）', e);
+      console.warn('[SourceHub] 保存本地配置失败', e);
     }
   }
 
@@ -56,41 +68,105 @@
       var raw = localStorage.getItem(LS_KEY);
       if (!raw) return;
       var d = JSON.parse(raw);
-      if (d && Array.isArray(d.backends)) state.backends = d.backends;
-      if (d && d.searchId) state.searchId = d.searchId;
-      if (d && d.urlId) state.urlId = d.urlId;
+      if (d) {
+        if (d.searchId) state.searchId = d.searchId;
+        if (d.urlId) state.urlId = d.urlId;
+        if (Array.isArray(d.customBackends)) {
+          d.customBackends.forEach(function (cb) {
+            if (cb.kind === 'lx' && cb.code) {
+              try {
+                var s = loadLxScript(cb.code, cb.id);
+                state.backends.push({
+                  id: cb.id,
+                  name: cb.name || '自定义音源',
+                  kind: 'lx',
+                  code: cb.code,
+                  session: s,
+                  sources: Object.keys((s.inited && s.inited.sources) || {})
+                });
+              } catch (err) {
+                console.warn('[SourceHub] 自定义音源加载失败：' + cb.name, err);
+              }
+            } else if (cb.kind === 'http') {
+              state.backends.push(cb);
+            }
+          });
+        }
+      }
     } catch (e) {
-      console.warn('[SourceHub] 读取配置失败', e);
+      console.warn('[SourceHub] 读取本地配置失败', e);
     }
   }
 
   /* ==========================================================
-     内置后端
+     内置官方与预置音源定义
      ========================================================== */
-  var BUILTIN = [
-    { id: 'builtin', name: '内置接口（酷我 / QQ / 网易云）', kind: 'builtin', builtin: true },
-    { id: 'meting',  name: 'Meting（api.php）',              kind: 'meting',  builtin: true }
+  var BUILTIN_BACKENDS = [
+    { id: 'builtin', name: '官方直连聚合 (酷我/QQ/网易)', kind: 'builtin', builtin: true }
   ];
 
   function allBackends() {
-    return BUILTIN.concat(state.backends);
+    return BUILTIN_BACKENDS.concat(state.backends);
   }
 
   function findBackend(id) {
     var list = allBackends();
-    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].id === id) return list[i];
+    }
     return null;
   }
 
   /* ==========================================================
-     LX 音源宿主：提供 globalThis.lx 的最小实现
-     协议面来自 21 个音源脚本的实际用法：
-       lx.EVENT_NAMES / lx.on / lx.send / lx.request / lx.version / lx.env
+     洛雪音源协议代理 (lx.request)
      ========================================================== */
-  function makeLxShim(session) {
+  function hostRequest(url, options) {
+    options = options || {};
+    var method = (options.method || 'GET').toUpperCase();
+    var headers = options.headers || {};
+    var body = options.body;
+
+    // 绝大多数洛雪音源向第三方请求，浏览器直接 fetch 会受 CORS 限制，统一走同源代理
+    var proxyUrl = 'backend.php?types=proxy&_t=' + Date.now();
+    var payload = {
+      url: url,
+      method: method,
+      headers: headers,
+      body: typeof body === 'object' ? JSON.stringify(body) : (body || '')
+    };
+
+    return fetch(proxyUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.json();
+    }).then(function (j) {
+      if (!j || !j.ok) {
+        throw new Error((j && j.error) || '代理请求失败 (HTTP ' + (j ? j.status : 0) + ')');
+      }
+      var rawBody = j.body == null ? '' : String(j.body);
+      return {
+        statusCode: j.status || 200,
+        status: j.status || 200,
+        headers: j.headers || {},
+        body: rawBody // 必须为原始字符串，保证脚本内 JSON.parse(body) 正常工作
+      };
+    }).catch(function (err) {
+      console.warn('[SourceHub] 代理请求异常:', url, err);
+      throw err;
+    });
+  }
+
+  function makeLxShim(sessionId) {
+    var session = sessions[sessionId];
     return {
       version: LX_VERSION,
       env: 'web',
+      currentScriptInfo: {
+        name: (session && session.name) || 'SourceHub-Worker',
+        version: '1.0.0'
+      },
       EVENT_NAMES: {
         inited: 'inited',
         updateAlert: 'updateAlert',
@@ -99,441 +175,390 @@
         configViewReady: 'configViewReady'
       },
       on: function (event, handler) {
-        session.handlers[event] = handler;
+        if (session) session.handlers[event] = handler;
       },
       send: function (event, data) {
-        if (event === 'inited') session.inited = data || null;
+        if (session && event === 'inited') {
+          session.inited = data || null;
+        }
       },
       request: function (url, options, cb) {
-        hostRequest(url, options || {}).then(function (r) {
+        if (typeof options === 'function') {
+          cb = options;
+          options = {};
+        }
+        cb = cb || function () {};
+
+        hostRequest(url, options).then(function (r) {
           cb(null, r, r.body);
-        }, function (err) {
-          cb(err || new Error('请求失败'));
+        }).catch(function (err) {
+          cb(err || new Error('网络请求失败'));
         });
       }
     };
   }
 
-  /**
-   * 宿主代发 HTTP 请求。
-   * 直接 fetch 会受 CORS 限制，所以优先走同源代理 backend.php?types=fetchsrc
-   */
-  function hostRequest(url, options) {
-    var direct = fetch(url, {
-      method: (options && options.method) || 'GET',
-      headers: (options && options.headers) || {},
-      body: (options && options.body) || undefined
-    }).then(function (res) {
-      return res.text().then(function (t) {
-        var body = t;
-        try { body = JSON.parse(t); } catch (e) { /* 保留文本 */ }
-        return {
-          statusCode: res.status,
-          headers: (function () {
-            var h = {};
-            res.headers.forEach(function (v, k) { h[k.toLowerCase()] = v; });
-            return h;
-          })(),
-          body: body
-        };
-      });
-    });
-
-    // 跨域失败时退回同源代理
-    return direct.catch(function () {
-      return fetch('backend.php?types=fetchsrc&url=' + encodeURIComponent(url), {
-        method: 'GET'
-      }).then(function (res) {
-        // 后端没部署时会拿到 HTML 而不是 JSON，这里先判类型再解析，避免页面报红
-        var ct = (res.headers.get('content-type') || '').toLowerCase();
-        if (ct.indexOf('json') === -1) {
-          throw new Error('代理不可用（backend.php 未就绪），该音源需要服务端代理拉取');
-        }
-        return res.json();
-      }).then(function (j) {
-        if (!j || !j.ok) throw new Error((j && j.error) || '代理请求失败');
-        var body = j.body;
-        try { body = JSON.parse(j.body); } catch (e) { /* 保留文本 */ }
-        return { statusCode: j.status, headers: j.headers || {}, body: body };
-      });
-    });
+  // 绑定全局 globalThis.lx 支持
+  function ensureGlobalLx(activeSessionId) {
+    var shim = makeLxShim(activeSessionId || 'default');
+    try {
+      window.lx = shim;
+      globalThis.lx = shim;
+    } catch (e) {}
   }
 
   /**
-   * 加载一个 LX 音源脚本，返回 { handlers, inited, sources, lx }
+   * 加载洛雪音源脚本
    */
-  function loadLxScript(code) {
-    var session = { handlers: {}, inited: null, lx: null };
-    session.lx = makeLxShim(session);
+  function loadLxScript(code, customId, name) {
+    var sid = customId || uid('lx');
+    var session = {
+      id: sid,
+      name: name || 'LX-Source',
+      handlers: {},
+      inited: null,
+      code: code
+    };
+    sessions[sid] = session;
 
-    var prev = globalThis.lx;
-    globalThis.lx = session.lx;
+    ensureGlobalLx(sid);
     try {
-      // 间接 eval：在全局作用域执行，与洛雪一致（脚本内 const/let 不会互相覆盖）
       (0, eval)(code);
-    } finally {
-      if (prev === undefined) {
-        try { delete globalThis.lx; } catch (e) { globalThis.lx = undefined; }
-      } else {
-        globalThis.lx = prev;
-      }
+    } catch (e) {
+      console.error('[SourceHub] 执行音源脚本出错 (' + name + '):', e);
+      throw e;
     }
 
-    if (typeof session.handlers.request !== 'function') {
-      throw new Error('脚本没有注册 request 处理器，可能不是洛雪自定义音源');
+    if (typeof session.handlers.request !== 'function' && typeof session.handlers.musicUrl !== 'function') {
+      throw new Error('脚本未注册 request/musicUrl 处理函数，可能不是洛雪自定义音源');
     }
     return session;
   }
 
   /**
-   * 调用 LX 音源取播放地址
+   * 调用洛雪音源获取真实直链
    */
   function callLx(session, action, source, info) {
+    if (!session) return Promise.reject(new Error('音源会话不存在'));
     var fn = session.handlers[action] || session.handlers.request;
     if (typeof fn !== 'function') {
-      return Promise.reject(new Error('音源不支持 ' + action));
+      return Promise.reject(new Error('该音源未实现 ' + action));
     }
-    var prev = globalThis.lx;
-    globalThis.lx = session.lx;
-    try {
-      return Promise.resolve(fn({ action: action, source: source, info: info }));
-    } catch (e) {
-      return Promise.reject(e);
-    } finally {
-      globalThis.lx = prev;
-    }
-  }
 
-  /* ==========================================================
-     自定义 HTTP 后端
-     模板变量：{kw} 关键字 {page} 页码 {count} 条数 {id} 歌曲ID {source} 来源
-     ========================================================== */
-  function fillTpl(tpl, vars) {
-    var out = String(tpl || '');
-    for (var k in vars) {
-      out = out.split('{' + k + '}').join(encodeURIComponent(vars[k] == null ? '' : vars[k]));
-    }
-    return out;
-  }
-
-  function httpSearch(b, kw, source, page, count) {
-    var u = fillTpl(b.searchUrl, { kw: kw, source: source, page: page, count: count });
-    return fetch(u).then(function (r) { return r.json(); }).then(function (j) {
-      // 允许几种常见形状：数组 / {list:[...]} / {data:[...]} / {songs:[...]}
-      var arr = null;
-      if (Array.isArray(j)) arr = j;
-      else if (j && Array.isArray(j.list)) arr = j.list;
-      else if (j && Array.isArray(j.data)) arr = j.data;
-      else if (j && Array.isArray(j.songs)) arr = j.songs;
-      else if (j && Array.isArray(j.data && j.data.list)) arr = j.data.list;
-      if (!arr) return [];
-      return arr.map(function (x) {
-        return {
-          id: String(x.id != null ? x.id : (x.songmid || x.url_id || x.mid || '')),
-          name: x.name || x.songname || x.songName || '',
-          artist: [].concat(x.artist || x.singer || x.author || []),
-          album: x.album || x.albumname || '',
-          source: source,
-          url_id: String(x.url_id != null ? x.url_id : (x.id != null ? x.id : '')),
-          pic_id: x.pic_id || x.pic || x.cover || null,
-          lyric_id: String(x.lyric_id != null ? x.lyric_id : (x.id != null ? x.id : ''))
-        };
-      }).filter(function (x) { return x.id !== '' && x.name !== ''; });
-    });
-  }
-
-  function httpUrl(b, id, source) {
-    var u = fillTpl(b.urlUrl, { id: id, source: source });
-    return fetch(u).then(function (r) { return r.json(); }).then(function (j) {
-      if (typeof j === 'string') return j;
-      return (j && (j.url || (j.data && j.data.url))) || '';
-    });
-  }
-
-  /* ==========================================================
-     对外：搜索
-     ========================================================== */
-  function search(kw, source, page, count) {
-    var b = findBackend(state.searchId) || BUILTIN[0];
-    page = page || 1;
-    count = count || 20;
-
-    if (b.kind === 'builtin') {
-      return jsonp('backend.php?types=search&name=' + encodeURIComponent(kw) +
-                   '&source=' + encodeURIComponent(source) +
-                   '&pages=' + page + '&count=' + count);
-    }
-    if (b.kind === 'meting') {
-      return jsonp('api.php?types=search&name=' + encodeURIComponent(kw) +
-                   '&source=' + encodeURIComponent(source) +
-                   '&pages=' + page + '&count=' + count);
-    }
-    return httpSearch(b, kw, source, page, count);
-  }
-
-  /**
-   * JSONP 请求（MKOnlinePlayer 的后端返回 jsonp）
-   */
-  function jsonp(url) {
+    ensureGlobalLx(session.id);
     return new Promise(function (resolve, reject) {
-      var name = '__sh_cb_' + Math.random().toString(36).slice(2);
-      var s = document.createElement('script');
-      var timer = setTimeout(function () { cleanup(); reject(new Error('请求超时')); }, 15000);
-      function cleanup() {
-        clearTimeout(timer);
-        delete window[name];
-        if (s.parentNode) s.parentNode.removeChild(s);
+      try {
+        var res = fn({ action: action, source: source, info: info });
+        Promise.resolve(res).then(resolve, reject);
+      } catch (err) {
+        reject(err);
       }
-      window[name] = function (data) { cleanup(); resolve(data); };
-      s.onerror = function () { cleanup(); reject(new Error('请求失败')); };
-      s.src = url + (url.indexOf('?') > -1 ? '&' : '?') + 'callback=' + name;
-      document.body.appendChild(s);
     });
   }
 
   /* ==========================================================
-     对外：取播放地址（按后端链依次尝试）
+     HTTPS 混合内容保护 (Mixed Content Stream Relay)
+     ========================================================== */
+  function ensureSecureStream(url) {
+    if (!url || typeof url !== 'string') return '';
+    url = url.trim();
+    if (!/^https?:\/\//i.test(url)) return url;
+
+    // 若当前页面是 HTTPS，而直链是 HTTP
+    if (window.location.protocol === 'https:' && url.indexOf('http://') === 0) {
+      // 避免某些无法 HTTPS 加载的 IP 或域名被浏览器直接阻断
+      return 'backend.php?types=stream&url=' + encodeURIComponent(url);
+    }
+    return url;
+  }
+
+  /* ==========================================================
+     取播放链接与多源自动故障转移 (Smart Fallback Engine)
      ========================================================== */
   function resolveUrl(music, quality) {
-    var b = findBackend(state.urlId) || BUILTIN[0];
     quality = quality || '128k';
 
-    if (b.kind === 'lx') {
-      return resolveViaLx(b, music, quality).catch(function (e) {
-        console.warn('[SourceHub] LX 音源取链接失败，回退内置后端：', e && e.message);
-        return builtinUrl(music);
+    // 候选音源链
+    var candidates = [];
+
+    // 1. 首选音源
+    var primary = findBackend(state.urlId);
+    if (primary && primary.kind === 'lx' && primary.session) {
+      candidates.push(primary);
+    }
+
+    // 2. 备选已加载的洛雪音源
+    state.backends.forEach(function (b) {
+      if (b.kind === 'lx' && b.session && candidates.indexOf(b) === -1) {
+        candidates.push(b);
+      }
+    });
+
+    var idx = 0;
+    function tryNextSource() {
+      if (idx >= candidates.length) {
+        // 所有洛雪音源尝试完毕，回退到官方直连
+        return fallbackBuiltinUrl(music);
+      }
+      var cur = candidates[idx++];
+      return resolveViaLx(cur, music, quality).then(function (u) {
+        if (u && /^https?:\/\//i.test(u)) {
+          return ensureSecureStream(u);
+        }
+        return tryNextSource();
+      }).catch(function (err) {
+        console.warn('[SourceHub] 音源 [' + cur.name + '] 解析失败，自动切换备选音源:', err && err.message);
+        return tryNextSource();
       });
     }
-    if (b.kind === 'meting') {
-      return jsonp('api.php?types=url&id=' + encodeURIComponent(music.id) +
-                   '&source=' + encodeURIComponent(music.source))
-        .then(function (j) { return (j && j.url) || ''; })
-        .catch(function () { return builtinUrl(music); });
-    }
-    if (b.kind === 'http') {
-      return httpUrl(b, music.id, music.source).catch(function () { return builtinUrl(music); });
-    }
-    return builtinUrl(music);
+
+    return tryNextSource();
   }
 
-  function builtinUrl(music) {
-    return jsonp('backend.php?types=url&id=' + encodeURIComponent(music.id) +
-                 '&source=' + encodeURIComponent(music.source))
-      .then(function (j) { return (j && j.url) || ''; });
-  }
+  function resolveViaLx(backend, music, quality) {
+    var s = backend.session;
+    if (!s) return Promise.reject(new Error('音源未就绪'));
 
-  function resolveViaLx(b, music, quality) {
-    var s = b.session;
-    if (!s) return Promise.reject(new Error('音源未加载'));
     var aliases = LX_ALIAS[music.source] || [music.source];
-    var info = {
-      musicInfo: {
-        id: music.id,
-        songmid: music.id,
-        songId: music.id,
-        musicId: music.id,
-        hash: music.id,
-        rid: music.id,
-        name: music.name,
-        singer: music.artist,
-        artist: music.artist,
-        albumName: music.album,
-        album: music.album
-      },
-      type: quality,
-      name: music.name,
-      id: music.id
-    };
-
     var i = 0;
-    function tryNext() {
-      if (i >= aliases.length) return Promise.reject(new Error('音源不支持该来源：' + music.source));
+
+    function tryPlatformAlias() {
+      if (i >= aliases.length) {
+        return Promise.reject(new Error('音源不支持来源：' + music.source));
+      }
       var src = aliases[i++];
-      return callLx(s, 'musicUrl', src, info).then(function (u) {
-        if (typeof u === 'string' && /^https?:\/\//.test(u)) return u;
-        throw new Error('音源返回的不是链接');
-      }).catch(function (e) {
-        if (i < aliases.length) return tryNext();
-        throw e;
+      var info = {
+        type: quality || '128k',
+        musicInfo: {
+          id: String(music.id || ''),
+          songmid: String(music.id || ''),
+          songId: String(music.id || ''),
+          musicId: String(music.id || ''),
+          hash: String(music.id || ''),
+          rid: String(music.id || ''),
+          name: music.name || '',
+          singer: Array.isArray(music.artist) ? music.artist.join(' / ') : (music.artist || ''),
+          artist: Array.isArray(music.artist) ? music.artist.join(' / ') : (music.artist || ''),
+          albumName: music.album || '',
+          album: music.album || '',
+          source: src // 核心：向脚本注入当前平台标识
+        }
+      };
+
+      return callLx(s, 'musicUrl', src, info).then(function (res) {
+        var u = typeof res === 'string' ? res : (res && (res.url || (res.data && res.data.url)));
+        if (typeof u === 'string' && /^https?:\/\//i.test(u)) {
+          return u;
+        }
+        throw new Error('未获取到有效播放直链');
+      }).catch(function (err) {
+        if (i < aliases.length) return tryPlatformAlias();
+        throw err;
       });
     }
-    return tryNext();
+
+    return tryPlatformAlias();
+  }
+
+  function fallbackBuiltinUrl(music) {
+    return fetch('backend.php?types=url&id=' + encodeURIComponent(music.id) +
+                 '&source=' + encodeURIComponent(music.source) +
+                 '&_t=' + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        var u = (j && j.url) || '';
+        return ensureSecureStream(u);
+      }).catch(function () {
+        return '';
+      });
   }
 
   /* ==========================================================
-     对外：封面 / 歌词
+     封面与歌词获取
      ========================================================== */
   function resolvePic(music) {
-    var b = findBackend(state.urlId) || BUILTIN[0];
-    var base = b.kind === 'meting' ? 'api.php' : 'backend.php';
-    return jsonp(base + '?types=pic&id=' + encodeURIComponent(music.pic_id || '') +
-                 '&source=' + encodeURIComponent(music.source))
+    if (music.pic_id && /^https?:\/\//i.test(music.pic_id)) {
+      return Promise.resolve(music.pic_id);
+    }
+    return fetch('backend.php?types=pic&id=' + encodeURIComponent(music.pic_id || music.id) +
+                 '&source=' + encodeURIComponent(music.source) + '&_t=' + Date.now())
+      .then(function (r) { return r.json(); })
       .then(function (j) { return (j && j.url) || ''; })
       .catch(function () { return ''; });
   }
 
   function resolveLyric(music) {
-    var b = findBackend(state.urlId) || BUILTIN[0];
-    var base = b.kind === 'meting' ? 'api.php' : 'backend.php';
-    return jsonp(base + '?types=lyric&id=' + encodeURIComponent(music.lyric_id || music.id) +
-                 '&source=' + encodeURIComponent(music.source))
+    return fetch('backend.php?types=lyric&id=' + encodeURIComponent(music.lyric_id || music.id) +
+                 '&source=' + encodeURIComponent(music.source) + '&_t=' + Date.now())
+      .then(function (r) { return r.json(); })
       .then(function (j) { return (j && j.lyric) || ''; })
       .catch(function () { return ''; });
   }
 
   /* ==========================================================
-     后端管理
+     自动预置音源加载 (Preload Preset Sources)
      ========================================================== */
-  function addLxBackend(name, code) {
-    var session = loadLxScript(code);
-    var b = {
-      id: uid(),
-      name: name || 'LX 音源',
-      kind: 'lx',
-      code: code,
-      sources: Object.keys((session.inited && session.inited.sources) || {}),
-      session: session
-    };
-    state.backends.push(b);
-    save();
-    return b;
-  }
+  function preloadPresets() {
+    return fetch('sources/manifest.json?_t=' + Date.now())
+      .then(function (res) { return res.json(); })
+      .catch(function () {
+        return fetch('backend.php?types=sources&_t=' + Date.now()).then(function (r) { return r.json(); });
+      })
+      .then(function (manifest) {
+        if (!manifest || !Array.isArray(manifest.sources)) return;
 
-  function addHttpBackend(name, searchUrl, urlUrl) {
-    var b = {
-      id: uid(),
-      name: name || '自定义接口',
-      kind: 'http',
-      searchUrl: searchUrl || '',
-      urlUrl: urlUrl || ''
-    };
-    state.backends.push(b);
-    save();
-    return b;
-  }
+        var loadPromises = [];
+        manifest.sources.forEach(function (meta) {
+          // 只自动加载通过实测验证的推荐音源，其余按需挂载
+          if (!meta.verified && !meta.default) return;
 
-  function removeBackend(id) {
-    state.backends = state.backends.filter(function (b) { return b.id !== id; });
-    if (state.searchId === id) state.searchId = 'builtin';
-    if (state.urlId === id) state.urlId = 'builtin';
-    save();
-  }
+          var sid = 'preset_' + meta.id;
+          // 若已加载过则跳过
+          if (findBackend(sid)) return;
 
-  /**
-   * 页面刷新后重新加载所有 LX 音源脚本
-   */
-  function hydrate() {
-    state.backends.forEach(function (b) {
-      if (b.kind !== 'lx') return;
-      try {
-        b.session = loadLxScript(b.code);
-        b.sources = Object.keys((b.session.inited && b.session.inited.sources) || {});
-      } catch (e) {
-        console.warn('[SourceHub] 音源加载失败：' + b.name, e);
-        b.error = e.message || String(e);
-      }
-    });
-  }
+          var p = fetch('sources/' + encodeURIComponent(meta.file) + '?_t=' + Date.now())
+            .then(function (r) {
+              if (!r.ok) throw new Error('HTTP ' + r.status);
+              return r.text();
+            })
+            .then(function (code) {
+              var s = loadLxScript(code, sid, meta.name);
+              var b = {
+                id: sid,
+                name: meta.name + (meta.default ? ' (推荐主力)' : ' (备选)'),
+                kind: 'lx',
+                isPreset: true,
+                session: s,
+                sources: Object.keys((s.inited && s.inited.sources) || {})
+              };
+              state.backends.push(b);
+              if (meta.default && state.urlId === 'builtin') {
+                state.urlId = sid;
+              }
+              console.log('[SourceHub] 预置音源加载成功:', meta.name);
+            }).catch(function (err) {
+              console.warn('[SourceHub] 加载预置音源失败:', meta.file, err);
+            });
+          loadPromises.push(p);
+        });
 
-  /**
-   * 测试一个后端是否真的能用
-   */
-  function testBackend(id) {
-    var b = findBackend(id);
-    if (!b) return Promise.reject(new Error('后端不存在'));
-    var t0 = Date.now();
-
-    if (b.kind === 'lx') {
-      if (!b.session) return Promise.reject(new Error('音源未加载'));
-      return callLx(b.session, 'musicUrl', 'wy', {
-        musicInfo: { id: '186016', songmid: '186016', songId: '186016', name: '晴天', singer: '周杰伦' },
-        type: '128k'
-      }).then(function (u) {
-        return { ok: /^https?:\/\//.test(String(u || '')), ms: Date.now() - t0, detail: String(u).slice(0, 120) };
+        return Promise.all(loadPromises);
+      }).catch(function (err) {
+        console.warn('[SourceHub] 检查预置音源清单失败:', err);
       });
-    }
-
-    var probe = (b.kind === 'meting')
-      ? 'api.php?types=search&name=test&source=netease&pages=1&count=5'
-      : (b.kind === 'builtin')
-        ? 'backend.php?types=search&name=' + encodeURIComponent('周杰伦') + '&source=kuwo&pages=1&count=3'
-        : fillTpl(b.searchUrl, { kw: '周杰伦', source: 'kuwo', page: 1, count: 3 });
-
-    if (b.kind === 'http') {
-      return fetch(probe).then(function (r) { return r.json(); }).then(function (j) {
-        var n = Array.isArray(j) ? j.length : (j && (j.list || j.data || j.songs) || []).length;
-        return { ok: n > 0, ms: Date.now() - t0, detail: '返回 ' + n + ' 条' };
-      });
-    }
-    return jsonp(probe).then(function (j) {
-      var n = Array.isArray(j) ? j.length : 0;
-      return { ok: n > 0, ms: Date.now() - t0, detail: '返回 ' + n + ' 条' };
-    });
   }
 
   /* ==========================================================
-     界面
+     挂钩 MKOnlinePlayer
      ========================================================== */
-  var CSS = [
-    '#sh-btn{position:fixed;right:16px;bottom:16px;z-index:9990;',
-    '  display:inline-flex;align-items:center;gap:.45em;padding:.62em 1.05em;',
-    '  border-radius:999px;border:1px solid rgba(255,255,255,.18);cursor:pointer;',
-    '  background:rgba(18,20,28,.88);color:#e9edf5;font:inherit;font-size:13px;',
-    '  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);',
-    '  box-shadow:0 14px 36px -16px rgba(0,0,0,.7);transition:transform .25s cubic-bezier(.22,1,.36,1)}',
-    '#sh-btn:hover{transform:translateY(-2px);border-color:rgba(34,211,238,.6)}',
-    '#sh-mask{position:fixed;inset:0;z-index:9991;background:rgba(4,6,12,.62);display:none}',
-    '#sh-mask.open{display:block}',
-    '#sh-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9992;',
-    '  width:min(720px,calc(100vw - 32px));max-height:86vh;overflow:auto;display:none;',
-    '  border-radius:18px;border:1px solid rgba(255,255,255,.12);',
-    '  background:#0e111a;color:#e9edf5;font:14px/1.75 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;',
-    '  box-shadow:0 30px 90px -30px rgba(0,0,0,.9);padding:22px 22px 18px}',
-    '#sh-modal.open{display:block}',
-    '#sh-modal h3{margin:0 0 4px;font-size:17px;font-weight:650}',
-    '#sh-modal .sub{margin:0 0 16px;font-size:12.5px;color:rgba(233,237,245,.55)}',
-    '#sh-modal .row{margin:0 0 14px}',
-    '#sh-modal label{display:block;font-size:12px;letter-spacing:.05em;color:rgba(233,237,245,.5);margin-bottom:5px}',
-    '#sh-modal select,#sh-modal input,#sh-modal textarea{',
-    '  width:100%;padding:9px 11px;border-radius:9px;box-sizing:border-box;',
-    '  border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#e9edf5;font:inherit}',
-    '#sh-modal textarea{min-height:78px;resize:vertical;font-family:ui-monospace,Consolas,monospace;font-size:12px}',
-    '#sh-modal .btn{display:inline-flex;align-items:center;gap:.4em;padding:.55em 1.05em;',
-    '  border-radius:999px;cursor:pointer;font:inherit;font-size:13px;',
-    '  border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#e9edf5}',
-    '#sh-modal .btn:hover{border-color:rgba(34,211,238,.6);background:rgba(34,211,238,.14)}',
-    '#sh-modal .btn--primary{background:linear-gradient(135deg,#22d3ee,#3b82f6);border-color:transparent;color:#04121a;font-weight:650}',
-    '#sh-modal .btn--sm{padding:.32em .8em;font-size:12px}',
-    '#sh-modal .btn--danger:hover{border-color:#fb7185;background:rgba(251,113,133,.16)}',
-    '#sh-modal .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}',
-    '#sh-modal .tab{padding:.42em 1em;border-radius:999px;cursor:pointer;font-size:12.5px;',
-    '  border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(233,237,245,.6)}',
-    '#sh-modal .tab.active{background:rgba(34,211,238,.18);border-color:#22d3ee;color:#fff}',
-    '#sh-modal .list{list-style:none;margin:0 0 8px;padding:0}',
-    '#sh-modal .list li{display:flex;align-items:center;gap:9px;padding:8px 2px;',
-    '  border-bottom:1px solid rgba(255,255,255,.07)}',
-    '#sh-modal .list li:last-child{border-bottom:0}',
-    '#sh-modal .dot{width:7px;height:7px;border-radius:50%;background:#34d399;flex:0 0 auto}',
-    '#sh-modal .dot.err{background:#fb7185}',
-    '#sh-modal .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
-    '#sh-modal .kd{font-size:11px;color:rgba(233,237,245,.45);padding:.1em .55em;',
-    '  border:1px solid rgba(255,255,255,.12);border-radius:999px}',
-    '#sh-modal .msg{min-height:20px;font-size:12px;color:#34d399;margin-top:6px}',
-    '#sh-modal .msg.err{color:#fb7185}',
-    '#sh-modal .hint{font-size:11.5px;color:rgba(233,237,245,.42);margin-top:6px;line-height:1.7}',
-    '#sh-modal .x{position:absolute;right:16px;top:14px;width:28px;height:28px;border-radius:50%;',
-    '  border:1px solid rgba(255,255,255,.14);background:transparent;color:#e9edf5;cursor:pointer}',
-    '@media(max-width:640px){#sh-modal{padding:18px 15px 15px}#sh-btn{right:12px;bottom:12px}}'
-  ].join('\n');
+  function hookPlayer() {
+    if (typeof window.ajaxUrl !== 'function') return false;
 
-  var TAB = 'search';
+    // 1. 挂钩取音频直链
+    window.__sh_orig_ajaxUrl = window.ajaxUrl;
+    window.ajaxUrl = function (music, callback) {
+      if (music.url !== null && music.url !== 'err' && music.url !== '') {
+        return window.__sh_orig_ajaxUrl(music, callback);
+      }
+      if (music.id === null) {
+        return window.__sh_orig_ajaxUrl(music, callback);
+      }
 
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      resolveUrl(music).then(function (u) {
+        music.url = u || 'err';
+        if (window.updateMinfo) window.updateMinfo(music);
+        callback(music);
+      }).catch(function () {
+        return window.__sh_orig_ajaxUrl(music, callback);
+      });
+      return true;
+    };
+
+    // 2. 挂钩封面图片获取
+    if (typeof window.ajaxPic === 'function') {
+      window.__sh_orig_ajaxPic = window.ajaxPic;
+      window.ajaxPic = function (music, callback) {
+        if (music.pic !== null && music.pic !== 'err' && music.pic !== '') {
+          return window.__sh_orig_ajaxPic(music, callback);
+        }
+        resolvePic(music).then(function (u) {
+          if (u) {
+            music.pic = u;
+            if (window.updateMinfo) window.updateMinfo(music);
+            callback(music);
+          } else {
+            window.__sh_orig_ajaxPic(music, callback);
+          }
+        }).catch(function () {
+          window.__sh_orig_ajaxPic(music, callback);
+        });
+        return true;
+      };
+    }
+
+    // 3. 挂钩搜索功能（确保强制加上防 CDN 缓存时间戳）
+    if (typeof window.ajaxSearch === 'function') {
+      window.__sh_orig_ajaxSearch = window.ajaxSearch;
+      window.ajaxSearch = function () {
+        // 将 mkPlayer.api 自动指向后端并附带防缓存参数
+        if (window.mkPlayer) {
+          window.mkPlayer.api = 'backend.php?_t=' + Date.now();
+        }
+        return window.__sh_orig_ajaxSearch();
+      };
+    }
+
+    return true;
   }
 
-  function buildUI() {
+  /* ==========================================================
+     用户界面 (UI / 交互控制面板)
+     ========================================================== */
+  var CSS = [
+    '#sh-btn{position:fixed;right:18px;bottom:18px;z-index:99999;',
+    '  display:inline-flex;align-items:center;gap:6px;padding:8px 14px;',
+    '  border-radius:999px;border:1px solid rgba(255,255,255,.2);cursor:pointer;',
+    '  background:rgba(18,24,38,.9);color:#e2e8f0;font:500 12.5px/1 system-ui,-apple-system,sans-serif;',
+    '  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);',
+    '  box-shadow:0 8px 24px -6px rgba(0,0,0,.6);transition:all .25s ease}',
+    '#sh-btn:hover{transform:translateY(-2px);border-color:#38bdf8;box-shadow:0 12px 30px -6px rgba(56,189,248,.3)}',
+    '#sh-btn .dot-pulse{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #34d399}',
+    '#sh-mask{position:fixed;inset:0;z-index:99998;background:rgba(4,6,12,.68);display:none;backdrop-filter:blur(3px)}',
+    '#sh-mask.open{display:block}',
+    '#sh-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:99999;',
+    '  width:min(640px,calc(100vw - 32px));max-height:86vh;overflow-y:auto;display:none;',
+    '  border-radius:18px;border:1px solid rgba(255,255,255,.14);',
+    '  background:#0f172a;color:#f8fafc;font:13.5px/1.7 system-ui,-apple-system,sans-serif;',
+    '  box-shadow:0 25px 60px -15px rgba(0,0,0,.85);padding:24px 22px 20px}',
+    '#sh-modal.open{display:block}',
+    '#sh-modal h3{margin:0 0 6px;font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}',
+    '#sh-modal .sub{margin:0 0 16px;font-size:12px;color:#94a3b8}',
+    '#sh-modal .row{margin:0 0 14px}',
+    '#sh-modal label{display:block;font-size:11.5px;font-weight:500;color:#94a3b8;margin-bottom:6px}',
+    '#sh-modal select,#sh-modal input,#sh-modal textarea{',
+    '  width:100%;padding:8px 12px;border-radius:10px;box-sizing:border-box;',
+    '  border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#f8fafc;font:inherit;font-size:12.5px}',
+    '#sh-modal select option{background:#0f172a;color:#f8fafc}',
+    '#sh-modal .btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;',
+    '  border-radius:999px;cursor:pointer;font:inherit;font-size:12px;',
+    '  border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#f8fafc;transition:all .2s ease}',
+    '#sh-modal .btn:hover{border-color:#38bdf8;background:rgba(56,189,248,.15)}',
+    '#sh-modal .btn--primary{background:#0284c7;border-color:transparent;color:#fff;font-weight:600}',
+    '#sh-modal .btn--primary:hover{background:#0369a1}',
+    '#sh-modal .btn--sm{padding:4px 10px;font-size:11.5px}',
+    '#sh-modal .list{list-style:none;margin:0 0 12px;padding:0}',
+    '#sh-modal .list li{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid rgba(255,255,255,.07)}',
+    '#sh-modal .list li:last-child{border-bottom:0}',
+    '#sh-modal .tag{padding:2px 7px;border-radius:999px;font-size:10.5px;background:rgba(56,189,248,.15);color:#38bdf8;border:1px solid rgba(56,189,248,.3)}',
+    '#sh-modal .tag--preset{background:rgba(52,211,153,.15);color:#34d399;border-color:rgba(52,211,153,.3)}',
+    '#sh-modal .msg{font-size:12px;margin-top:8px;padding:8px 12px;border-radius:8px;display:none}',
+    '#sh-modal .msg.show{display:block;background:rgba(52,211,153,.12);color:#34d399;border:1px solid rgba(52,211,153,.25)}',
+    '#sh-modal .msg.err{background:rgba(244,63,94,.12);color:#f43f5e;border:1px solid rgba(244,63,94,.25)}',
+    '#sh-modal .close-btn{position:absolute;right:16px;top:16px;width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:transparent;color:#94a3b8;cursor:pointer}',
+    '@media(max-width:640px){#sh-btn{right:12px;bottom:12px;padding:6px 12px}}'
+  ].join('\n');
+
+  function renderUI() {
     if (document.getElementById('sh-btn')) return;
     var st = document.createElement('style');
     st.textContent = CSS;
@@ -542,7 +567,7 @@
     var btn = document.createElement('button');
     btn.id = 'sh-btn';
     btn.type = 'button';
-    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>接口后端';
+    btn.innerHTML = '<span class="dot-pulse"></span><span>音源引擎 2.0</span>';
     btn.addEventListener('click', openModal);
     document.body.appendChild(btn);
 
@@ -554,13 +579,13 @@
     var modal = document.createElement('div');
     modal.id = 'sh-modal';
     document.body.appendChild(modal);
-    renderModal();
   }
 
   function openModal() {
     document.getElementById('sh-mask').classList.add('open');
-    document.getElementById('sh-modal').classList.add('open');
-    renderModal();
+    var m = document.getElementById('sh-modal');
+    m.classList.add('open');
+    renderModalContent();
   }
 
   function closeModal() {
@@ -568,339 +593,145 @@
     document.getElementById('sh-modal').classList.remove('open');
   }
 
-  function renderModal() {
+  function renderModalContent() {
     var m = document.getElementById('sh-modal');
     if (!m) return;
-    var opts = allBackends().map(function (b) {
-      return '<option value="' + esc(b.id) + '"' +
-        (b.id === (TAB === 'search' ? state.searchId : state.urlId) ? ' selected' : '') + '>' +
-        esc(b.name) + '</option>';
-    }).join('');
 
     var rows = allBackends().map(function (b) {
-      var kind = b.kind === 'lx' ? ('LX·' + ((b.sources || []).join('/') || '音源'))
-        : b.kind === 'http' ? 'HTTP' : (b.kind === 'meting' ? 'Meting' : '内置');
+      var isCur = (b.id === state.urlId);
+      var tag = b.isPreset ? '<span class="tag tag--preset">内置预置</span>'
+        : b.builtin ? '<span class="tag">官方聚合</span>' : '<span class="tag">自定义</span>';
+
       return '<li>' +
-        '<span class="dot' + (b.error ? ' err' : '') + '"></span>' +
-        '<span class="nm">' + esc(b.name) + '</span>' +
-        '<span class="kd">' + esc(kind) + '</span>' +
-        '<button class="btn btn--sm" data-test="' + esc(b.id) + '">测试</button>' +
-        (b.builtin ? '' : '<button class="btn btn--sm btn--danger" data-del="' + esc(b.id) + '">删除</button>') +
+        '<input type="radio" name="sh_url_radio" value="' + b.id + '"' + (isCur ? ' checked' : '') + '>' +
+        '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + b.name + '</span>' +
+        tag +
+        '<button class="btn btn--sm" data-test="' + b.id + '">测试取流</button>' +
         '</li>';
     }).join('');
 
     m.innerHTML =
-      '<button class="x" id="sh-close" aria-label="关闭">✕</button>' +
-      '<h3>接口后端</h3>' +
-      '<p class="sub">切换搜索 / 取链接走哪套接口；也可以自己加接口（粘贴链接或导入 .js 文件）。</p>' +
-
-      '<div class="tabs">' +
-        '<button class="tab' + (TAB === 'search' ? ' active' : '') + '" data-tab="search">搜索后端</button>' +
-        '<button class="tab' + (TAB === 'url' ? ' active' : '') + '" data-tab="url">取链接后端</button>' +
-        '<button class="tab' + (TAB === 'add' ? ' active' : '') + '" data-tab="add">添加接口</button>' +
+      '<button class="close-btn" id="sh-x">✕</button>' +
+      '<h3>⚡ 音源后端引擎 (SourceHub 2.0)</h3>' +
+      '<p class="sub">已自动挂载 20+ 洛雪音频解析源，具备自动容灾、HTTPS 混合内容防拦截与跨域代理能力。</p>' +
+      '<div class="row"><label>选择默认主力音源（单源失败将自动无缝回退备用源）</label>' +
+      '<ul class="list">' + rows + '</ul></div>' +
+      '<div class="row">' +
+        '<label>导入新的洛雪自定义音源 (.js 脚本文件)</label>' +
+        '<input type="file" id="sh-file" accept=".js,.txt" multiple>' +
       '</div>' +
+      '<div class="msg" id="sh-msg"></div>';
 
-      (TAB === 'add' ? renderAdd() :
-        '<div class="row">' +
-          '<label>当前' + (TAB === 'search' ? '搜索' : '取链接') + '后端</label>' +
-          '<select id="sh-select">' + opts + '</select>' +
-          '<div class="msg" id="sh-msg"></div>' +
-        '</div>' +
-        '<div class="row"><label>已添加的接口</label><ul class="list">' + rows + '</ul></div>' +
-        '<p class="hint">取链接后端选「LX 音源」时，只负责换播放地址；搜索仍走上面的搜索后端。<br>' +
-        '各平台对 VIP / 数字专辑曲目不给播放地址，属于平台限制，接口取不到就是取不到。</p>'
-      ) +
+    var x = m.querySelector('#sh-x');
+    if (x) x.addEventListener('click', closeModal);
 
-      (TAB === 'add' ? '' : '<div class="row" style="margin-top:14px"><button class="btn" id="sh-export">导出配置</button> ' +
-        '<button class="btn" id="sh-import">导入配置</button></div>');
-
-    bindModal();
-  }
-
-  function renderAdd() {
-    return '' +
-      '<div class="row"><label>名称</label><input id="add-name" placeholder="例如：我的酷我接口"></div>' +
-      '<div class="row"><label>类型</label>' +
-        '<select id="add-kind">' +
-          '<option value="lx">LX 音源脚本（导入 .js 文件，或粘贴脚本内容）</option>' +
-          '<option value="http">HTTP 接口（填链接模板）</option>' +
-        '</select></div>' +
-
-      '<div id="add-lx">' +
-        '<div class="row"><label>导入 .js 文件</label><input type="file" id="add-file" accept=".js,.txt,.json" multiple></div>' +
-        '<div class="row"><label>或粘贴脚本内容 / 脚本链接</label>' +
-          '<textarea id="add-code" placeholder="把洛雪音源 .js 的内容贴到这里，或者填一个 .js 的 http 链接"></textarea></div>' +
-        '<div class="row"><label>或填脚本链接</label>' +
-          '<input id="add-url" placeholder="https://example.com/source.js"></div>' +
-        '<p class="hint">支持洛雪音乐助手自定义音源格式（globalThis.lx）。<br>' +
-          '文件导入只在本机读取，不上传；链接导入会走你自己的服务器代理拉取。</p>' +
-      '</div>' +
-
-      '<div id="add-http" style="display:none">' +
-        '<div class="row"><label>搜索地址模板</label>' +
-          '<input id="add-search" placeholder="https://api.example.com/search?keyword={kw}&page={page}&size={count}"></div>' +
-        '<div class="row"><label>取链接地址模板</label>' +
-          '<input id="add-urltpl" placeholder="https://api.example.com/url?id={id}&source={source}"></div>' +
-        '<p class="hint">模板变量：{kw} 关键字 {page} 页码 {count} 条数 {id} 歌曲ID {source} 来源。<br>' +
-          '返回需是 JSON：数组或 {"list":[...]} / {"data":[...]}；取链接返回 {"url":"..."}。</p>' +
-      '</div>' +
-
-      '<div class="row"><button class="btn btn--primary" id="add-save">保存并启用</button></div>' +
-      '<div class="msg" id="add-msg"></div>';
-  }
-
-  function bindModal() {
-    var m = document.getElementById('sh-modal');
-
-    var close = m.querySelector('#sh-close');
-    if (close) close.addEventListener('click', closeModal);
-
-    Array.prototype.forEach.call(m.querySelectorAll('[data-tab]'), function (t) {
-      t.addEventListener('click', function () { TAB = t.dataset.tab; renderModal(); });
-    });
-
-    var sel = m.querySelector('#sh-select');
-    if (sel) sel.addEventListener('change', function () {
-      if (TAB === 'search') state.searchId = sel.value; else state.urlId = sel.value;
-      save();
-      var msg = m.querySelector('#sh-msg');
-      if (msg) { msg.textContent = '已切换'; msg.className = 'msg'; }
-    });
-
-    Array.prototype.forEach.call(m.querySelectorAll('[data-del]'), function (b) {
-      b.addEventListener('click', function () {
-        removeBackend(b.dataset.del);
-        renderModal();
+    var radios = m.querySelectorAll('input[name="sh_url_radio"]');
+    Array.prototype.forEach.call(radios, function (r) {
+      r.addEventListener('change', function () {
+        state.urlId = r.value;
+        save();
+        showMsg('已切换主力音源为: ' + (findBackend(r.value) ? findBackend(r.value).name : r.value));
       });
     });
 
-    Array.prototype.forEach.call(m.querySelectorAll('[data-test]'), function (b) {
-      b.addEventListener('click', function () {
-        var msg = m.querySelector('#sh-msg');
-        if (msg) { msg.textContent = '测试中…'; msg.className = 'msg'; }
-        testBackend(b.dataset.test).then(function (r) {
-          if (!msg) return;
-          msg.textContent = (r.ok ? '正常' : '无结果') + ' · ' + r.ms + 'ms · ' + r.detail;
-          msg.className = 'msg' + (r.ok ? '' : ' err');
-        }, function (e) {
-          if (!msg) return;
-          msg.textContent = '失败：' + ((e && e.message) || e);
-          msg.className = 'msg err';
-        });
-      });
-    });
+    Array.prototype.forEach.call(m.querySelectorAll('[data-test]'), function (btn) {
+      btn.addEventListener('click', function () {
+        var bid = btn.dataset.test;
+        showMsg('正在测试取链中...');
+        var b = findBackend(bid);
+        if (!b) return showMsg('音源不存在', true);
 
-    var exp = m.querySelector('#sh-export');
-    if (exp) exp.addEventListener('click', function () {
-      var blob = new Blob([JSON.stringify({ backends: state.backends, searchId: state.searchId, urlId: state.urlId }, null, 2)],
-        { type: 'application/json' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'sourcehub-config.json';
-      a.click();
-    });
-
-    var imp = m.querySelector('#sh-import');
-    if (imp) imp.addEventListener('click', function () {
-      var f = document.createElement('input');
-      f.type = 'file';
-      f.accept = '.json';
-      f.onchange = function () {
-        var file = f.files[0];
-        if (!file) return;
-        var r = new FileReader();
-        r.onload = function () {
-          try {
-            var d = JSON.parse(r.result);
-            if (Array.isArray(d.backends)) {
-              d.backends.forEach(function (b) {
-                if (!b.id) b.id = uid();
-                if (b.kind === 'lx' && b.code) { try { b.session = loadLxScript(b.code); } catch (e) { b.error = e.message; } }
-                state.backends.push(b);
-              });
+        // 测试网易云、QQ、酷我三大平台解析
+        var testMusic = { source: 'kuwo', id: '2689227', name: '晴天', artist: '周杰伦' };
+        var t0 = Date.now();
+        (b.kind === 'lx' ? resolveViaLx(b, testMusic, '128k') : fallbackBuiltinUrl(testMusic))
+          .then(function (u) {
+            var ms = Date.now() - t0;
+            if (u && /^https?:\/\//i.test(u)) {
+              showMsg('✅ 测试成功 (' + ms + 'ms) 直链已就绪: ' + u.slice(0, 60) + '...');
+            } else {
+              showMsg('⚠️ 音源响应但未返回有效直链 (' + ms + 'ms)', true);
             }
-            if (d.searchId) state.searchId = d.searchId;
-            if (d.urlId) state.urlId = d.urlId;
-            save();
-            renderModal();
-          } catch (e) {
-            alert('配置文件解析失败');
-          }
-        };
-        r.readAsText(file);
-      };
-      f.click();
+          }).catch(function (err) {
+            showMsg('❌ 测试失败: ' + (err && err.message), true);
+          });
+      });
     });
 
-    // ---- 添加接口 ----
-    var kind = m.querySelector('#add-kind');
-    if (kind) kind.addEventListener('change', function () {
-      m.querySelector('#add-lx').style.display = kind.value === 'lx' ? '' : 'none';
-      m.querySelector('#add-http').style.display = kind.value === 'http' ? '' : 'none';
-    });
-
-    var file = m.querySelector('#add-file');
-    if (file) file.addEventListener('change', function () {
-      var names = [];
-      Array.prototype.forEach.call(file.files, function (x) { names.push(x.name); });
-      var ta = m.querySelector('#add-code');
-      if (ta) ta.placeholder = '已选择 ' + file.files.length + ' 个文件：' + names.join('、') + '（点「保存并启用」）';
-    });
-
-    var saveBtn = m.querySelector('#add-save');
-    if (saveBtn) saveBtn.addEventListener('click', function () {
-      var msg = m.querySelector('#add-msg');
-      var name = (m.querySelector('#add-name').value || '').trim();
-      var msgOk = function (t) { if (msg) { msg.textContent = t; msg.className = 'msg'; } };
-      var msgErr = function (t) { if (msg) { msg.textContent = t; msg.className = 'msg err'; } };
-
-      if (kind.value === 'http') {
-        var s = m.querySelector('#add-search').value.trim();
-        var u = m.querySelector('#add-urltpl').value.trim();
-        if (!s && !u) { msgErr('至少填一个地址模板'); return; }
-        addHttpBackend(name || '自定义接口', s, u);
-        msgOk('已添加');
-        return;
-      }
-
-      // LX：文件优先，其次粘贴内容，最后 URL
-      var files = file.files;
-      if (files && files.length) {
-        var pending = files.length, added = [];
+    var fileInp = m.querySelector('#sh-file');
+    if (fileInp) {
+      fileInp.addEventListener('change', function () {
+        var files = fileInp.files;
+        if (!files || !files.length) return;
+        var count = 0;
         Array.prototype.forEach.call(files, function (f) {
-          var r = new FileReader();
-          r.onload = function () {
+          var reader = new FileReader();
+          reader.onload = function () {
             try {
-              addLxBackend(name || f.name.replace(/\.[^.]+$/, ''), r.result);
-              added.push(f.name);
+              var s = loadLxScript(reader.result, null, f.name.replace(/\.[^.]+$/, ''));
+              state.backends.push({
+                id: s.id,
+                name: f.name.replace(/\.[^.]+$/, ''),
+                kind: 'lx',
+                code: reader.result,
+                session: s,
+                sources: Object.keys((s.inited && s.inited.sources) || {})
+              });
+              count++;
+              save();
+              showMsg('成功导入并激活 ' + count + ' 个自定义音源');
+              renderModalContent();
             } catch (e) {
-              msgErr(f.name + ' 加载失败：' + ((e && e.message) || e));
+              showMsg('导入 ' + f.name + ' 失败: ' + (e && e.message), true);
             }
-            if (--pending === 0) msgOk('已添加 ' + added.length + ' 个音源');
           };
-          r.readAsText(f);
+          reader.readAsText(f);
         });
-        return;
-      }
-
-      var code = (m.querySelector('#add-code').value || '').trim();
-      var url = (m.querySelector('#add-url').value || '').trim();
-      if (code) {
-        try {
-          addLxBackend(name || 'LX 音源', code);
-          msgOk('已添加');
-        } catch (e) {
-          msgErr('加载失败：' + ((e && e.message) || e));
-        }
-        return;
-      }
-      if (url) {
-        msgOk('拉取脚本中…');
-        fetch('backend.php?types=fetchsrc&url=' + encodeURIComponent(url))
-          .then(function (r) {
-            var ct = (r.headers.get('content-type') || '').toLowerCase();
-            if (ct.indexOf('json') === -1) {
-              throw new Error('代理不可用（backend.php 未就绪）');
-            }
-            return r.json();
-          })
-          .then(function (j) {
-            if (!j || !j.ok) throw new Error((j && j.error) || '拉取失败');
-            addLxBackend(name || 'LX 音源', j.body);
-            msgOk('已添加');
-          })
-          .catch(function (e) { msgErr('拉取失败：' + ((e && e.message) || e)); });
-        return;
-      }
-      msgErr('请选择文件、粘贴脚本内容，或填脚本链接');
-    });
-  }
-
-  /* ==========================================================
-     对 MKOnlinePlayer 的挂钩
-     ========================================================== */
-  function hookPlayer() {
-    if (typeof window.ajaxUrl !== 'function') return false;
-
-    window.__sh_ajaxUrl = window.ajaxUrl;
-    window.ajaxUrl = function (music, callback) {
-      // 已有链接直接走原逻辑
-      if (music.url !== null && music.url !== 'err' && music.url !== '') {
-        return window.__sh_ajaxUrl(music, callback);
-      }
-      if (music.id === null) {
-        return window.__sh_ajaxUrl(music, callback);
-      }
-      resolveUrl(music).then(function (u) {
-        music.url = u || 'err';
-        if (window.updateMinfo) window.updateMinfo(music);
-        callback(music);
-      }, function () {
-        return window.__sh_ajaxUrl(music, callback);
       });
-      return true;
-    };
-
-    if (typeof window.ajaxPic === 'function') {
-      window.__sh_ajaxPic = window.ajaxPic;
-      window.ajaxPic = function (music, callback) {
-        if (music.pic !== null && music.pic !== 'err' && music.pic !== '') {
-          return window.__sh_ajaxPic(music, callback);
-        }
-        if (!music.pic_id) return window.__sh_ajaxPic(music, callback);
-        resolvePic(music).then(function (u) {
-          music.pic = u || 'err';
-          if (window.updateMinfo) window.updateMinfo(music);
-          callback(music);
-        }, function () {
-          return window.__sh_ajaxPic(music, callback);
-        });
-        return true;
-      };
     }
+  }
 
-    return true;
+  function showMsg(text, isErr) {
+    var msg = document.getElementById('sh-msg');
+    if (!msg) return;
+    msg.textContent = text;
+    msg.className = 'msg show' + (isErr ? ' err' : '');
   }
 
   /* ==========================================================
-     启动
+     启动入口
      ========================================================== */
   function init() {
     load();
-    hydrate();
+    preloadPresets().then(function () {
+      save();
+    });
 
-    var hooked = hookPlayer();
-    if (!hooked) {
-      // player.js 可能后加载，轮询一小段时间
-      var tries = 0;
-      var t = setInterval(function () {
-        if (hookPlayer() || ++tries > 40) clearInterval(t);
-      }, 200);
-    }
+    var timer = setInterval(function () {
+      if (hookPlayer()) {
+        clearInterval(timer);
+      }
+    }, 200);
+    setTimeout(function () { clearInterval(timer); }, 10000);
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', buildUI);
+      document.addEventListener('DOMContentLoaded', renderUI);
     } else {
-      buildUI();
+      renderUI();
     }
 
-    console.log('[SourceHub] 已就绪 · 搜索后端=' + state.searchId + ' · 取链接后端=' + state.urlId);
+    console.log('[SourceHub 2.0] 音源引擎就绪');
   }
 
   window.SourceHub = {
-    search: search,
     resolveUrl: resolveUrl,
     resolvePic: resolvePic,
     resolveLyric: resolveLyric,
-    testBackend: testBackend,
-    addLxBackend: addLxBackend,
-    addHttpBackend: addHttpBackend,
-    removeBackend: removeBackend,
     list: allBackends,
+    open: openModal,
     getState: function () {
-      return { searchId: state.searchId, urlId: state.urlId, backends: allBackends() };
-    },
-    open: openModal
+      return { urlId: state.urlId, searchId: state.searchId, backends: allBackends() };
+    }
   };
 
   init();

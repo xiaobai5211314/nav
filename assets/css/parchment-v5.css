@@ -1236,7 +1236,7 @@ footer.claude-footer {
     transform: translateY(20px) scale(0.96);
     pointer-events: none;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    max-width: 320px;
+    max-width: 360px;
 }
 .visitor-ip-badge.show {
     opacity: 1;
@@ -1264,9 +1264,8 @@ footer.claude-footer {
     font-weight: 600;
     color: var(--claude-text);
     margin-bottom: 2px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    line-height: 1.4;
+    white-space: normal;
 }
 .visitor-ip-loc {
     color: var(--claude-terracotta);
