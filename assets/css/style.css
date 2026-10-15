@@ -1,75 +1,117 @@
 /* ==========================================================================
-   小白的数字空间 · Claude Code 官方文学极简与沉静典雅设计系统
-   设计规范：Anthropic Claude 官方品牌视觉（Terracotta 陶土橙、深炭暖灰、羊皮纸白、1px 细腻分割）
-   排版规范：统一 微软雅黑 (Microsoft YaHei)、宽松呼吸感行高、零冗余链接、全原生可点击 Bento 矩阵
+   小白的数字空间 · Claude (Anthropic) 官方文学极简设计系统
+   设计参照：C:\Users\xiaobai\.agents\skills\creative\popular-web-designs\templates\claude.md
+   核心特征：
+   - 温暖羊皮纸背景 (Parchment #f5f4ed) 与象牙白表面 (Ivory #faf9f5)
+   - 深炭暖黑暗色调 (Deep Near Black #141413) 与深色表面 (#1e1e1c)
+   - 官方品牌陶土暖橙 (Terracotta #c96442 / #d97757)
+   - 100% 暖色调中性灰，摒弃冷蓝灰；Ring-based 细腻环状投影与 Whisper 柔影
+   - 典雅衬线与清爽无衬线排版，全站统一微软雅黑色阶，零廉价终端特效与 Emoji 乱象
    ========================================================================== */
 
 :root {
-    --font-yahei: "Microsoft YaHei", "微软雅黑", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    /* 字体族系 */
+    --font-sans: "Microsoft YaHei", "微软雅黑", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", Georgia, "Times New Roman", serif;
     --font-mono: "Cascadia Code", "Fira Code", Consolas, Menlo, Monaco, monospace;
 
-    /* Anthropic Claude 官方品牌调色盘 */
-    --claude-bg: #141413;           /* 官方深炭暖黑 */
-    --claude-surface: #1e1e1c;      /* 官方表面色 */
-    --claude-surface-hover: #262624;/* 悬浮微亮 */
-    --claude-surface-card: #191918; /* 卡片底色 */
-    --claude-border: rgba(255, 255, 255, 0.08); /* 细腻 1px 细线 */
-    --claude-border-hover: rgba(217, 119, 87, 0.45); /* Terracotta 微光 */
+    /* 亮色主题 (Claude Parchment 官方默认) */
+    --claude-bg: #f5f4ed;               /* 官方羊皮纸底色 */
+    --claude-surface: #faf9f5;          /* 象牙白卡片表面 */
+    --claude-surface-hover: #ffffff;    /* 悬浮微亮高光表面 */
+    --claude-surface-muted: #eceae1;    /* 次级表面/输入背景 */
+    --claude-nav-bg: rgba(245, 244, 237, 0.88); /* 顶部半透导航 */
 
-    --claude-text: #faf9f5;         /* 温暖羊皮纸白 */
-    --claude-text-sub: #b0aea5;     /* 中性暖灰 */
-    --claude-text-muted: #78766e;   /* 幽暗注释灰 */
+    --claude-border: #e8e6dc;           /* 温暖沙岩边框 (1px) */
+    --claude-border-subtle: #f0eee6;    /* 奶油细腻浅边框 */
+    --claude-border-hover: rgba(201, 100, 66, 0.4); /* 陶土微光边框 */
 
-    --claude-terracotta: #d97757;   /* 主强调色：陶土暖橙 (Anthropic Terracotta) */
-    --claude-terracotta-hover: #e06c43;
-    --claude-terracotta-bg: rgba(217, 119, 87, 0.12);
-    --claude-sage: #788c5d;         /* 鼠尾草橄榄绿 */
-    --claude-sage-bg: rgba(120, 140, 93, 0.14);
-    --claude-slate: #6a9bcc;        /* 板岩灰蓝 */
-    --claude-slate-bg: rgba(106, 155, 204, 0.14);
-    --claude-sand: #e8e6dc;         /* 暖沙浅灰 */
+    --claude-text: #141413;             /* 官方近黑 (Warm Charcoal) */
+    --claude-text-secondary: #5e5d59;   /* 橄榄灰正文 (Olive Gray) */
+    --claude-text-muted: #87867f;       /* 石灰弱化注释 (Stone Gray) */
 
-    --radius-card: 14px;
+    /* 核心品牌色与辅色 */
+    --claude-terracotta: #c96442;       /* 核心品牌色：陶土橙 (Terracotta Brand) */
+    --claude-terracotta-hover: #b85736;
+    --claude-terracotta-soft: rgba(201, 100, 66, 0.08);
+    --claude-terracotta-border: rgba(201, 100, 66, 0.22);
+    --claude-terracotta-text: #c96442;
+
+    --claude-sage: #788c5d;             /* 鼠尾草橄榄绿 */
+    --claude-sage-soft: rgba(120, 140, 93, 0.1);
+    --claude-slate: #5b7f95;            /* 板岩灰蓝 */
+    --claude-slate-soft: rgba(91, 127, 149, 0.1);
+
+    --shadow-ring: 0 0 0 1px var(--claude-border);
+    --shadow-whisper: 0 4px 20px rgba(20, 20, 19, 0.04);
+    --shadow-lift: 0 12px 28px rgba(20, 20, 19, 0.07);
+    --shadow-modal: 0 20px 50px rgba(20, 20, 19, 0.18);
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
     --radius-pill: 9999px;
-    --radius-btn: 8px;
-    --radius-sm: 6px;
 }
 
-/* 全局重置与微软雅黑强制生效 */
-* {
+/* 暗色主题 (Claude Dark Charcoal) */
+[data-theme="dark"] {
+    --claude-bg: #141413;               /* 官方深炭黑 */
+    --claude-surface: #1e1e1c;          /* 深暖灰表面 */
+    --claude-surface-hover: #262623;    /* 悬浮微亮深色表面 */
+    --claude-surface-muted: #2a2926;    /* 次级深色表面 */
+    --claude-nav-bg: rgba(20, 20, 19, 0.88);
+
+    --claude-border: #30302e;           /* 暗色暖边框 */
+    --claude-border-subtle: #242422;
+    --claude-border-hover: rgba(217, 119, 87, 0.45);
+
+    --claude-text: #faf9f5;             /* 象牙白主文字 */
+    --claude-text-secondary: #b0aea5;   /* 温暖银灰次要文字 */
+    --claude-text-muted: #78766e;       /* 弱化暗灰 */
+
+    --claude-terracotta: #d97757;       /* 暗色提亮陶土橙 */
+    --claude-terracotta-hover: #e06c43;
+    --claude-terracotta-soft: rgba(217, 119, 87, 0.14);
+    --claude-terracotta-border: rgba(217, 119, 87, 0.32);
+    --claude-terracotta-text: #ff9d79;
+
+    --claude-sage: #8fa671;
+    --claude-sage-soft: rgba(143, 166, 113, 0.15);
+    --claude-slate: #739bb2;
+    --claude-slate-soft: rgba(115, 155, 178, 0.15);
+
+    --shadow-ring: 0 0 0 1px var(--claude-border);
+    --shadow-whisper: 0 4px 20px rgba(0, 0, 0, 0.35);
+    --shadow-lift: 0 12px 32px rgba(0, 0, 0, 0.5);
+    --shadow-modal: 0 24px 60px rgba(0, 0, 0, 0.7);
+}
+
+/* 全局重置 */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: var(--font-yahei) !important;
+    font-family: var(--font-sans);
 }
 
-html, body {
-    background-color: var(--claude-bg);
-    color: var(--claude-text);
-    min-height: 100vh;
-    line-height: 1.7;
-    overflow-x: hidden;
-    position: relative;
-    user-select: auto;
+html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* 优雅克制的自然环境微光斑 */
-.ambient-glow {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    background: 
-        radial-gradient(circle at 18% 12%, rgba(217, 119, 87, 0.05) 0%, transparent 45%),
-        radial-gradient(circle at 82% 80%, rgba(120, 140, 93, 0.035) 0%, transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(106, 155, 204, 0.02) 0%, transparent 50%);
+body {
+    background-color: var(--claude-bg);
+    color: var(--claude-text);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* 自然落樱画布 */
 #sakura-canvas {
     position: fixed;
     top: 0;
@@ -78,31 +120,36 @@ html, body {
     height: 100%;
     pointer-events: none;
     z-index: 1;
-    opacity: 0.45;
+    opacity: 0.35;
     transition: opacity 0.5s ease;
 }
 
+/* 核心主容器 */
 .claude-container {
     position: relative;
     z-index: 2;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 28px 24px 80px;
+    padding: 24px 24px 80px;
 }
 
-/* ================= 1. Claude 官方风格导航栏 ================= */
+/* ================= 1. 顶部导航栏 ================= */
 header.claude-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 22px;
-    background: rgba(26, 26, 24, 0.88);
+    padding: 10px 20px;
+    background: var(--claude-nav-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--claude-border);
     border-radius: var(--radius-pill);
-    margin-bottom: 40px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    margin-bottom: 48px;
+    box-shadow: var(--shadow-whisper);
+    position: sticky;
+    top: 16px;
+    z-index: 100;
+    transition: all 0.25s ease;
 }
 
 .brand-section {
@@ -114,102 +161,92 @@ header.claude-header {
     cursor: pointer;
 }
 
-.claude-star {
+.brand-spark {
     color: var(--claude-terracotta);
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    filter: drop-shadow(0 0 6px rgba(217, 119, 87, 0.4));
 }
 
 .brand-avatar {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    border: 1.5px solid var(--claude-terracotta);
+    border: 1.5px solid var(--claude-border);
     object-fit: cover;
 }
 
 .brand-meta {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
 }
 
 .brand-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.3px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--claude-text);
+    letter-spacing: -0.2px;
 }
 
-.brand-node {
+.brand-sub {
     font-size: 11px;
     color: var(--claude-text-muted);
-    font-family: var(--font-mono) !important;
-    background: rgba(255, 255, 255, 0.04);
-    padding: 2px 8px;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--claude-border);
 }
 
 .header-center-links {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
 }
 
 .claude-nav-link {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 16px;
-    font-size: 13px;
-    font-weight: 600;
+    padding: 6px 14px;
+    font-size: 13.5px;
+    font-weight: 500;
     text-decoration: none;
     border-radius: var(--radius-pill);
-    transition: all 0.22s ease;
+    transition: all 0.2s ease;
     border: 1px solid transparent;
 }
 
 .claude-nav-link.primary {
-    background: var(--claude-terracotta-bg);
-    border-color: rgba(217, 119, 87, 0.35);
-    color: #ff9d79;
+    background: var(--claude-terracotta-soft);
+    color: var(--claude-terracotta);
+    border-color: var(--claude-terracotta-border);
 }
 
 .claude-nav-link.primary:hover {
     background: var(--claude-terracotta);
-    color: #fff;
-    border-color: var(--claude-terracotta);
-    box-shadow: 0 4px 14px rgba(217, 119, 87, 0.35);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(201, 100, 66, 0.25);
 }
 
 .claude-nav-link.secondary {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: var(--claude-border);
-    color: var(--claude-text-sub);
+    background: transparent;
+    color: var(--claude-text-secondary);
 }
 
 .claude-nav-link.secondary:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
-    border-color: var(--claude-text-sub);
+    background: var(--claude-surface-muted);
+    color: var(--claude-text);
 }
 
 .header-controls {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .time-widget {
-    font-family: var(--font-mono) !important;
+    font-family: var(--font-mono);
     font-size: 12px;
-    color: var(--claude-text-sub);
-    padding-right: 10px;
+    color: var(--claude-text-muted);
+    padding-right: 8px;
     border-right: 1px solid var(--claude-border);
 }
 
@@ -218,38 +255,39 @@ header.claude-header {
     height: 32px;
     border-radius: 50%;
     border: 1px solid var(--claude-border);
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--claude-text-sub);
+    background: var(--claude-surface);
+    color: var(--claude-text-secondary);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 14px;
     transition: all 0.2s ease;
     outline: none;
 }
 
 .ctrl-btn:hover {
     background: var(--claude-surface-hover);
-    border-color: var(--claude-terracotta);
-    color: #fff;
+    color: var(--claude-terracotta);
+    border-color: var(--claude-border-hover);
 }
 
 .ctrl-btn.active {
-    background: rgba(120, 140, 93, 0.25);
-    border-color: var(--claude-sage);
-    color: #fff;
+    color: var(--claude-terracotta);
+    border-color: var(--claude-terracotta-border);
+    background: var(--claude-terracotta-soft);
 }
 
-/* ================= 2. Claude Code 官方风格 Hero 区域 ================= */
+.ctrl-btn svg {
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
+}
+
+/* ================= 2. Claude 官方文学感 Hero ================= */
 .claude-hero-section {
-    margin-bottom: 40px;
-}
-
-.claude-hero-main {
     text-align: center;
-    max-width: 820px;
-    margin: 0 auto 36px;
+    margin-bottom: 56px;
+    padding: 12px 16px 0;
 }
 
 .claude-eyebrow-pill {
@@ -257,46 +295,45 @@ header.claude-header {
     align-items: center;
     gap: 8px;
     padding: 5px 14px;
+    background: var(--claude-surface);
+    border: 1px solid var(--claude-border);
     border-radius: var(--radius-pill);
-    background: var(--claude-terracotta-bg);
-    border: 1px solid rgba(217, 119, 87, 0.35);
-    color: #ff9d79;
     font-size: 12.5px;
-    font-weight: 600;
-    margin-bottom: 20px;
+    font-weight: 500;
+    color: var(--claude-text-secondary);
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-whisper);
 }
 
-.claude-eyebrow-pill .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--claude-terracotta);
-    box-shadow: 0 0 8px var(--claude-terracotta);
+.claude-eyebrow-pill .spark {
+    color: var(--claude-terracotta);
 }
 
 .claude-hero-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #ffffff;
-    line-height: 1.35;
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4.5vw, 3.25rem);
+    font-weight: 500;
+    line-height: 1.22;
+    color: var(--claude-text);
+    margin-bottom: 20px;
     letter-spacing: -0.5px;
-    margin-bottom: 18px;
 }
 
 .claude-hero-desc {
-    font-size: 1.05rem;
-    color: var(--claude-text-sub);
-    line-height: 1.8;
-    margin-bottom: 26px;
+    max-width: 680px;
+    margin: 0 auto 32px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--claude-text-secondary);
 }
 
 .claude-hero-actions {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 28px;
+    gap: 12px;
+    margin-bottom: 48px;
 }
 
 .btn-claude-primary {
@@ -304,21 +341,23 @@ header.claude-header {
     align-items: center;
     gap: 8px;
     padding: 10px 22px;
-    font-size: 14px;
-    font-weight: 600;
     background: var(--claude-terracotta);
     color: #ffffff;
-    border-radius: var(--radius-pill);
+    font-size: 14.5px;
+    font-weight: 500;
     text-decoration: none;
+    border-radius: var(--radius-pill);
     border: 1px solid var(--claude-terracotta);
-    transition: all 0.22s ease;
-    box-shadow: 0 6px 20px rgba(217, 119, 87, 0.3);
+    box-shadow: 0 4px 14px rgba(201, 100, 66, 0.28);
+    transition: all 0.2s ease;
+    cursor: pointer;
 }
 
 .btn-claude-primary:hover {
     background: var(--claude-terracotta-hover);
+    border-color: var(--claude-terracotta-hover);
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(217, 119, 87, 0.45);
+    box-shadow: 0 6px 18px rgba(201, 100, 66, 0.36);
 }
 
 .btn-claude-secondary {
@@ -326,373 +365,413 @@ header.claude-header {
     align-items: center;
     gap: 8px;
     padding: 10px 20px;
+    background: var(--claude-surface);
+    color: var(--claude-text);
     font-size: 14px;
     font-weight: 500;
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--claude-text);
-    border-radius: var(--radius-pill);
     text-decoration: none;
+    border-radius: var(--radius-pill);
     border: 1px solid var(--claude-border);
-    transition: all 0.22s ease;
+    box-shadow: var(--shadow-whisper);
+    transition: all 0.2s ease;
     cursor: pointer;
 }
 
 .btn-claude-secondary:hover {
-    background: rgba(255, 255, 255, 0.09);
-    border-color: rgba(255, 255, 255, 0.25);
-    color: #fff;
+    background: var(--claude-surface-hover);
+    border-color: var(--claude-border-hover);
+    color: var(--claude-terracotta);
     transform: translateY(-1px);
 }
 
-/* Claude Code 标志性极简 CLI 控制台视窗 */
-.claude-cli-container {
-    background: #181816;
-    border: 1px solid var(--claude-border);
-    border-radius: var(--radius-card);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
-    overflow: hidden;
-    max-width: 960px;
+/* ================= 3. 典藏心绪卡片 (Claude Artifact 风格) ================= */
+.claude-artifact-card {
+    max-width: 820px;
     margin: 0 auto;
+    background: var(--claude-surface);
+    border: 1px solid var(--claude-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-whisper);
+    padding: 24px 28px;
+    text-align: left;
+    position: relative;
+    transition: all 0.25s ease;
 }
 
-.claude-cli-header {
+.claude-artifact-card:hover {
+    border-color: var(--claude-border-hover);
+    box-shadow: var(--shadow-lift);
+}
+
+.artifact-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 18px;
-    background: #141413;
-    border-bottom: 1px solid var(--claude-border);
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--claude-border-subtle);
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-.cli-badge-left {
+.artifact-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--claude-terracotta);
+}
+
+.artifact-meta-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12.5px;
+    color: var(--claude-text-muted);
+}
+
+.love-counter-tag {
+    background: var(--claude-terracotta-soft);
+    color: var(--claude-terracotta);
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--claude-terracotta-border);
+}
+
+.artifact-body {
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.8;
+    color: var(--claude-text);
+    margin-bottom: 20px;
+    font-style: normal;
+    padding: 4px 0;
+}
+
+.artifact-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--claude-border-subtle);
+}
+
+.artifact-tip {
+    font-size: 12px;
+    color: var(--claude-text-muted);
+}
+
+.artifact-btn-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
-    color: var(--claude-text-sub);
-    font-family: var(--font-mono) !important;
 }
 
-.cli-green-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #4ade80;
-    box-shadow: 0 0 6px #4ade80;
-}
-
-.cli-badge-right {
-    font-size: 11px;
-    color: var(--claude-text-muted);
-    font-family: var(--font-mono) !important;
-}
-
-.claude-cli-body {
-    padding: 22px 24px;
-    font-size: 13.5px;
-    line-height: 1.8;
-}
-
-.cli-row {
-    margin-bottom: 12px;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.cli-prompt-symbol {
-    color: var(--claude-terracotta);
-    font-weight: 700;
-    font-family: var(--font-mono) !important;
-    user-select: none;
-}
-
-.cli-cmd-label {
-    color: #a4be85;
-    font-family: var(--font-mono) !important;
-    font-weight: 600;
-    min-width: 80px;
-}
-
-.cli-content-text {
-    color: var(--claude-text);
-    flex: 1;
-}
-
-.cli-motto-box {
-    background: rgba(255, 255, 255, 0.02);
-    border-left: 2px solid var(--claude-terracotta);
-    padding: 10px 14px;
-    border-radius: 0 6px 6px 0;
-    color: #dedcd3;
-    font-size: 13px;
-    margin: 4px 0 12px;
-    line-height: 1.7;
-}
-
-.cli-diary-box {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid var(--claude-border);
-    border-radius: 8px;
-    padding: 14px 16px;
-    margin-top: 8px;
-}
-
-.cli-diary-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 12px;
-    color: var(--claude-text-muted);
-}
-
-.cli-diary-text {
-    color: #f0eee6;
-    font-size: 13.5px;
-    line-height: 1.75;
-    margin-bottom: 12px;
-    min-height: 38px;
-}
-
-.cli-diary-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.cli-small-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--claude-border);
-    color: var(--claude-text-sub);
-    padding: 4px 12px;
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.artifact-btn {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 500;
+    background: var(--claude-surface-muted);
+    border: 1px solid var(--claude-border);
+    border-radius: var(--radius-sm);
+    color: var(--claude-text);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.cli-small-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border-color: var(--claude-terracotta);
+.artifact-btn:hover {
+    background: var(--claude-surface-hover);
+    color: var(--claude-terracotta);
+    border-color: var(--claude-border-hover);
 }
 
-/* ================= 3. Claude 风格分类筛选标签栏 ================= */
+.artifact-btn svg {
+    width: 13px;
+    height: 13px;
+    fill: currentColor;
+}
+
+/* ================= 4. 分类筛选导航 ================= */
 .claude-filter-section {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 32px;
     flex-wrap: wrap;
     gap: 16px;
-    margin: 44px 0 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--claude-border);
+    padding: 0 4px;
 }
 
 .filter-tab-group {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    background: var(--claude-surface);
+    padding: 4px;
+    border: 1px solid var(--claude-border);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-whisper);
+    gap: 2px;
     flex-wrap: wrap;
 }
 
 .filter-tab-btn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--claude-border);
-    color: var(--claude-text-sub);
+    border: none;
+    background: transparent;
     padding: 6px 16px;
     border-radius: var(--radius-pill);
     font-size: 13px;
     font-weight: 500;
+    color: var(--claude-text-secondary);
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .filter-tab-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--claude-text);
 }
 
 .filter-tab-btn.active {
-    background: var(--claude-terracotta-bg);
-    border-color: rgba(217, 119, 87, 0.5);
-    color: #ff9d79;
+    background: var(--claude-bg);
+    color: var(--claude-text);
     font-weight: 600;
+    box-shadow: 0 1px 4px rgba(20, 20, 19, 0.08);
+}
+
+[data-theme="dark"] .filter-tab-btn.active {
+    background: var(--claude-surface-hover);
+    color: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .filter-status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-size: 12px;
     color: var(--claude-text-muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--font-mono) !important;
 }
 
-.filter-status-tag .ping-dot {
-    width: 6px;
-    height: 6px;
+.status-dot {
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: #4ade80;
+    background: var(--claude-sage);
 }
 
-/* ================= 4. Bento 网格卡片（100% 原生超链接） ================= */
+/* ================= 5. Bento 网格矩阵 ================= */
 .claude-bento-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: 16px;
-    margin-bottom: 40px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 64px;
 }
 
-.bento-card, .claude-card {
-    background: var(--claude-surface-card);
-    border: 1px solid var(--claude-border);
-    border-radius: var(--radius-card);
-    padding: 22px;
+.claude-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background: var(--claude-surface);
+    border: 1px solid var(--claude-border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
     text-decoration: none;
     color: inherit;
-    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    min-height: 185px;
+    box-shadow: var(--shadow-ring), var(--shadow-whisper);
+    transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
 }
 
-.bento-card:hover, .claude-card:hover {
-    background: var(--claude-surface-hover);
+.claude-card:hover {
     border-color: var(--claude-border-hover);
+    box-shadow: var(--shadow-ring), var(--shadow-lift);
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(217, 119, 87, 0.2);
+    background: var(--claude-surface-hover);
 }
 
-.bento-card.featured, .claude-card.featured {
-    background: linear-gradient(145deg, rgba(217, 119, 87, 0.12), #1c1c1a 70%);
-    border-color: rgba(217, 119, 87, 0.35);
-}
-
-.bento-card.featured:hover, .claude-card.featured:hover {
-    border-color: var(--claude-terracotta);
-    box-shadow: 0 12px 32px rgba(217, 119, 87, 0.25);
+.claude-card.featured {
+    grid-column: span 1;
+    border-color: var(--claude-border);
 }
 
 .card-top {
-    margin-bottom: 14px;
+    margin-bottom: 20px;
 }
 
 .card-badge-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
-.card-icon {
-    font-size: 24px;
-    line-height: 1;
+.card-icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--claude-surface-muted);
+    border: 1px solid var(--claude-border);
+    color: var(--claude-text);
+    transition: all 0.2s ease;
+}
+
+.claude-card:hover .card-icon-box {
+    color: var(--claude-terracotta);
+    border-color: var(--claude-terracotta-border);
+    background: var(--claude-terracotta-soft);
+}
+
+.card-icon-box svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
 }
 
 .card-pill {
     font-size: 11px;
+    font-weight: 600;
     padding: 2px 8px;
-    border-radius: var(--radius-sm);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--claude-border);
-    color: var(--claude-text-sub);
-    font-family: var(--font-mono) !important;
+    border-radius: var(--radius-pill);
+    letter-spacing: 0.2px;
 }
 
 .card-pill.terracotta {
-    background: var(--claude-terracotta-bg);
-    border-color: rgba(217, 119, 87, 0.35);
-    color: #ff9d79;
+    background: var(--claude-terracotta-soft);
+    color: var(--claude-terracotta-text);
+    border: 1px solid var(--claude-terracotta-border);
 }
 
 .card-pill.sage {
-    background: var(--claude-sage-bg);
-    border-color: rgba(120, 140, 93, 0.35);
-    color: #a4be85;
+    background: var(--claude-sage-soft);
+    color: var(--claude-sage);
+    border: 1px solid rgba(120, 140, 93, 0.25);
 }
 
 .card-pill.slate {
-    background: var(--claude-slate-bg);
-    border-color: rgba(106, 155, 204, 0.35);
-    color: #9ac2eb;
+    background: var(--claude-slate-soft);
+    color: var(--claude-slate);
+    border: 1px solid rgba(91, 127, 149, 0.25);
 }
 
 .card-title {
     font-size: 1.05rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 6px;
-    line-height: 1.45;
+    font-weight: 600;
+    color: var(--claude-text);
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+    transition: color 0.2s ease;
+}
+
+.claude-card:hover .card-title {
+    color: var(--claude-terracotta);
 }
 
 .card-desc {
-    font-size: 13px;
-    color: var(--claude-text-sub);
-    line-height: 1.65;
-    flex-grow: 1;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--claude-text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .card-bottom {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 12px;
-    border-top: 1px solid var(--claude-border);
+    padding-top: 14px;
+    border-top: 1px solid var(--claude-border-subtle);
     font-size: 12px;
 }
 
 .card-domain {
-    font-family: var(--font-mono) !important;
+    font-family: var(--font-mono);
     color: var(--claude-text-muted);
-    font-size: 11.5px;
 }
 
 .card-arrow {
-    color: var(--claude-terracotta);
-    font-weight: 600;
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    transition: transform 0.2s ease;
+    color: var(--claude-text-secondary);
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
-.bento-card:hover .card-arrow, .claude-card:hover .card-arrow {
-    transform: translate(3px, -3px);
+.claude-card:hover .card-arrow {
+    color: var(--claude-terracotta);
+    transform: translateX(2px);
 }
 
-/* ================= 5. 模态弹窗与 Toast ================= */
+/* ================= 6. 页脚 ================= */
+footer.claude-footer {
+    border-top: 1px solid var(--claude-border);
+    padding-top: 36px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--claude-text-muted);
+}
+
+.footer-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.footer-nav a {
+    color: var(--claude-text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-nav a:hover {
+    color: var(--claude-terracotta);
+}
+
+.footer-sub {
+    font-size: 12px;
+    color: var(--claude-text-muted);
+    margin-top: 8px;
+}
+
+/* ================= 7. 模态弹窗 ================= */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(10, 10, 9, 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    z-index: 10000;
+    background: rgba(20, 20, 19, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    z-index: 1000;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.25s ease;
+    padding: 20px;
 }
 
-.modal-overlay.active {
+.modal-overlay.open {
     opacity: 1;
     pointer-events: auto;
 }
@@ -700,68 +779,78 @@ header.claude-header {
 .modal-content {
     background: var(--claude-surface);
     border: 1px solid var(--claude-border);
-    border-radius: var(--radius-card);
-    max-width: 600px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-modal);
     width: 100%;
+    max-width: 520px;
     max-height: 85vh;
     display: flex;
     flex-direction: column;
+    transform: scale(0.96);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+}
+
+.modal-overlay.open .modal-content {
+    transform: scale(1);
 }
 
 .modal-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 22px;
-    background: rgba(255, 255, 255, 0.02);
+    padding: 18px 22px;
     border-bottom: 1px solid var(--claude-border);
 }
 
 .modal-head h3 {
-    font-size: 1.08rem;
-    color: #fff;
-    font-weight: 700;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--claude-text);
 }
 
 .modal-close-btn {
-    background: none;
+    background: transparent;
     border: none;
-    color: var(--claude-text-sub);
-    font-size: 24px;
+    font-size: 22px;
+    color: var(--claude-text-muted);
     cursor: pointer;
     line-height: 1;
+    padding: 4px;
+    transition: color 0.2s ease;
 }
 
 .modal-close-btn:hover {
-    color: #fff;
+    color: var(--claude-terracotta);
 }
 
 .modal-scroll {
-    padding: 24px;
+    padding: 24px 28px;
     overflow-y: auto;
-    font-size: 14px;
-    line-height: 2;
-    color: #dedcd3;
+    font-family: var(--font-serif);
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--claude-text);
 }
 
+/* 轻提示 Toast */
 .toast-msg {
     position: fixed;
     bottom: 28px;
     left: 50%;
     transform: translateX(-50%) translateY(20px);
-    background: #262624;
-    color: var(--claude-text);
-    border: 1px solid var(--claude-border);
-    padding: 9px 20px;
+    background: var(--claude-text);
+    color: var(--claude-bg);
+    padding: 10px 22px;
     border-radius: var(--radius-pill);
-    font-size: 13px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    z-index: 100000;
+    font-size: 13.5px;
+    font-weight: 500;
+    box-shadow: var(--shadow-lift);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.25s ease;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 2000;
 }
 
 .toast-msg.show {
@@ -769,56 +858,44 @@ header.claude-header {
     transform: translateX(-50%) translateY(0);
 }
 
-/* ================= 6. Claude 风格极简页脚 ================= */
-footer.claude-footer {
-    border-top: 1px solid var(--claude-border);
-    padding-top: 32px;
-    margin-top: 50px;
-    text-align: center;
-    color: var(--claude-text-muted);
-    font-size: 12.5px;
-    line-height: 1.8;
+/* ================= 8. 响应式断点 ================= */
+@media (max-width: 992px) {
+    .claude-bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.footer-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-}
-
-.footer-nav a {
-    color: var(--claude-text-sub);
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.footer-nav a:hover {
-    color: var(--claude-terracotta);
-}
-
-/* ================= 7. 移动端与响应式适配 ================= */
-@media (max-width: 820px) {
+@media (max-width: 680px) {
     .claude-container {
         padding: 16px 16px 60px;
     }
     header.claude-header {
-        padding: 10px 16px;
-        margin-bottom: 28px;
+        padding: 8px 14px;
+        margin-bottom: 32px;
     }
-    .brand-node, .header-center-links, .time-widget {
+    .brand-sub, .header-center-links, .time-widget {
         display: none;
     }
     .claude-hero-title {
         font-size: 1.85rem;
     }
     .claude-hero-desc {
-        font-size: 0.95rem;
+        font-size: 14.5px;
     }
     .claude-bento-grid {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 14px;
+    }
+    .artifact-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .claude-filter-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .filter-tab-group {
+        width: 100%;
+        justify-content: flex-start;
     }
 }
