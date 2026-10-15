@@ -1,16 +1,15 @@
 /**
- * 小白个人全景空间 · 核心应用中枢 (App Core Engine)
- * 具备：SPA无刷新路由、又拍云CDN调度、爱心树纪年、打字机告白、樱花粒子、音乐随身听
+ * 小白个人全景空间 · 核心应用中枢 (Claude Code UI 架构)
+ * 纯粹、敏捷、无死锁：支持分类筛选、舔狗日记、落樱粒子、背景乐随身听、模态弹窗与复制
  */
 (function() {
     'use strict';
 
     // 1. 全局配置与状态
     var State = {
-        currentView: 'home',
         sakuraActive: true,
         bgmPlaying: false,
-        loveStartTime: new Date(2019, 4, 20, 20, 20, 0), // 2019-05-20 20:20:00 (月份0索引)
+        loveStartTime: new Date(2019, 4, 20, 20, 20, 0), // 2019-05-20 20:20:00 (月份 0 索引)
         quotes: window.TG_QUOTES || [],
         currentQuote: ''
     };
@@ -19,85 +18,47 @@
     var DOM = {
         clockTime: document.getElementById('clock-time'),
         clockDate: document.getElementById('clock-date'),
+        loveDaysDisplay: document.getElementById('love-days-display'),
         btnSakura: document.getElementById('btn-sakura'),
         btnBgm: document.getElementById('btn-bgm'),
         bgmAudio: document.getElementById('bgm-audio'),
         quoteText: document.getElementById('quote-text'),
         quoteDate: document.getElementById('quote-date'),
-        quoteWeather: document.getElementById('quote-weather'),
         btnRefreshQuote: document.getElementById('btn-refresh-quote'),
         btnCopyQuote: document.getElementById('btn-copy-quote'),
-        loveDaysEl: document.getElementById('love-days-display'),
-        loveDetailEl: document.getElementById('love-detail-display'),
-        confessionTypewriter: document.getElementById('confession-typewriter'),
         sakuraCanvas: document.getElementById('sakura-canvas'),
         toast: document.getElementById('toast-msg'),
-        vinylDisc: document.getElementById('vinyl-disc'),
-        playMainBtn: document.getElementById('play-main-btn'),
-        viewPanels: document.querySelectorAll('.view-panel'),
-        tabBtns: document.querySelectorAll('.tab-btn')
+        filterTabs: document.querySelectorAll('.filter-tab'),
+        cards: document.querySelectorAll('.claude-card')
     };
 
-    // 3. SPA 路由中枢
-    function switchView(viewName) {
-        if (!viewName) viewName = 'home';
-        State.currentView = viewName;
+    // 3. 分类过滤引擎
+    function initCategoryFilter() {
+        DOM.filterTabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                var filter = tab.getAttribute('data-filter');
 
-        // 更新 Tab 按钮激活态
-        DOM.tabBtns.forEach(function(btn) {
-            if (btn.getAttribute('data-view') === viewName) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
+                // 切换激活按钮态
+                DOM.filterTabs.forEach(function(t) { t.classList.remove('active'); });
+                tab.classList.add('active');
 
-        // 切换视图面板
-        DOM.viewPanels.forEach(function(panel) {
-            if (panel.id === 'view-' + viewName) {
-                panel.classList.add('active');
-            } else {
-                panel.classList.remove('active');
-            }
-        });
-
-        // 视窗激活联动
-        if (viewName === 'romance') {
-            startConfessionTyping();
-            initLoveTreeCanvas();
-        } else if (viewName === 'visual') {
-            initVisual3D();
-        }
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // 路由监听
-    function initRouter() {
-        DOM.tabBtns.forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-                var targetView = btn.getAttribute('data-view');
-                if (targetView) {
-                    window.location.hash = targetView;
-                }
+                // 筛选卡片显示
+                DOM.cards.forEach(function(card) {
+                    var categories = (card.getAttribute('data-category') || '').split(' ');
+                    if (filter === 'all' || categories.indexOf(filter) !== -1) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
         });
-
-        window.addEventListener('hashchange', function() {
-            var hash = window.location.hash.replace('#', '') || 'home';
-            switchView(hash);
-        });
-
-        // 首次加载按 Hash 定位
-        var initialHash = window.location.hash.replace('#', '') || 'home';
-        switchView(initialHash);
     }
 
-    // 4. 时钟与恋爱计时器
+    // 4. 实时时钟与相恋计时
     function updateClockAndLoveTime() {
         var now = new Date();
 
-        // 头部实时时钟
         if (DOM.clockTime) {
             var h = String(now.getHours()).padStart(2, '0');
             var m = String(now.getMinutes()).padStart(2, '0');
@@ -109,220 +70,101 @@
             var year = now.getFullYear();
             var month = String(now.getMonth() + 1).padStart(2, '0');
             var date = String(now.getDate()).padStart(2, '0');
-            var days = ['日', '一', '二', '三', '四', '五', '六'];
-            var dayStr = '星期' + days[now.getDay()];
-            DOM.clockDate.textContent = year + '年' + month + '月' + date + '日 ' + dayStr;
-            if (DOM.quoteDate) DOM.quoteDate.textContent = year + '年' + month + '月' + date + '日';
+            DOM.clockDate.textContent = year + '年' + month + '月' + date + '日';
         }
 
-        // 恋爱计时（起算点：2019-05-20 20:20:00）
-        if (DOM.loveDaysEl && DOM.loveDetailEl) {
+        if (DOM.loveDaysDisplay) {
             var diffMs = now.getTime() - State.loveStartTime.getTime();
-            if (diffMs > 0) {
-                var totalSeconds = Math.floor(diffMs / 1000);
-                var days = Math.floor(totalSeconds / (3600 * 24));
-                var hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
-                var minutes = Math.floor((totalSeconds % 3600) / 60);
-                var seconds = totalSeconds % 60;
-
-                DOM.loveDaysEl.textContent = days + ' 天 ' + hours + ' 小时';
-                DOM.loveDetailEl.textContent = minutes + ' 分 ' + seconds + ' 秒';
-            }
+            var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            DOM.loveDaysDisplay.textContent = diffDays + ' 天';
         }
     }
 
-    // 5. 每日一言 / 舔狗日记引擎
-    function initQuotesEngine() {
+    // 5. 今日日记心绪 (舔狗日记) 引擎
+    function getRandomQuote() {
         if (!State.quotes || State.quotes.length === 0) {
-            fetch('assets/data/data.json')
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    State.quotes = data;
-                    renderRandomQuote();
-                })
-                .catch(function() {
-                    if (DOM.quoteText) DOM.quoteText.textContent = '今天也是爱你的一天，想你。';
-                });
-        } else {
-            renderRandomQuote();
+            return "一个人习惯了，也就不知道寂寞是什么了。愿你历经千帆，归来仍是少年。";
         }
+        var idx = Math.floor(Math.random() * State.quotes.length);
+        return State.quotes[idx];
+    }
 
-        // 天气随机
-        if (DOM.quoteWeather) {
-            var weathers = ['晴好 ☀️', '微风 🍃', '温暖 🌤️', '多云 ⛅', '微雨 🌧️'];
-            DOM.quoteWeather.textContent = weathers[Math.floor(Math.random() * weathers.length)];
+    function renderQuote() {
+        State.currentQuote = getRandomQuote();
+        if (DOM.quoteText) {
+            DOM.quoteText.textContent = State.currentQuote;
         }
+        if (DOM.quoteDate) {
+            var now = new Date();
+            var y = now.getFullYear();
+            var m = String(now.getMonth() + 1).padStart(2, '0');
+            var d = String(now.getDate()).padStart(2, '0');
+            DOM.quoteDate.textContent = y + '年' + m + '月' + d + '日';
+        }
+    }
+
+    function initQuotesEngine() {
+        renderQuote();
 
         if (DOM.btnRefreshQuote) {
-            DOM.btnRefreshQuote.addEventListener('click', renderRandomQuote);
+            DOM.btnRefreshQuote.addEventListener('click', function() {
+                renderQuote();
+                window.showToast('🎲 已更新一篇心绪日记');
+            });
         }
 
         if (DOM.btnCopyQuote) {
             DOM.btnCopyQuote.addEventListener('click', function() {
-                if (!State.currentQuote) return;
-                navigator.clipboard.writeText(State.currentQuote).then(function() {
-                    showToast('✨ 已复制日记到剪贴板！');
-                }).catch(function() {
-                    var ta = document.createElement('textarea');
-                    ta.value = State.currentQuote;
-                    document.body.appendChild(ta);
-                    ta.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(ta);
-                    showToast('✨ 已复制日记到剪贴板！');
-                });
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(State.currentQuote).then(function() {
+                        window.showToast('📋 已复制日记到剪贴板 ✨');
+                    }).catch(function() {
+                        fallbackCopy(State.currentQuote);
+                    });
+                } else {
+                    fallbackCopy(State.currentQuote);
+                }
             });
         }
     }
 
-    function renderRandomQuote() {
-        if (!State.quotes || State.quotes.length === 0) return;
-        var idx = Math.floor(Math.random() * State.quotes.length);
-        State.currentQuote = State.quotes[idx];
-        if (DOM.quoteText) {
-            DOM.quoteText.style.opacity = '0';
-            setTimeout(function() {
-                DOM.quoteText.textContent = State.currentQuote;
-                DOM.quoteText.style.transition = 'opacity 0.25s ease';
-                DOM.quoteText.style.opacity = '1';
-            }, 120);
+    function fallbackCopy(text) {
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            window.showToast('📋 已成功复制 ✨');
+        } catch (e) {
+            window.showToast('复制失败，请手动选择复制');
         }
+        document.body.removeChild(textarea);
     }
 
-    // 6. 随身听音乐与唱片交互
+    // 6. 背景音频控制器
     function initMusicController() {
-        if (!DOM.bgmAudio) return;
+        if (!DOM.btnBgm || !DOM.bgmAudio) return;
 
-        function togglePlay() {
-            if (DOM.bgmAudio.paused) {
-                DOM.bgmAudio.play().then(function() {
-                    State.bgmPlaying = true;
-                    if (DOM.btnBgm) DOM.btnBgm.classList.add('active');
-                    if (DOM.vinylDisc) DOM.vinylDisc.classList.add('playing');
-                    if (DOM.playMainBtn) DOM.playMainBtn.innerHTML = '❚❚';
-                    showToast('🎵 正在播放《520》浪漫旋律');
-                }).catch(function(err) {
-                    showToast('请点击屏幕激活音频播放');
-                });
-            } else {
+        DOM.btnBgm.addEventListener('click', function() {
+            if (State.bgmPlaying) {
                 DOM.bgmAudio.pause();
                 State.bgmPlaying = false;
-                if (DOM.btnBgm) DOM.btnBgm.classList.remove('active');
-                if (DOM.vinylDisc) DOM.vinylDisc.classList.remove('playing');
-                if (DOM.playMainBtn) DOM.playMainBtn.innerHTML = '▶';
-                showToast('⏸️ 已暂停背景音乐');
-            }
-        }
-
-        if (DOM.btnBgm) DOM.btnBgm.addEventListener('click', togglePlay);
-        if (DOM.playMainBtn) DOM.playMainBtn.addEventListener('click', togglePlay);
-    }
-
-    // 7. 浪漫告白打字机与 Yes/No 互动
-    var confessionText = "遇见你是我所有美好故事的开始。\n请别放开我的手，也别缺席我的将来，因为一辈子和你在一起才叫将来。❤️";
-    var confessionTyped = false;
-
-    function startConfessionTyping() {
-        if (confessionTyped || !DOM.confessionTypewriter) return;
-        confessionTyped = true;
-        DOM.confessionTypewriter.textContent = '';
-        var i = 0;
-        var timer = setInterval(function() {
-            if (i < confessionText.length) {
-                DOM.confessionTypewriter.textContent += confessionText.charAt(i);
-                i++;
+                DOM.btnBgm.classList.remove('active');
+                window.showToast('已暂停背景音乐');
             } else {
-                clearInterval(timer);
+                DOM.bgmAudio.play().then(function() {
+                    State.bgmPlaying = true;
+                    DOM.btnBgm.classList.add('active');
+                    window.showToast('🎵 正在播放浪漫背景音 (520.mp3)');
+                }).catch(function() {
+                    window.showToast('请与页面交互后点击播放');
+                });
             }
-        }, 50);
+        });
     }
 
-    // 8. 告白互动按钮
-    window.handleConfessionYes = function() {
-        showToast('太好了！愿得一人心，白首不相离 💕');
-        var modal = document.getElementById('confession-modal');
-        if (modal) modal.classList.add('active');
-    };
-
-    var noRejections = [
-        '房子写你名！',
-        '工资全交！',
-        '家务我全包！',
-        '听话不惹你生气！',
-        '再考虑一下嘛，求求了 🥺',
-        '告诉我Yes好不好！'
-    ];
-    var noIndex = 0;
-
-    window.handleConfessionNo = function(btn) {
-        var phrase = noRejections[noIndex % noRejections.length];
-        noIndex++;
-        showToast(phrase);
-        if (btn) {
-            btn.textContent = phrase;
-            btn.style.transform = 'scale(' + Math.max(0.7, 1 - noIndex * 0.05) + ')';
-        }
-    };
-
-    // 9. 爱心树 Canvas 绘制核心
-    function initLoveTreeCanvas() {
-        var canvas = document.getElementById('love-tree-canvas');
-        if (!canvas) return;
-        var ctx = canvas.getContext('2d');
-        canvas.width = canvas.parentElement.clientWidth || 550;
-        canvas.height = canvas.parentElement.clientHeight || 500;
-
-        // 简雅手绘大树开花
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // 树干
-        var startX = canvas.width / 2;
-        var startY = canvas.height - 20;
-        
-        function drawBranch(x, y, len, angle, depth) {
-            if (depth === 0) {
-                // 绽放爱心花瓣
-                ctx.fillStyle = 'rgba(244, 63, 94, ' + (Math.random() * 0.5 + 0.5) + ')';
-                ctx.beginPath();
-                ctx.arc(x, y, Math.random() * 5 + 3, 0, Math.PI * 2);
-                ctx.fill();
-                return;
-            }
-            var x2 = x + Math.cos(angle * Math.PI / 180) * len;
-            var y2 = y + Math.sin(angle * Math.PI / 180) * len;
-
-            ctx.lineWidth = depth * 1.5;
-            ctx.strokeStyle = '#5a3d28';
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(x2, y2);
-            ctx.stroke();
-
-            drawBranch(x2, y2, len * 0.75, angle - 22, depth - 1);
-            drawBranch(x2, y2, len * 0.75, angle + 22, depth - 1);
-        }
-
-        drawBranch(startX, startY, 70, -90, 8);
-    }
-
-    // 10. 3D 视觉展厅初始化
-    function initVisual3D() {
-        var container = document.getElementById('visual-container-slot');
-        if (!container || container.getAttribute('data-loaded')) return;
-        container.setAttribute('data-loaded', 'true');
-
-        // 优雅无缝加载 3D 页面体验
-        var iframe = document.createElement('iframe');
-        iframe.src = 'a/index.html';
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.style.border = 'none';
-        iframe.style.display = 'block';
-        iframe.setAttribute('allow', 'camera; accelerometer; gyroscope; microphone');
-        container.appendChild(iframe);
-    }
-
-    // 11. 樱花飘落粒子系统
+    // 7. 樱花粒子动画
     function initSakuraParticles() {
         var canvas = DOM.sakuraCanvas;
         if (!canvas) return;
@@ -348,63 +190,58 @@
             this.opacity = Math.random() * 0.4 + 0.3;
         }
 
-        Petal.prototype.update = function() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-            this.rotation += this.rotSpeed;
-            if (this.y > canvas.height) {
-                this.y = -10;
-                this.x = Math.random() * canvas.width;
-            }
-        };
-
-        Petal.prototype.draw = function() {
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            ctx.rotate(this.rotation * Math.PI / 180);
-            ctx.fillStyle = 'rgba(255, 183, 197, ' + this.opacity + ')';
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.bezierCurveTo(this.size / 2, -this.size / 2, this.size, 0, 0, this.size);
-            ctx.bezierCurveTo(-this.size, 0, -this.size / 2, -this.size / 2, 0, 0);
-            ctx.fill();
-            ctx.restore();
-        };
-
         for (var i = 0; i < count; i++) {
             petals.push(new Petal());
         }
 
-        function loop() {
-            if (State.sakuraActive) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (var i = 0; i < petals.length; i++) {
-                    petals[i].update();
-                    petals[i].draw();
-                }
-            }
-            requestAnimationFrame(loop);
+        function drawPetal(p) {
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = 'rgba(244, 63, 94, ' + p.opacity + ')';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, p.size, p.size * 0.55, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
         }
-        loop();
+
+        function animate() {
+            if (!State.sakuraActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            petals.forEach(function(p) {
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.rotation += p.rotSpeed;
+                if (p.y > canvas.height) {
+                    p.y = -10;
+                    p.x = Math.random() * canvas.width;
+                }
+                drawPetal(p);
+            });
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
 
         if (DOM.btnSakura) {
             DOM.btnSakura.addEventListener('click', function() {
                 State.sakuraActive = !State.sakuraActive;
                 if (State.sakuraActive) {
-                    canvas.style.opacity = '0.6';
+                    canvas.style.opacity = '0.55';
                     DOM.btnSakura.classList.add('active');
-                    showToast('🌸 已开启落樱浪漫特效');
+                    window.showToast('🌸 已开启落樱浪漫特效');
+                    requestAnimationFrame(animate);
                 } else {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     canvas.style.opacity = '0';
                     DOM.btnSakura.classList.remove('active');
-                    showToast('已关闭落樱特效');
+                    window.showToast('已关闭落樱特效');
                 }
             });
         }
     }
 
-    // 12. 弹窗与 Toast
+    // 8. 模态弹窗与 Toast
     window.openModal = function(id) {
         var m = document.getElementById(id);
         if (m) m.classList.add('active');
@@ -422,7 +259,7 @@
     document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
         overlay.addEventListener('click', function(e) {
             if (e.target === overlay) {
-                closeModal(overlay.id);
+                window.closeModal(overlay.id);
             }
         });
     });
@@ -436,31 +273,9 @@
         }, 2200);
     };
 
-    // 挂载全局方法，确保 HTML 内联事件无报错
-    window.switchView = switchView;
-    window.DOM = DOM;
-    window.playTrack = function(src, name) {
-        if (!DOM.bgmAudio) return;
-        DOM.bgmAudio.src = src;
-        DOM.bgmAudio.play().then(function() {
-            State.bgmPlaying = true;
-            if (DOM.btnBgm) DOM.btnBgm.classList.add('playing');
-            if (DOM.vinylDisc) DOM.vinylDisc.classList.add('playing');
-            if (DOM.playMainBtn) DOM.playMainBtn.textContent = '⏸ 暂停播放';
-            window.showToast('正在播放: ' + name);
-        }).catch(function() {
-            window.showToast('点击播放: ' + name);
-        });
-    };
-    window.seekAudio = function(delta) {
-        if (!DOM.bgmAudio) return;
-        DOM.bgmAudio.currentTime = Math.max(0, DOM.bgmAudio.currentTime + delta);
-        window.showToast((delta > 0 ? '快进 ' : '快退 ') + Math.abs(delta) + ' 秒');
-    };
-
-    // 13. 初始化启动
+    // 9. 启动初始化
     function init() {
-        initRouter();
+        initCategoryFilter();
         setInterval(updateClockAndLoveTime, 1000);
         updateClockAndLoveTime();
         initQuotesEngine();
