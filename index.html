@@ -62,7 +62,7 @@
     </script>
 
     <!-- 全局样式表 (Claude 官方极简设计系统 · 羊皮纸暖白) -->
-    <link rel="stylesheet" href="assets/css/parchment-v4.css">
+    <link rel="stylesheet" href="assets/css/parchment-v5.css">
     <style>
     /* 关键新组件高优先级保护样式 */
     .audio-capsule { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 6px; background: #eceae1; border: 1px solid #e8e6dc; border-radius: 9999px; cursor: pointer; transition: all 0.25s ease; user-select: none; }
@@ -181,7 +181,7 @@
                 <div style="margin-bottom:20px; background:var(--claude-surface-muted); border-radius:10px; padding:16px; border:1px solid var(--claude-border);">
                     <h4 style="color:var(--claude-terracotta); margin-bottom:6px;">《最长的电影 · 周杰伦》</h4>
                     <p style="font-size:13px; color:var(--claude-text-secondary); margin-bottom:12px;">小笑和小宇相爱相伴六十余年，当头发花白的小笑开始记不清一切，小宇便带她踏上了寻找记忆的旅程。</p>
-                    <video src="assets/video/521.mp4" controls preload="metadata" style="width:100%; border-radius:8px; display:block;"></video>
+                    <video id="memory-video" src="assets/video/movie-521.mp4" controls preload="metadata" style="width:100%; border-radius:8px; display:block;"></video>
                 </div>
                 <div style="margin-bottom:20px; background:var(--claude-surface-muted); border-radius:10px; padding:16px; border:1px solid var(--claude-border);">
                     <h4 style="color:var(--claude-terracotta); margin-bottom:6px;">《本的气球》</h4>
@@ -210,26 +210,16 @@
                 </div>
             </div>
 
-            <!-- 核心通道链接 -->
-            <div class="header-center-links">
-                <a href="https://21212121.xyz" target="_blank" rel="noopener" class="claude-nav-link primary" title="访问官方 Typecho 主博客">
-                    <span>岁月静好主博客 ↗</span>
-                </a>
-                <a href="links.html" class="claude-nav-link secondary" title="直达站群矩阵与友链互联中心">
-                    <span>站群友链中心 ↗</span>
-                </a>
-            </div>
-
             <!-- 控制小工具 -->
             <div class="header-controls">
                 <div class="time-widget" id="clock-time">00:00:00</div>
 
-                <!-- 随身轻音乐胶囊 (融合自 l/ 空间 BGM 520.mp3) -->
-                <div class="audio-capsule" id="audio-capsule" title="轻触播放/暂停《520 · 岁月静好》背景轻音乐">
+                <!-- 随身轻音乐胶囊 (最甜情歌 / 520.mp3) -->
+                <div class="audio-capsule" id="audio-capsule" title="轻触播放/暂停《最甜情歌》背景轻音乐">
                     <div class="audio-capsule-btn" id="btn-bgm">
                         <svg width="12" height="12" style="width:12px;height:12px;display:block;" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
                     </div>
-                    <span class="audio-capsule-title">520 · 岁月静好</span>
+                    <span class="audio-capsule-title">最甜情歌</span>
                     <div class="audio-waves">
                         <span class="audio-wave-bar"></span>
                         <span class="audio-wave-bar"></span>
@@ -289,16 +279,15 @@
                 </div>
             </div>
 
-            <!-- 3. 典藏心绪卡片 (Claude Artifact 风格) -->
+            <!-- 3. 舔狗日记卡片 (Claude Artifact 风格) -->
             <div class="claude-artifact-card">
                 <div class="artifact-header">
                     <div class="artifact-badge">
                         <span>✦</span>
-                        <span>今日心绪拾遗</span>
+                        <span>舔狗日记</span>
                     </div>
                     <div class="artifact-meta-group">
                         <span id="quote-date">2026年10月15日</span>
-                        <span class="love-counter-tag" id="love-days-display">相守计时中</span>
                     </div>
                 </div>
 
@@ -307,7 +296,7 @@
                 </div>
 
                 <div class="artifact-footer">
-                    <div class="artifact-tip">每日随笔心绪 · 幽默与真情沉淀</div>
+                    <div class="artifact-tip">每日随笔语录 · 幽默与真情调味</div>
                     <div class="artifact-btn-group">
                         <button type="button" class="artifact-btn" id="btn-refresh-quote">
                             <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
@@ -322,18 +311,8 @@
             </div>
         </section>
 
-        <!-- 4. 全局检索与分类筛选导航 -->
+        <!-- 4. 分类筛选导航 (无需搜索框，13项极简直达) -->
         <section class="claude-filter-section">
-            <!-- 全局即时模糊检索框 -->
-            <div class="claude-search-wrap">
-                <div class="claude-search-box">
-                    <svg width="16" height="16" style="width:16px;height:16px;min-width:16px;min-height:16px;max-width:16px;max-height:16px;flex-shrink:0;" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                    <input type="text" class="claude-search-input" id="search-input" placeholder="输入关键词即时检索项目、独立微服务、技术栈或域名 (按 / 聚焦)..." autocomplete="off">
-                    <span class="claude-search-badge" id="search-count">13 个项目</span>
-                    <button type="button" class="claude-search-clear" id="btn-clear-search" title="清除搜索">&times;</button>
-                </div>
-            </div>
-
             <!-- 分类筛选标签组 -->
             <div class="filter-tab-group">
                 <button type="button" class="filter-tab-btn active" data-filter="all">全部 All (13)</button>
@@ -617,7 +596,7 @@
                 <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" rel="noopener">又拍云联盟</a>
             </div>
             <div>
-                © 2026 小白 · 岁月静好 · <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:inherit; text-decoration:none;">皖ICP备2021004128号-1</a>
+                © 2026 小白 · 岁月静好
             </div>
             <div class="footer-sub">
                 静态资源托管于 又拍云 (Upyun) 高速 CDN 全球分发网络 · 节点托管于腾讯云上海数据中心
@@ -637,6 +616,6 @@
     </div>
 
     <!-- 核心应用驱动脚本 (Claude 官方极简设计系统 · 羊皮纸暖白) -->
-    <script src="assets/js/parchment-v4.js"></script>
+    <script src="assets/js/parchment-v5.js"></script>
 </body>
 </html>

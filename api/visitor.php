@@ -22,26 +22,38 @@ if (!$ip) {
 
 $location = '华夏大地';
 
-// 查询地理位置 (轻量免费公共接口，带超时保护)
+// 1. 优先通过百度 OpenData 权威接口解析（国内毫秒级响应，支持精确到市县及运营商）
 try {
     $ctx = stream_context_create([
         'http' => [
-            'timeout' => 1.5,
-            'header' => "User-Agent: Mozilla/5.0\r\n"
+            'timeout' => 2.0,
+            'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)\r\n"
         ]
     ]);
-    // 太平洋电脑网免费 IP 归属接口 (国内极速)
-    $raw = @file_get_contents("http://whois.pconline.com.cn/ipJson.jsp?ip={$ip}&json=true", false, $ctx);
+    $raw = @file_get_contents("https://opendata.baidu.com/api.php?query=" . urlencode($ip) . "&co=&resource_id=6006&oe=utf8", false, $ctx);
     if ($raw) {
-        $utf8Json = iconv('GBK', 'UTF-8//IGNORE', $raw);
-        $data = json_decode($utf8Json, true);
-        if (!empty($data['addr'])) {
-            $location = trim($data['addr']);
-        } elseif (!empty($data['pro'])) {
-            $location = trim($data['pro'] . ' ' . ($data['city'] ?? ''));
+        $data = json_decode($raw, true);
+        if (!empty($data['data'][0]['location'])) {
+            $location = trim($data['data'][0]['location']);
         }
     }
 } catch (\Throwable $e) {}
+
+// 2. 备用国外 IP / 失败降级查询 (ip-api.com)
+if ($location === '华夏大地') {
+    try {
+        $raw = @file_get_contents("http://ip-api.com/json/" . urlencode($ip) . "?lang=zh-CN", false, $ctx);
+        if ($raw) {
+            $data = json_decode($raw, true);
+            if (!empty($data['status']) && $data['status'] === 'success') {
+                $parts = array_filter([$data['country'] ?? '', $data['regionName'] ?? '', $data['city'] ?? '']);
+                if (!empty($parts)) {
+                    $location = implode(' ', $parts);
+                }
+            }
+        }
+    } catch (\Throwable $e) {}
+}
 
 echo json_encode([
     'code' => 200,
