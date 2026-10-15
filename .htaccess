@@ -62,11 +62,16 @@ RewriteCond %{REQUEST_URI} !^/sj/
 RewriteRule ^(.*)$ sj/$1?Rewrite [L,QSA]
 
 
+# 路径级 301 永久重定向（合并废弃子目录）
+RewriteRule ^wzdh/(.*)$ /l/$1 [R=301,L]
+RewriteRule ^yy/(.*)$ /yyjx/$1 [R=301,L]
+
+# 域名级重写与重定向
+RewriteCond %{HTTP_HOST} ^wzdh\.21212121\.xyz$ [NC]
+RewriteRule ^(.*)$ /l/$1 [R=301,L]
+
 RewriteCond %{HTTP_HOST} ^yy\.21212121\.xyz$ [NC]
-
-RewriteCond %{REQUEST_URI} !^/yy/
-
-RewriteRule ^(.*)$ yy/$1?Rewrite [L,QSA]
+RewriteRule ^(.*)$ /yyjx/$1 [R=301,L]
 
 
 RewriteCond %{HTTP_HOST} ^xb\.21212121\.xyz$ [NC]
